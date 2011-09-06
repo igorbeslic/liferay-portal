@@ -27,6 +27,7 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.permission.PermissionPropagator;
 import com.liferay.portal.service.PermissionServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourceBlockLocalServiceUtil;
@@ -349,6 +350,19 @@ public class EditPermissionsAction extends EditConfigurationAction {
 				ResourcePermissionServiceUtil.setIndividualResourcePermissions(
 					themeDisplay.getScopeGroupId(), themeDisplay.getCompanyId(),
 					selResource, resourcePrimKey, roleId, actionIds);
+			}
+		}
+
+		if (PropsValues.PERMISSIONS_PROPAGATION_ENABLED) {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				themeDisplay.getCompanyId(), portletResource);
+
+			PermissionPropagator permissionPropagator =
+				portlet.getPermissionPropagatorInstance();
+
+			if (permissionPropagator != null) {
+				permissionPropagator.propagateRolePermissions(
+					actionRequest, modelResource, roleIds);
 			}
 		}
 	}

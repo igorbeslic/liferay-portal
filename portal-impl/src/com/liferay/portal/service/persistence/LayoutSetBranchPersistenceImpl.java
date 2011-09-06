@@ -555,8 +555,7 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 		Object[] finderArgs = new Object[] {
 				groupId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<LayoutSetBranch> list = (List<LayoutSetBranch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
@@ -1212,8 +1211,7 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 		Object[] finderArgs = new Object[] {
 				groupId, privateLayout,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<LayoutSetBranch> list = (List<LayoutSetBranch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P,
@@ -2054,10 +2052,7 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	 */
 	public List<LayoutSetBranch> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<LayoutSetBranch> list = (List<LayoutSetBranch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -2693,10 +2688,12 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(LayoutSetBranchPersistenceImpl.class);
 	private static LayoutSetBranch _nullLayoutSetBranch = new LayoutSetBranchImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<LayoutSetBranch> toCacheModel() {
 				return _nullLayoutSetBranchCacheModel;
 			}

@@ -263,6 +263,11 @@ public class AssetEntryLocalServiceWrapper implements AssetEntryLocalService {
 		_assetEntryLocalService.deleteEntry(className, classPK);
 	}
 
+	public com.liferay.portlet.asset.model.AssetEntry fetchEntry(long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _assetEntryLocalService.fetchEntry(entryId);
+	}
+
 	public java.util.List<com.liferay.portlet.asset.model.AssetEntry> getAncestorEntries(
 		long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -362,18 +367,17 @@ public class AssetEntryLocalServiceWrapper implements AssetEntryLocalService {
 	}
 
 	public void incrementViewCounter(long userId, java.lang.String className,
-		long classPK)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_assetEntryLocalService.incrementViewCounter(userId, className, classPK);
-	}
-
-	public void incrementViewCounter(long userId, java.lang.String className,
 		long classPK, int increment)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_assetEntryLocalService.incrementViewCounter(userId, className,
 			classPK, increment);
+	}
+
+	public void reindex(
+		java.util.List<com.liferay.portlet.asset.model.AssetEntry> entries)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_assetEntryLocalService.reindex(entries);
 	}
 
 	public com.liferay.portal.kernel.search.Hits search(long companyId,

@@ -132,6 +132,7 @@ public class UserFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			setJoin(qPos, params);
+
 			qPos.add(userId);
 
 			Iterator<Long> itr = q.list().iterator();
@@ -251,6 +252,7 @@ public class UserFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			setJoin(qPos, params);
+
 			qPos.add(companyId);
 			qPos.add(false);
 			qPos.add(firstNames, 2);
@@ -330,7 +332,7 @@ public class UserFinderImpl
 
 			qPos.add(type);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -352,7 +354,7 @@ public class UserFinderImpl
 
 			q.addEntity("User_", UserImpl.class);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -374,7 +376,7 @@ public class UserFinderImpl
 
 			q.addEntity("User_", UserImpl.class);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -454,6 +456,7 @@ public class UserFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			setJoin(qPos, params);
+
 			qPos.add(companyId);
 			qPos.add(false);
 			qPos.add(firstNames, 2);

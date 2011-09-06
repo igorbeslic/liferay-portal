@@ -399,6 +399,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		countryImpl.setA3(country.getA3());
 		countryImpl.setNumber(country.getNumber());
 		countryImpl.setIdd(country.getIdd());
+		countryImpl.setZipRequired(country.isZipRequired());
 		countryImpl.setActive(country.isActive());
 
 		return countryImpl;
@@ -973,12 +974,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	public List<Country> findByActive(boolean active, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				active,
-				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { active, start, end, orderByComparator };
 
 		List<Country> list = (List<Country>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ACTIVE,
 				finderArgs, this);
@@ -1305,10 +1301,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 */
 	public List<Country> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<Country> list = (List<Country>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -1903,10 +1896,12 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(CountryPersistenceImpl.class);
 	private static Country _nullCountry = new CountryImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<Country> toCacheModel() {
 				return _nullCountryCacheModel;
 			}

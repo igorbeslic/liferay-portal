@@ -27,6 +27,7 @@ import com.liferay.portal.model.LayoutBranch;
 import com.liferay.portal.model.LayoutBranchConstants;
 import com.liferay.portal.model.LayoutRevision;
 import com.liferay.portal.model.LayoutRevisionConstants;
+import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetBranch;
 import com.liferay.portal.model.LayoutSetBranchConstants;
 import com.liferay.portal.model.ResourceConstants;
@@ -82,7 +83,7 @@ public class LayoutSetBranchLocalServiceImpl
 			LayoutSetBranch.class.getName(),
 			layoutSetBranch.getLayoutSetBranchId(), false, true, false);
 
-		// Revisions
+		// Layout revisions
 
 		if (layoutSetBranch.isMaster() ||
 			(copyLayoutSetBranchId == LayoutSetBranchConstants.ALL_BRANCHES)) {
@@ -166,7 +167,12 @@ public class LayoutSetBranchLocalServiceImpl
 			ResourceConstants.SCOPE_INDIVIDUAL,
 			layoutSetBranch.getLayoutSetBranchId());
 
-		// Revisions
+		// Layout branches
+
+		layoutBranchLocalService.deleteLayoutSetBranchLayoutBranches(
+			layoutSetBranch.getLayoutSetBranchId());
+
+		// Layout revisions
 
 		layoutRevisionLocalService.deleteLayoutSetBranchLayoutRevisions(
 			layoutSetBranch.getLayoutSetBranchId());
@@ -230,7 +236,11 @@ public class LayoutSetBranchLocalServiceImpl
 		if (layoutSetBranchId <= 0) {
 			User user = userPersistence.findByPrimaryKey(userId);
 
-			layoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(user);
+			LayoutSet layoutSet = layoutSetLocalService.getLayoutSet(
+				groupId, privateLayout);
+
+			layoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(
+				user, layoutSet.getLayoutSetId());
 		}
 
 		if (layoutSetBranchId > 0) {

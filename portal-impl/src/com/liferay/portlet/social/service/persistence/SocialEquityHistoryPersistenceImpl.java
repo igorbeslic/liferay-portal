@@ -443,10 +443,7 @@ public class SocialEquityHistoryPersistenceImpl extends BasePersistenceImpl<Soci
 	 */
 	public List<SocialEquityHistory> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<SocialEquityHistory> list = (List<SocialEquityHistory>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -621,10 +618,12 @@ public class SocialEquityHistoryPersistenceImpl extends BasePersistenceImpl<Soci
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(SocialEquityHistoryPersistenceImpl.class);
 	private static SocialEquityHistory _nullSocialEquityHistory = new SocialEquityHistoryImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<SocialEquityHistory> toCacheModel() {
 				return _nullSocialEquityHistoryCacheModel;
 			}

@@ -274,6 +274,19 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByT_P",
 			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_FIND_BY_T_A = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+			MBMessageModelImpl.FINDER_CACHE_ENABLED, MBMessageImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByT_A",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_COUNT_BY_T_A = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByT_A",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_T_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, MBMessageImpl.class,
 			FINDER_CLASS_NAME_LIST, "findByT_S",
@@ -744,6 +757,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		mbMessageImpl.setAnonymous(mbMessage.isAnonymous());
 		mbMessageImpl.setPriority(mbMessage.getPriority());
 		mbMessageImpl.setAllowPingbacks(mbMessage.isAllowPingbacks());
+		mbMessageImpl.setAnswer(mbMessage.isAnswer());
 		mbMessageImpl.setStatus(mbMessage.getStatus());
 		mbMessageImpl.setStatusByUserId(mbMessage.getStatusByUserId());
 		mbMessageImpl.setStatusByUserName(mbMessage.getStatusByUserName());
@@ -896,12 +910,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	 */
 	public List<MBMessage> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				uuid,
-				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { uuid, start, end, orderByComparator };
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_UUID,
 				finderArgs, this);
@@ -1416,8 +1425,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_GROUPID,
@@ -2066,8 +2074,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				companyId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
@@ -2407,8 +2414,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				threadId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_THREADID,
@@ -2747,8 +2753,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				threadId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_THREADREPLIES,
@@ -3083,12 +3088,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	 */
 	public List<MBMessage> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				userId,
-				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { userId, start, end, orderByComparator };
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_USERID,
 				finderArgs, this);
@@ -3429,8 +3429,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, userId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_U,
@@ -4113,8 +4112,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, categoryId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C,
@@ -4797,8 +4795,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_S,
@@ -5480,8 +5477,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				companyId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_S,
@@ -5841,8 +5837,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, classNameId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C,
@@ -6207,8 +6202,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, StringUtil.merge(classNameIds),
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C,
@@ -6353,8 +6347,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				classNameId, classPK,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
@@ -6715,8 +6708,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				threadId, parentMessageId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_P,
@@ -7024,6 +7016,366 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	}
 
 	/**
+	 * Returns all the message-boards messages where threadId = &#63; and answer = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @return the matching message-boards messages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBMessage> findByT_A(long threadId, boolean answer)
+		throws SystemException {
+		return findByT_A(threadId, answer, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the message-boards messages where threadId = &#63; and answer = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @return the range of matching message-boards messages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBMessage> findByT_A(long threadId, boolean answer, int start,
+		int end) throws SystemException {
+		return findByT_A(threadId, answer, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the message-boards messages where threadId = &#63; and answer = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @param start the lower bound of the range of message-boards messages
+	 * @param end the upper bound of the range of message-boards messages (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching message-boards messages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<MBMessage> findByT_A(long threadId, boolean answer, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				threadId, answer,
+				
+				start, end, orderByComparator
+			};
+
+		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_A,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_MBMESSAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_T_A_THREADID_2);
+
+			query.append(_FINDER_COLUMN_T_A_ANSWER_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(MBMessageModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(threadId);
+
+				qPos.add(answer);
+
+				list = (List<MBMessage>)QueryUtil.list(q, getDialect(), start,
+						end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FIND_BY_T_A,
+						finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(FINDER_PATH_FIND_BY_T_A,
+						finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first message-boards message in the ordered set where threadId = &#63; and answer = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message-boards message
+	 * @throws com.liferay.portlet.messageboards.NoSuchMessageException if a matching message-boards message could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMessage findByT_A_First(long threadId, boolean answer,
+		OrderByComparator orderByComparator)
+		throws NoSuchMessageException, SystemException {
+		List<MBMessage> list = findByT_A(threadId, answer, 0, 1,
+				orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("threadId=");
+			msg.append(threadId);
+
+			msg.append(", answer=");
+			msg.append(answer);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchMessageException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last message-boards message in the ordered set where threadId = &#63; and answer = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message-boards message
+	 * @throws com.liferay.portlet.messageboards.NoSuchMessageException if a matching message-boards message could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMessage findByT_A_Last(long threadId, boolean answer,
+		OrderByComparator orderByComparator)
+		throws NoSuchMessageException, SystemException {
+		int count = countByT_A(threadId, answer);
+
+		List<MBMessage> list = findByT_A(threadId, answer, count - 1, count,
+				orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("threadId=");
+			msg.append(threadId);
+
+			msg.append(", answer=");
+			msg.append(answer);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchMessageException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the message-boards messages before and after the current message-boards message in the ordered set where threadId = &#63; and answer = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param messageId the primary key of the current message-boards message
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next message-boards message
+	 * @throws com.liferay.portlet.messageboards.NoSuchMessageException if a message-boards message with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMessage[] findByT_A_PrevAndNext(long messageId, long threadId,
+		boolean answer, OrderByComparator orderByComparator)
+		throws NoSuchMessageException, SystemException {
+		MBMessage mbMessage = findByPrimaryKey(messageId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBMessage[] array = new MBMessageImpl[3];
+
+			array[0] = getByT_A_PrevAndNext(session, mbMessage, threadId,
+					answer, orderByComparator, true);
+
+			array[1] = mbMessage;
+
+			array[2] = getByT_A_PrevAndNext(session, mbMessage, threadId,
+					answer, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected MBMessage getByT_A_PrevAndNext(Session session,
+		MBMessage mbMessage, long threadId, boolean answer,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_MBMESSAGE_WHERE);
+
+		query.append(_FINDER_COLUMN_T_A_THREADID_2);
+
+		query.append(_FINDER_COLUMN_T_A_ANSWER_2);
+
+		if (orderByComparator != null) {
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			if (orderByFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(MBMessageModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(threadId);
+
+		qPos.add(answer);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByValues(mbMessage);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<MBMessage> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
 	 * Returns all the message-boards messages where threadId = &#63; and status = &#63;.
 	 *
 	 * @param threadId the thread ID
@@ -7076,8 +7428,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				threadId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_T_S,
@@ -7437,8 +7788,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				threadId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_TR_S,
@@ -7802,8 +8152,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, userId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_U_S,
@@ -8521,8 +8870,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, categoryId, threadId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_T,
@@ -9240,8 +9588,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, categoryId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_S,
@@ -9959,8 +10306,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, classNameId, classPK,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C_C,
@@ -10341,8 +10687,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, classNameId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C_S,
@@ -10727,8 +11072,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, StringUtil.merge(classNameIds), status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C_S,
@@ -10887,8 +11231,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				classNameId, classPK, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_S,
@@ -11275,8 +11618,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				groupId, categoryId, threadId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_C_T_S,
@@ -12032,8 +12374,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		Object[] finderArgs = new Object[] {
 				userId, classNameId, classPK, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_U_C_C_S,
@@ -12417,10 +12758,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	 */
 	public List<MBMessage> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -12663,6 +13001,20 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public void removeByT_P(long threadId, long parentMessageId)
 		throws SystemException {
 		for (MBMessage mbMessage : findByT_P(threadId, parentMessageId)) {
+			mbMessagePersistence.remove(mbMessage);
+		}
+	}
+
+	/**
+	 * Removes all the message-boards messages where threadId = &#63; and answer = &#63; from the database.
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByT_A(long threadId, boolean answer)
+		throws SystemException {
+		for (MBMessage mbMessage : findByT_A(threadId, answer)) {
 			mbMessagePersistence.remove(mbMessage);
 		}
 	}
@@ -13941,6 +14293,65 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	}
 
 	/**
+	 * Returns the number of message-boards messages where threadId = &#63; and answer = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @param answer the answer
+	 * @return the number of matching message-boards messages
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByT_A(long threadId, boolean answer)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { threadId, answer };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_T_A,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MBMESSAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_T_A_THREADID_2);
+
+			query.append(_FINDER_COLUMN_T_A_ANSWER_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(threadId);
+
+				qPos.add(answer);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_T_A, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
 	 * Returns the number of message-boards messages where threadId = &#63; and status = &#63;.
 	 *
 	 * @param threadId the thread ID
@@ -15000,12 +15411,12 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	protected MBMailingListPersistence mbMailingListPersistence;
 	@BeanReference(type = MBMessagePersistence.class)
 	protected MBMessagePersistence mbMessagePersistence;
-	@BeanReference(type = MBMessageFlagPersistence.class)
-	protected MBMessageFlagPersistence mbMessageFlagPersistence;
 	@BeanReference(type = MBStatsUserPersistence.class)
 	protected MBStatsUserPersistence mbStatsUserPersistence;
 	@BeanReference(type = MBThreadPersistence.class)
 	protected MBThreadPersistence mbThreadPersistence;
+	@BeanReference(type = MBThreadFlagPersistence.class)
+	protected MBThreadFlagPersistence mbThreadFlagPersistence;
 	@BeanReference(type = CompanyPersistence.class)
 	protected CompanyPersistence companyPersistence;
 	@BeanReference(type = GroupPersistence.class)
@@ -15074,6 +15485,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "mbMessage.classPK = ?";
 	private static final String _FINDER_COLUMN_T_P_THREADID_2 = "mbMessage.threadId = ? AND ";
 	private static final String _FINDER_COLUMN_T_P_PARENTMESSAGEID_2 = "mbMessage.parentMessageId = ?";
+	private static final String _FINDER_COLUMN_T_A_THREADID_2 = "mbMessage.threadId = ? AND ";
+	private static final String _FINDER_COLUMN_T_A_ANSWER_2 = "mbMessage.answer = ?";
 	private static final String _FINDER_COLUMN_T_S_THREADID_2 = "mbMessage.threadId = ? AND ";
 	private static final String _FINDER_COLUMN_T_S_STATUS_2 = "mbMessage.status = ?";
 	private static final String _FINDER_COLUMN_TR_S_THREADID_2 = "mbMessage.threadId = ? AND ";
@@ -15137,10 +15550,12 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(MBMessagePersistenceImpl.class);
 	private static MBMessage _nullMBMessage = new MBMessageImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<MBMessage> toCacheModel() {
 				return _nullMBMessageCacheModel;
 			}

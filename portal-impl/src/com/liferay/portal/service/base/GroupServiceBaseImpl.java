@@ -86,6 +86,7 @@ import com.liferay.portal.service.PortletService;
 import com.liferay.portal.service.QuartzLocalService;
 import com.liferay.portal.service.RegionService;
 import com.liferay.portal.service.ReleaseLocalService;
+import com.liferay.portal.service.RepositoryEntryLocalService;
 import com.liferay.portal.service.RepositoryService;
 import com.liferay.portal.service.ResourceActionLocalService;
 import com.liferay.portal.service.ResourceBlockLocalService;
@@ -228,9 +229,6 @@ import com.liferay.portlet.calendar.service.persistence.CalEventFinder;
 import com.liferay.portlet.calendar.service.persistence.CalEventPersistence;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalService;
 import com.liferay.portlet.documentlibrary.service.DLAppService;
-import com.liferay.portlet.imagegallery.service.IGFolderLocalService;
-import com.liferay.portlet.imagegallery.service.IGFolderService;
-import com.liferay.portlet.imagegallery.service.persistence.IGFolderPersistence;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleService;
 import com.liferay.portlet.journal.service.JournalStructureLocalService;
@@ -2357,6 +2355,25 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	}
 
 	/**
+	 * Returns the repository entry local service.
+	 *
+	 * @return the repository entry local service
+	 */
+	public RepositoryEntryLocalService getRepositoryEntryLocalService() {
+		return repositoryEntryLocalService;
+	}
+
+	/**
+	 * Sets the repository entry local service.
+	 *
+	 * @param repositoryEntryLocalService the repository entry local service
+	 */
+	public void setRepositoryEntryLocalService(
+		RepositoryEntryLocalService repositoryEntryLocalService) {
+		this.repositoryEntryLocalService = repositoryEntryLocalService;
+	}
+
+	/**
 	 * Returns the repository entry persistence.
 	 *
 	 * @return the repository entry persistence
@@ -4124,61 +4141,6 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	}
 
 	/**
-	 * Returns the i g folder local service.
-	 *
-	 * @return the i g folder local service
-	 */
-	public IGFolderLocalService getIGFolderLocalService() {
-		return igFolderLocalService;
-	}
-
-	/**
-	 * Sets the i g folder local service.
-	 *
-	 * @param igFolderLocalService the i g folder local service
-	 */
-	public void setIGFolderLocalService(
-		IGFolderLocalService igFolderLocalService) {
-		this.igFolderLocalService = igFolderLocalService;
-	}
-
-	/**
-	 * Returns the i g folder remote service.
-	 *
-	 * @return the i g folder remote service
-	 */
-	public IGFolderService getIGFolderService() {
-		return igFolderService;
-	}
-
-	/**
-	 * Sets the i g folder remote service.
-	 *
-	 * @param igFolderService the i g folder remote service
-	 */
-	public void setIGFolderService(IGFolderService igFolderService) {
-		this.igFolderService = igFolderService;
-	}
-
-	/**
-	 * Returns the i g folder persistence.
-	 *
-	 * @return the i g folder persistence
-	 */
-	public IGFolderPersistence getIGFolderPersistence() {
-		return igFolderPersistence;
-	}
-
-	/**
-	 * Sets the i g folder persistence.
-	 *
-	 * @param igFolderPersistence the i g folder persistence
-	 */
-	public void setIGFolderPersistence(IGFolderPersistence igFolderPersistence) {
-		this.igFolderPersistence = igFolderPersistence;
-	}
-
-	/**
 	 * Returns the journal article local service.
 	 *
 	 * @return the journal article local service
@@ -5317,6 +5279,8 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	protected RepositoryService repositoryService;
 	@BeanReference(type = RepositoryPersistence.class)
 	protected RepositoryPersistence repositoryPersistence;
+	@BeanReference(type = RepositoryEntryLocalService.class)
+	protected RepositoryEntryLocalService repositoryEntryLocalService;
 	@BeanReference(type = RepositoryEntryPersistence.class)
 	protected RepositoryEntryPersistence repositoryEntryPersistence;
 	@BeanReference(type = ResourceLocalService.class)
@@ -5507,12 +5471,6 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	protected DLAppLocalService dlAppLocalService;
 	@BeanReference(type = DLAppService.class)
 	protected DLAppService dlAppService;
-	@BeanReference(type = IGFolderLocalService.class)
-	protected IGFolderLocalService igFolderLocalService;
-	@BeanReference(type = IGFolderService.class)
-	protected IGFolderService igFolderService;
-	@BeanReference(type = IGFolderPersistence.class)
-	protected IGFolderPersistence igFolderPersistence;
 	@BeanReference(type = JournalArticleLocalService.class)
 	protected JournalArticleLocalService journalArticleLocalService;
 	@BeanReference(type = JournalArticleService.class)

@@ -20,7 +20,7 @@
 
 <c:choose>
 	<c:when test="<%= portletName.equals(PortletKeys.COMMUNITIES) || portletName.equals(PortletKeys.GROUP_PAGES) || portletName.equals(PortletKeys.MY_PAGES) || portletName.equals(PortletKeys.SITES_ADMIN) || portletName.equals(PortletKeys.USERS_ADMIN) %>">
-		<c:if test="<%= portletName.equals(PortletKeys.COMMUNITIES) || portletName.equals(PortletKeys.SITES_ADMIN) || portletName.equals(PortletKeys.USERS_ADMIN) %>">
+		<c:if test="<%= portletName.equals(PortletKeys.COMMUNITIES) || portletName.equals(PortletKeys.GROUP_PAGES) || portletName.equals(PortletKeys.SITES_ADMIN) || portletName.equals(PortletKeys.USERS_ADMIN) %>">
 			<liferay-ui:header
 				backURL="<%= backURL %>"
 				localizeTitle="<%= false %>"
@@ -94,7 +94,7 @@ if ((selLayout != null) && !group.isLayoutPrototype()) {
 					long layoutSetBranchId = ParamUtil.getLong(request, "layoutSetBranchId");
 
 					if (layoutSetBranchId <= 0) {
-						layoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(user);
+						layoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(user, selLayoutSet.getLayoutSetId());
 					}
 
 					LayoutSetBranch layoutSetBranch = null;
@@ -126,6 +126,7 @@ if ((selLayout != null) && !group.isLayoutPrototype()) {
 											<portlet:param name="<%= Constants.CMD %>" value="select_layout_set_branch" />
 											<portlet:param name="redirect" value="<%= redirectURL.toString() %>" />
 											<portlet:param name="groupId" value="<%= String.valueOf(curLayoutSetBranch.getGroupId()) %>" />
+											<portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
 											<portlet:param name="layoutSetBranchId" value="<%= String.valueOf(curLayoutSetBranch.getLayoutSetBranchId()) %>" />
 										</portlet:actionURL>
 

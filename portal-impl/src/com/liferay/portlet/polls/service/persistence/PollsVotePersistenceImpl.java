@@ -525,8 +525,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		Object[] finderArgs = new Object[] {
 				questionId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_QUESTIONID,
@@ -858,8 +857,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		Object[] finderArgs = new Object[] {
 				choiceId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_CHOICEID,
@@ -1321,10 +1319,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	 */
 	public List<PollsVote> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<PollsVote> list = (List<PollsVote>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -1697,10 +1692,12 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(PollsVotePersistenceImpl.class);
 	private static PollsVote _nullPollsVote = new PollsVoteImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<PollsVote> toCacheModel() {
 				return _nullPollsVoteCacheModel;
 			}

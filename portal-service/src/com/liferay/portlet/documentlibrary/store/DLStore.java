@@ -34,6 +34,11 @@ public interface DLStore {
 
 	public void addFile(
 			long companyId, long repositoryId, String fileName,
+			boolean validateFileExtension, byte[] bytes)
+		throws PortalException, SystemException;
+
+	public void addFile(
+			long companyId, long repositoryId, String fileName,
 			boolean validateFileExtension, File file)
 		throws PortalException, SystemException;
 
@@ -50,12 +55,15 @@ public interface DLStore {
 			long companyId, long repositoryId, String fileName, File file)
 		throws PortalException, SystemException;
 
+	public void addFile(
+			long companyId, long repositoryId, String fileName, InputStream is)
+		throws PortalException, SystemException;
+
 	public void checkRoot(long companyId) throws SystemException;
 
 	public void copyFileVersion(
 			long companyId, long repositoryId, String fileName,
-			String fromVersionNumber, String toVersionNumber,
-			String sourceFileName)
+			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException;
 
 	public void deleteDirectory(
@@ -68,15 +76,24 @@ public interface DLStore {
 
 	public void deleteFile(
 			long companyId, long repositoryId, String fileName,
-			String versionNumber)
+			String versionLabel)
 		throws PortalException, SystemException;
 
-	public byte[] getFile(long companyId, long repositoryId, String fileName)
+	public File getFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException;
 
-	public byte[] getFile(
+	public File getFile(
 			long companyId, long repositoryId, String fileName,
-			String versionNumber)
+			String versionLabel)
+		throws PortalException, SystemException;
+
+	public byte[] getFileAsBytes(
+			long companyId, long repositoryId, String fileName)
+		throws PortalException, SystemException;
+
+	public byte[] getFileAsBytes(
+			long companyId, long repositoryId, String fileName,
+			String versionLabel)
 		throws PortalException, SystemException;
 
 	public InputStream getFileAsStream(
@@ -85,7 +102,7 @@ public interface DLStore {
 
 	public InputStream getFileAsStream(
 			long companyId, long repositoryId, String fileName,
-			String versionNumber)
+			String versionLabel)
 		throws PortalException, SystemException;
 
 	public String[] getFileNames(
@@ -95,9 +112,12 @@ public interface DLStore {
 	public long getFileSize(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException;
 
+	public boolean hasFile(long companyId, long repositoryId, String fileName)
+		throws PortalException, SystemException;
+
 	public boolean hasFile(
 			long companyId, long repositoryId, String fileName,
-			String versionNumber)
+			String versionLabel)
 		throws PortalException, SystemException;
 
 	public void move(String srcDir, String destDir) throws SystemException;
@@ -115,29 +135,18 @@ public interface DLStore {
 	public void updateFile(
 			long companyId, long repositoryId, String fileName,
 			String fileExtension, boolean validateFileExtension,
-			String versionNumber, String sourceFileName, File file)
+			String versionLabel, String sourceFileName, File file)
 		throws PortalException, SystemException;
 
 	public void updateFile(
 			long companyId, long repositoryId, String fileName,
 			String fileExtension, boolean validateFileExtension,
-			String versionNumber, String sourceFileName, InputStream is)
-		throws PortalException, SystemException;
-
-	public void updateFile(
-			long companyId, long repositoryId, String fileName,
-			String versionNumber, String sourceFileName, byte[] bytes)
-		throws PortalException, SystemException;
-
-	public void updateFile(
-			long companyId, long repositoryId, String fileName,
-			String versionNumber, String sourceFileName, File file)
+			String versionLabel, String sourceFileName, InputStream is)
 		throws PortalException, SystemException;
 
 	public void updateFileVersion(
 			long companyId, long repositoryId, String fileName,
-			String fromVersionNumber, String toVersionNumber,
-			String sourceFileName)
+			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException;
 
 	public void validate(

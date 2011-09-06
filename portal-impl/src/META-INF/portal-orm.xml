@@ -180,6 +180,7 @@
 			<basic name="idd">
 				<column name="IDD_" />
 			</basic>
+			<basic name="zipRequired" />
 			<basic name="active">
 				<column name="ACTIVE_" />
 			</basic>
@@ -914,6 +915,7 @@
 				<column name="TYPE_" />
 			</basic>
 			<basic name="subtype" />
+			<transient name="descriptionMap" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="titleMap" />
@@ -1908,6 +1910,7 @@
 			</basic>
 			<basic name="fileId" />
 			<basic name="repositoryId" />
+			<basic name="parentFolderId" />
 			<basic name="event" />
 			<basic name="type">
 				<column name="TYPE_" />
@@ -2163,58 +2166,6 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.imagegallery.model.impl.IGFolderModelImpl">
-		<attributes>
-			<id name="folderId" />
-			<basic name="uuid">
-				<column name="UUID_" />
-			</basic>
-			<basic name="groupId" />
-			<basic name="companyId" />
-			<basic name="userId" />
-			<basic name="userName" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="parentFolderId" />
-			<basic name="name" />
-			<basic name="description" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.imagegallery.model.impl.IGImageModelImpl">
-		<attributes>
-			<id name="imageId" />
-			<basic name="uuid">
-				<column name="UUID_" />
-			</basic>
-			<basic name="groupId" />
-			<basic name="companyId" />
-			<basic name="userId" />
-			<basic name="userName" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="folderId" />
-			<basic name="name" />
-			<basic name="description" />
-			<basic name="smallImageId" />
-			<basic name="largeImageId" />
-			<basic name="custom1ImageId" />
-			<basic name="custom2ImageId" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portlet.journal.model.impl.JournalArticleModelImpl">
 		<attributes>
 			<id name="id">
@@ -2377,6 +2328,8 @@
 			<basic name="name" />
 			<basic name="description" />
 			<basic name="xsd" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -2410,6 +2363,8 @@
 			<basic name="smallImage" />
 			<basic name="smallImageId" />
 			<basic name="smallImageURL" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -2545,6 +2500,7 @@
 			<basic name="anonymous" />
 			<basic name="priority" />
 			<basic name="allowPingbacks" />
+			<basic name="answer" />
 			<basic name="status" />
 			<basic name="statusByUserId" />
 			<basic name="statusByUserName" />
@@ -2554,21 +2510,6 @@
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="statusByUserUuid" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.messageboards.model.impl.MBMessageFlagModelImpl">
-		<attributes>
-			<id name="messageFlagId" />
-			<basic name="userId" />
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="threadId" />
-			<basic name="messageId" />
-			<basic name="flag" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
@@ -2602,6 +2543,7 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="priority" />
+			<basic name="question" />
 			<basic name="status" />
 			<basic name="statusByUserId" />
 			<basic name="statusByUserName" />
@@ -2613,6 +2555,19 @@
 			<transient name="primaryKeyObj" />
 			<transient name="rootMessageUserUuid" />
 			<transient name="statusByUserUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portlet.messageboards.model.impl.MBThreadFlagModelImpl">
+		<attributes>
+			<id name="threadFlagId" />
+			<basic name="userId" />
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="threadId" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portlet.mobiledevicerules.model.impl.MDRActionModelImpl">
@@ -3581,6 +3536,7 @@
 			<transient name="maximizeHelp" />
 			<transient name="openSearchClass" />
 			<transient name="parentStrutsPath" />
+			<transient name="permissionPropagatorClass" />
 			<transient name="pluginPackage" />
 			<transient name="pollerProcessorClass" />
 			<transient name="popMessageListenerClass" />
@@ -3933,6 +3889,7 @@
 		<attributes>
 			<transient name="boolean" />
 			<transient name="booleanArray" />
+			<transient name="column" />
 			<transient name="date" />
 			<transient name="dateArray" />
 			<transient name="double" />
@@ -3947,16 +3904,6 @@
 			<transient name="shortArray" />
 			<transient name="string" />
 			<transient name="stringArray" />
-		</attributes>
-	</entity>
-	<entity class="com.liferay.portlet.imagegallery.model.impl.IGFolderImpl" name="IGFolder">
-		<table name="IGFolder" />
-		<attributes />
-	</entity>
-	<entity class="com.liferay.portlet.imagegallery.model.impl.IGImageImpl" name="IGImage">
-		<table name="IGImage" />
-		<attributes>
-			<transient name="imageType" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.journal.model.impl.JournalArticleImpl" name="JournalArticle">
@@ -4013,10 +3960,6 @@
 			<transient name="attachmentsDir" />
 		</attributes>
 	</entity>
-	<entity class="com.liferay.portlet.messageboards.model.impl.MBMessageFlagImpl" name="MBMessageFlag">
-		<table name="MBMessageFlag" />
-		<attributes />
-	</entity>
 	<entity class="com.liferay.portlet.messageboards.model.impl.MBStatsUserImpl" name="MBStatsUser">
 		<table name="MBStatsUser" />
 		<attributes />
@@ -4025,13 +3968,21 @@
 		<table name="MBThread" />
 		<attributes />
 	</entity>
+	<entity class="com.liferay.portlet.messageboards.model.impl.MBThreadFlagImpl" name="MBThreadFlag">
+		<table name="MBThreadFlag" />
+		<attributes />
+	</entity>
 	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRActionImpl" name="MDRAction">
 		<table name="MDRAction" />
-		<attributes />
+		<attributes>
+			<transient name="typeSettingsProperties" />
+		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleImpl" name="MDRRule">
 		<table name="MDRRule" />
-		<attributes />
+		<attributes>
+			<transient name="typeSettingsProperties" />
+		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupImpl" name="MDRRuleGroup">
 		<table name="MDRRuleGroup" />

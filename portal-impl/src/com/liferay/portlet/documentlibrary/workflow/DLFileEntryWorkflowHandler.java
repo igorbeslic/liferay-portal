@@ -54,6 +54,7 @@ public class DLFileEntryWorkflowHandler extends BaseWorkflowHandler {
 		return ResourceActionsUtil.getModelResource(locale, CLASS_NAME);
 	}
 
+	@Override
 	public WorkflowDefinitionLink getWorkflowDefinitionLink(
 			long companyId, long groupId, long classPK)
 		throws PortalException, SystemException {
@@ -106,7 +107,7 @@ public class DLFileEntryWorkflowHandler extends BaseWorkflowHandler {
 			"serviceContext");
 
 		return DLFileEntryLocalServiceUtil.updateStatus(
-			userId, classPK, status, serviceContext);
+			userId, classPK, status, workflowContext, serviceContext);
 	}
 
 	@Override

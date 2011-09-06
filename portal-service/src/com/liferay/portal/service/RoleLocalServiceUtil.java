@@ -256,22 +256,24 @@ public class RoleLocalServiceUtil {
 	public static com.liferay.portal.model.Role addRole(long userId,
 		long companyId, java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		java.lang.String description, int type)
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int type)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addRole(userId, companyId, name, titleMap, description, type);
+				   .addRole(userId, companyId, name, titleMap, descriptionMap,
+			type);
 	}
 
 	public static com.liferay.portal.model.Role addRole(long userId,
 		long companyId, java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		java.lang.String description, int type, java.lang.String className,
-		long classPK)
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int type, java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addRole(userId, companyId, name, titleMap, description,
+				   .addRole(userId, companyId, name, titleMap, descriptionMap,
 			type, className, classPK);
 	}
 
@@ -291,6 +293,12 @@ public class RoleLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService().checkSystemRoles(companyId);
+	}
+
+	public static com.liferay.portal.model.Role fetchRole(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchRole(companyId, name);
 	}
 
 	public static com.liferay.portal.model.Role getDefaultGroupRole(
@@ -430,6 +438,19 @@ public class RoleLocalServiceUtil {
 		return getService().hasUserRoles(userId, companyId, names, inherited);
 	}
 
+	public static com.liferay.portal.model.Role loadFetchRole(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().loadFetchRole(companyId, name);
+	}
+
+	public static com.liferay.portal.model.Role loadGetRole(long companyId,
+		java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().loadGetRole(companyId, name);
+	}
+
 	public static java.util.List<com.liferay.portal.model.Role> search(
 		long companyId, java.lang.String keywords, java.lang.Integer[] types,
 		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -508,11 +529,12 @@ public class RoleLocalServiceUtil {
 	public static com.liferay.portal.model.Role updateRole(long roleId,
 		java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		java.lang.String description, java.lang.String subtype)
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String subtype)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .updateRole(roleId, name, titleMap, description, subtype);
+				   .updateRole(roleId, name, titleMap, descriptionMap, subtype);
 	}
 
 	public static RoleLocalService getService() {

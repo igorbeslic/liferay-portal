@@ -538,8 +538,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		Object[] finderArgs = new Object[] {
 				companyId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_COMPANYID,
@@ -872,12 +871,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findByUserId(long userId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				userId,
-				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { userId, start, end, orderByComparator };
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_USERID,
 				finderArgs, this);
@@ -1216,8 +1210,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		Object[] finderArgs = new Object[] {
 				companyId, classNameId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C,
@@ -1580,8 +1573,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		Object[] finderArgs = new Object[] {
 				companyId, classNameId, classPK,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_C,
@@ -1966,8 +1958,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		Object[] finderArgs = new Object[] {
 				companyId, classNameId, classPK, mailing,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_C_M,
@@ -2370,8 +2361,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		Object[] finderArgs = new Object[] {
 				companyId, classNameId, classPK, primary,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_C_C_P,
@@ -2753,10 +2743,7 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	 */
 	public List<Address> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -3515,10 +3502,12 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(AddressPersistenceImpl.class);
 	private static Address _nullAddress = new AddressImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<Address> toCacheModel() {
 				return _nullAddressCacheModel;
 			}

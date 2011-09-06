@@ -368,6 +368,9 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 				groupIds, organizationIds, roleIds, userGroupIds, sendEmail,
 				serviceContext);
 
+			userLocalService.updateEmailAddressVerified(
+				defaultAdminUser.getUserId(), true);
+
 			userLocalService.updateLastLogin(
 				defaultAdminUser.getUserId(), defaultAdminUser.getLoginIP());
 
@@ -714,10 +717,11 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 			companyId);
 
 		try {
-			if (properties.containsKey(PropsKeys.LOCALES)) {
+			String newLocales = properties.getProperty(PropsKeys.LOCALES);
+
+			if (newLocales != null) {
 				String oldLocales = preferences.getValue(
 					PropsKeys.LOCALES, StringPool.BLANK);
-				String newLocales = properties.getProperty(PropsKeys.LOCALES);
 
 				if (!Validator.equals(oldLocales, newLocales)) {
 					LanguageUtil.resetAvailableLocales(companyId);

@@ -187,6 +187,13 @@ public class JournalArticleServiceWrapper implements JournalArticleService {
 			languageId, themeDisplay);
 	}
 
+	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> getArticlesByLayoutUuid(
+		long groupId, java.lang.String layoutUuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleService.getArticlesByLayoutUuid(groupId,
+			layoutUuid);
+	}
+
 	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
 		long resourcePrimKey)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -200,6 +207,14 @@ public class JournalArticleServiceWrapper implements JournalArticleService {
 			com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleService.getLatestArticle(groupId, articleId,
 			status);
+	}
+
+	public com.liferay.portlet.journal.model.JournalArticle getLatestArticle(
+		long groupId, java.lang.String className, long classPK)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleService.getLatestArticle(groupId, className,
+			classPK);
 	}
 
 	public void removeArticleLocale(long companyId, java.lang.String languageId)

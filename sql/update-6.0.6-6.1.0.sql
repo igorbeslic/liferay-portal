@@ -32,6 +32,12 @@ COMMIT_TRANSACTION;
 
 update Company set active_ = TRUE;
 
+alter table Country add zipRequired BOOLEAN;
+
+COMMIT_TRANSACTION;
+
+update Country set zipRequired = TRUE;
+
 create table DDLRecord (
 	uuid_ VARCHAR(75) null,
 	recordId LONG not null primary key,
@@ -233,6 +239,7 @@ create table DLSync (
 	modifiedDate DATE null,
 	fileId LONG,
 	repositoryId LONG,
+	parentFolderId LONG,
 	event VARCHAR(75) null,
 	type_ VARCHAR(75) null
 );
@@ -351,6 +358,7 @@ update MBCategory set displayStyle = 'default';
 alter table MBMailingList add allowAnonymous BOOLEAN;
 
 alter table MBMessage add format VARCHAR(75) null;
+alter table MBMessage add answer BOOLEAN;
 
 COMMIT_TRANSACTION;
 
@@ -358,6 +366,14 @@ update MBMessage set format = 'bbcode';
 
 alter table MBThread add companyId LONG;
 alter table MBThread add rootMessageUserId LONG;
+alter table MBThread add question BOOLEAN;
+
+create table MBThreadFlag (
+	threadFlagId LONG not null primary key,
+	userId LONG,
+	modifiedDate DATE null,
+	threadId LONG
+);
 
 create table MDRAction (
 	uuid_ VARCHAR(75) null,
@@ -372,8 +388,8 @@ create table MDRAction (
 	ruleId LONG,
 	name STRING null,
 	description STRING null,
-	type_ VARCHAR(75) null,
-	typeSettings VARCHAR(75) null
+	type_ VARCHAR(255) null,
+	typeSettings TEXT null
 );
 
 create table MDRRule (
@@ -388,8 +404,8 @@ create table MDRRule (
 	ruleGroupId LONG,
 	name STRING null,
 	description STRING null,
-	type_ VARCHAR(75) null,
-	typeSettings VARCHAR(75) null
+	type_ VARCHAR(255) null,
+	typeSettings TEXT null
 );
 
 create table MDRRuleGroup (
@@ -407,7 +423,7 @@ create table MDRRuleGroup (
 
 alter table PollsVote add companyId LONG;
 alter table PollsVote add userName VARCHAR(75) null;
-alter table PollsVote add createDate DATE null,;
+alter table PollsVote add createDate DATE null;
 alter table PollsVote add modifiedDate DATE null;
 
 create table PortalPreferences (
@@ -439,7 +455,32 @@ create table RepositoryEntry (
 	mappedId VARCHAR(75) null
 );
 
+create table ResourceBlock (
+	resourceBlockId LONG not null primary key,
+	companyId LONG,
+	groupId LONG,
+	name VARCHAR(75) null,
+	permissionsHash VARCHAR(75) null,
+	referenceCount LONG
+);
+
+create table ResourceBlockPermission (
+	resourceBlockPermissionId LONG not null primary key,
+	resourceBlockId LONG,
+	roleId LONG,
+	actionIds LONG
+);
+
 alter table ResourcePermission add ownerId LONG;
+
+create table ResourceTypePermission (
+	resourceTypePermissionId LONG not null primary key,
+	companyId LONG,
+	groupId LONG,
+	name VARCHAR(75) null,
+	roleId LONG,
+	actionIds LONG
+);
 
 alter table SocialEquityLog add extraData VARCHAR(255) null;
 

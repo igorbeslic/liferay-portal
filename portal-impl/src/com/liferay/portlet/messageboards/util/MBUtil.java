@@ -441,7 +441,8 @@ public class MBUtil {
 		String editorImpl = PropsUtil.get(BB_CODE_EDITOR_WYSIWYG_IMPL_KEY);
 
 		if (messageFormat.equals("bbcode") &&
-			!editorImpl.equals("ckeditor_bbcode")) {
+			!(editorImpl.equals("bbcode") ||
+			  editorImpl.equals("ckeditor_bbcode"))) {
 
 			messageFormat = "html";
 		}
@@ -726,6 +727,10 @@ public class MBUtil {
 
 	private static String _getParentMessageIdFromSubject(Message message)
 		throws Exception {
+
+		if (message.getSubject() == null) {
+			return null;
+		}
 
 		String parentMessageId = null;
 

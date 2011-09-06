@@ -157,6 +157,7 @@
 		<field name="a3" type="String" />
 		<field name="number" type="String" />
 		<field name="idd" type="String" />
+		<field name="zipRequired" type="boolean" />
 		<field name="active" type="boolean" />
 	</model>
 	<model name="com.liferay.portal.model.EmailAddress">
@@ -737,7 +738,7 @@
 		<field name="title" type="String" localized="true">
 			<hint name="max-length">4000</hint>
 		</field>
-		<field name="description" type="String">
+		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="type" type="int" />
@@ -1447,6 +1448,7 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="fileId" type="long" />
 		<field name="repositoryId" type="long" />
+		<field name="parentFolderId" type="long" />
 		<field name="event" type="String" />
 		<field name="type" type="String" />
 	</model>
@@ -1624,42 +1626,6 @@
 			<hint-collection name="TEXTAREA" />
 		</field>
 	</model>
-	<model name="com.liferay.portlet.imagegallery.model.IGFolder">
-		<field name="uuid" type="String" />
-		<field name="folderId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="parentFolderId" type="long" />
-		<field name="name" type="String">
-			<validator name="required" />
-		</field>
-		<field name="description" type="String">
-			<hint-collection name="TEXTAREA" />
-		</field>
-	</model>
-	<model name="com.liferay.portlet.imagegallery.model.IGImage">
-		<field name="uuid" type="String" />
-		<field name="imageId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="folderId" type="long" />
-		<field name="name" type="String" />
-		<field name="description" type="String">
-			<hint-collection name="TEXTAREA" />
-		</field>
-		<field name="smallImageId" type="long" />
-		<field name="largeImageId" type="long" />
-		<field name="custom1ImageId" type="long" />
-		<field name="custom2ImageId" type="long" />
-	</model>
 	<model name="com.liferay.portlet.journal.model.JournalArticle">
 		<field name="uuid" type="String" />
 		<field name="id" type="long" />
@@ -1800,10 +1766,10 @@
 			<hint name="auto-escape">false</hint>
 		</field>
 		<field name="parentStructureId" type="String" />
-		<field name="name" type="String">
+		<field name="name" type="String" localized="true">
 			<validator name="required" />
 		</field>
-		<field name="description" type="String">
+		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="xsd" type="String">
@@ -1826,10 +1792,10 @@
 		<field name="structureId" type="String">
 			<hint name="auto-escape">false</hint>
 		</field>
-		<field name="name" type="String">
+		<field name="name" type="String" localized="true">
 			<validator name="required" />
 		</field>
-		<field name="description" type="String">
+		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="xsl" type="String">
@@ -1940,18 +1906,11 @@
 		<field name="anonymous" type="boolean" />
 		<field name="priority" type="double" />
 		<field name="allowPingbacks" type="boolean" />
+		<field name="answer" type="boolean" />
 		<field name="status" type="int" />
 		<field name="statusByUserId" type="long" />
 		<field name="statusByUserName" type="String" />
 		<field name="statusDate" type="Date" />
-	</model>
-	<model name="com.liferay.portlet.messageboards.model.MBMessageFlag">
-		<field name="messageFlagId" type="long" />
-		<field name="userId" type="long" />
-		<field name="modifiedDate" type="Date" />
-		<field name="threadId" type="long" />
-		<field name="messageId" type="long" />
-		<field name="flag" type="int" />
 	</model>
 	<model name="com.liferay.portlet.messageboards.model.MBStatsUser">
 		<field name="statsUserId" type="long" />
@@ -1972,10 +1931,17 @@
 		<field name="lastPostByUserId" type="long" />
 		<field name="lastPostDate" type="Date" />
 		<field name="priority" type="double" />
+		<field name="question" type="boolean" />
 		<field name="status" type="int" />
 		<field name="statusByUserId" type="long" />
 		<field name="statusByUserName" type="String" />
 		<field name="statusDate" type="Date" />
+	</model>
+	<model name="com.liferay.portlet.messageboards.model.MBThreadFlag">
+		<field name="threadFlagId" type="long" />
+		<field name="userId" type="long" />
+		<field name="modifiedDate" type="Date" />
+		<field name="threadId" type="long" />
 	</model>
 	<model name="com.liferay.portlet.mobiledevicerules.model.MDRAction">
 		<field name="uuid" type="String" />
@@ -1988,10 +1954,20 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="ruleGroupId" type="long" />
 		<field name="ruleId" type="long" />
-		<field name="name" type="String" localized="true" />
-		<field name="description" type="String" localized="true" />
-		<field name="type" type="String" />
-		<field name="typeSettings" type="String" />
+		<field name="name" type="String" localized="true">
+			<hint name="display-width">150</hint>
+			<hint name="max-length">255</hint>
+			<validator name="required" />
+		</field>
+		<field name="description" type="String" localized="true">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="type" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="typeSettings" type="String">
+			<hint-collection name="CLOB" />
+		</field>
 	</model>
 	<model name="com.liferay.portlet.mobiledevicerules.model.MDRRule">
 		<field name="uuid" type="String" />
@@ -2003,10 +1979,20 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="ruleGroupId" type="long" />
-		<field name="name" type="String" localized="true" />
-		<field name="description" type="String" localized="true" />
-		<field name="type" type="String" />
-		<field name="typeSettings" type="String" />
+		<field name="name" type="String" localized="true">
+			<hint name="display-width">150</hint>
+			<hint name="max-length">255</hint>
+			<validator name="required" />
+		</field>
+		<field name="description" type="String" localized="true">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="type" type="String">
+			<hint name="max-length">255</hint>
+		</field>
+		<field name="typeSettings" type="String">
+			<hint-collection name="CLOB" />
+		</field>
 	</model>
 	<model name="com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup">
 		<field name="uuid" type="String" />
@@ -2017,8 +2003,14 @@
 		<field name="userName" type="String" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="name" type="String" localized="true" />
-		<field name="description" type="String" localized="true" />
+		<field name="name" type="String" localized="true">
+			<hint name="display-width">150</hint>
+			<hint name="max-length">255</hint>
+			<validator name="required" />
+		</field>
+		<field name="description" type="String" localized="true">
+			<hint-collection name="TEXTAREA" />
+		</field>
 	</model>
 	<model name="com.liferay.portlet.polls.model.PollsChoice">
 		<field name="uuid" type="String" />

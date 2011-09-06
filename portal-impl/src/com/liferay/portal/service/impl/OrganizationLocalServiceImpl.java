@@ -207,10 +207,13 @@ public class OrganizationLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(Organization.class);
+		if (serviceContext.isIndexingEnabled()) {
+			Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Organization.class);
 
-		indexer.reindex(
-			new String[] {String.valueOf(organization.getCompanyId())});
+			indexer.reindex(
+				new String[] {String.valueOf(organization.getCompanyId())});
+		}
 
 		return organization;
 	}
@@ -382,6 +385,12 @@ public class OrganizationLocalServiceImpl
 		// Group
 
 		Group group = organization.getGroup();
+
+		if (group.isSite()) {
+			group.setSite(false);
+
+			groupPersistence.update(group, false);
+		}
 
 		groupLocalService.deleteGroup(group);
 
@@ -956,6 +965,16 @@ public class OrganizationLocalServiceImpl
 		throws SystemException {
 
 		organizationPersistence.rebuildTree(companyId, force);
+	}
+
+	public List<Organization> search(
+			long companyId, LinkedHashMap<String, Object> params, int start,
+			int end)
+		throws SystemException {
+
+		return organizationFinder.findByCompanyId(
+			companyId, params, start, end,
+			new OrganizationNameComparator(true));
 	}
 
 	/**

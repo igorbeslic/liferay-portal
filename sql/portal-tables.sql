@@ -377,6 +377,7 @@ create table Country (
 	a3 VARCHAR(75) null,
 	number_ VARCHAR(75) null,
 	idd_ VARCHAR(75) null,
+	zipRequired BOOLEAN,
 	active_ BOOLEAN
 );
 
@@ -661,6 +662,7 @@ create table DLSync (
 	modifiedDate DATE null,
 	fileId LONG,
 	repositoryId LONG,
+	parentFolderId LONG,
 	event VARCHAR(75) null,
 	type_ VARCHAR(75) null
 );
@@ -753,38 +755,6 @@ create table Groups_UserGroups (
 	groupId LONG not null,
 	userGroupId LONG not null,
 	primary key (groupId, userGroupId)
-);
-
-create table IGFolder (
-	uuid_ VARCHAR(75) null,
-	folderId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	parentFolderId LONG,
-	name VARCHAR(75) null,
-	description STRING null
-);
-
-create table IGImage (
-	uuid_ VARCHAR(75) null,
-	imageId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	folderId LONG,
-	name VARCHAR(75) null,
-	description STRING null,
-	smallImageId LONG,
-	largeImageId LONG,
-	custom1ImageId LONG,
-	custom2ImageId LONG
 );
 
 create table Image (
@@ -897,7 +867,7 @@ create table JournalStructure (
 	modifiedDate DATE null,
 	structureId VARCHAR(75) null,
 	parentStructureId VARCHAR(75) null,
-	name VARCHAR(75) null,
+	name STRING null,
 	description STRING null,
 	xsd TEXT null
 );
@@ -913,7 +883,7 @@ create table JournalTemplate (
 	modifiedDate DATE null,
 	templateId VARCHAR(75) null,
 	structureId VARCHAR(75) null,
-	name VARCHAR(75) null,
+	name STRING null,
 	description STRING null,
 	xsl TEXT null,
 	langType VARCHAR(75) null,
@@ -1160,19 +1130,11 @@ create table MBMessage (
 	anonymous BOOLEAN,
 	priority DOUBLE,
 	allowPingbacks BOOLEAN,
+	answer BOOLEAN,
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
 	statusDate DATE null
-);
-
-create table MBMessageFlag (
-	messageFlagId LONG not null primary key,
-	userId LONG,
-	modifiedDate DATE null,
-	threadId LONG,
-	messageId LONG,
-	flag INTEGER
 );
 
 create table MBStatsUser (
@@ -1195,10 +1157,18 @@ create table MBThread (
 	lastPostByUserId LONG,
 	lastPostDate DATE null,
 	priority DOUBLE,
+	question BOOLEAN,
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
 	statusDate DATE null
+);
+
+create table MBThreadFlag (
+	threadFlagId LONG not null primary key,
+	userId LONG,
+	modifiedDate DATE null,
+	threadId LONG
 );
 
 create table MDRAction (
@@ -1214,8 +1184,8 @@ create table MDRAction (
 	ruleId LONG,
 	name STRING null,
 	description STRING null,
-	type_ VARCHAR(75) null,
-	typeSettings VARCHAR(75) null
+	type_ VARCHAR(255) null,
+	typeSettings TEXT null
 );
 
 create table MDRRule (
@@ -1230,8 +1200,8 @@ create table MDRRule (
 	ruleGroupId LONG,
 	name STRING null,
 	description STRING null,
-	type_ VARCHAR(75) null,
-	typeSettings VARCHAR(75) null
+	type_ VARCHAR(255) null,
+	typeSettings TEXT null
 );
 
 create table MDRRuleGroup (
@@ -1982,38 +1952,6 @@ create table Subscription (
 	classNameId LONG,
 	classPK LONG,
 	frequency VARCHAR(75) null
-);
-
-create table TasksProposal (
-	proposalId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	classNameId LONG,
-	classPK VARCHAR(75) null,
-	name VARCHAR(75) null,
-	description STRING null,
-	publishDate DATE null,
-	dueDate DATE null
-);
-
-create table TasksReview (
-	reviewId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	proposalId LONG,
-	assignedByUserId LONG,
-	assignedByUserName VARCHAR(75) null,
-	stage INTEGER,
-	completed BOOLEAN,
-	rejected BOOLEAN
 );
 
 create table Team (

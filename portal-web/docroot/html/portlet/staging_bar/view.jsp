@@ -76,11 +76,13 @@ if (layout != null) {
 
 	<div class="staging-bar">
 		<ul class="aui-tabview-list staging-tabview-list">
-			<li class="aui-state-default aui-tab first <%= (!group.isStagingGroup() ? " aui-state-active aui-tab-active" : StringPool.BLANK) %>">
-				<span class="aui-tab-content">
-					<aui:a cssClass="aui-tab-label" href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
-				</span>
-			</li>
+			<c:if test="<%= !group.isStagedRemotely() && ((liveGroup != null) && layout.isPrivateLayout() ? (liveGroup.getPrivateLayoutsPageCount() > 0) : (liveGroup.getPublicLayoutsPageCount() > 0)) %>">
+				<li class="aui-state-default aui-tab first <%= (!group.isStagingGroup() ? " aui-state-active aui-tab-active" : StringPool.BLANK) %>">
+					<span class="aui-tab-content">
+						<aui:a cssClass="aui-tab-label" href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
+					</span>
+				</li>
+			</c:if>
 
 			<c:if test="<%= stagingGroup != null %>">
 
@@ -103,8 +105,8 @@ if (layout != null) {
 									curLayoutSetBranch = layoutSetBranches.get(i);
 								}
 
-								boolean first = (i == 0) && (liveGroup == null);
-								boolean selected = group.isStagingGroup() && branchingEnabled && (curLayoutSetBranch.getLayoutSetBranchId() == layoutRevision.getLayoutSetBranchId());
+								boolean first = (i == 0) && ((liveGroup == null) || liveGroup.isStagedRemotely());
+								boolean selected = (group.isStagingGroup() || group.isStagedRemotely()) && (curLayoutSetBranch.getLayoutSetBranchId() == layoutRevision.getLayoutSetBranchId());
 
 								String cssClass = "aui-state-default aui-tab";
 
@@ -122,6 +124,7 @@ if (layout != null) {
 									<portlet:param name="<%= Constants.CMD %>" value="select_layout_set_branch" />
 									<portlet:param name="redirect" value="<%= stagingFriendlyURL %>" />
 									<portlet:param name="groupId" value="<%= String.valueOf(curLayoutSetBranch.getGroupId()) %>" />
+									<portlet:param name="privateLayout" value="<%= String.valueOf(layout.isPrivateLayout()) %>" />
 									<portlet:param name="layoutSetBranchId" value="<%= String.valueOf(curLayoutSetBranch.getLayoutSetBranchId()) %>" />
 								</portlet:actionURL>
 
@@ -160,6 +163,7 @@ if (layout != null) {
 												<portlet:param name="<%= Constants.CMD %>" value="select_layout_set_branch" />
 												<portlet:param name="redirect" value="<%= stagingFriendlyURL %>" />
 												<portlet:param name="groupId" value="<%= String.valueOf(curLayoutSetBranch.getGroupId()) %>" />
+												<portlet:param name="privateLayout" value="<%= String.valueOf(layout.isPrivateLayout()) %>" />
 												<portlet:param name="layoutSetBranchId" value="<%= String.valueOf(curLayoutSetBranch.getLayoutSetBranchId()) %>" />
 											</portlet:actionURL>
 

@@ -78,8 +78,6 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
-import com.liferay.portlet.imagegallery.model.impl.IGFolderImpl;
-import com.liferay.portlet.imagegallery.model.impl.IGImageImpl;
 import com.liferay.portlet.journal.model.impl.JournalArticleImpl;
 import com.liferay.portlet.journal.model.impl.JournalFeedImpl;
 import com.liferay.portlet.journal.model.impl.JournalStructureImpl;
@@ -91,8 +89,8 @@ import com.liferay.portlet.messageboards.model.MBMessageConstants;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.model.impl.MBBanImpl;
 import com.liferay.portlet.messageboards.model.impl.MBCategoryImpl;
-import com.liferay.portlet.messageboards.model.impl.MBMessageFlagImpl;
 import com.liferay.portlet.messageboards.model.impl.MBMessageImpl;
+import com.liferay.portlet.messageboards.model.impl.MBThreadFlagImpl;
 import com.liferay.portlet.messageboards.service.MBDiscussionLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
@@ -369,6 +367,41 @@ public class PortletDataContextImpl implements PortletDataContext {
 		String className, long classPK, List<MBMessage> messages) {
 
 		_commentsMap.put(getPrimaryKeyString(className, classPK), messages);
+	}
+
+	public void addExpando(
+			Element element, String path, ClassedModel classedModel)
+		throws PortalException, SystemException {
+
+		Class<?> clazz = classedModel.getModelClass();
+
+		String className = clazz.getName();
+
+		if (!_expandoColumnsMap.containsKey(className)) {
+			List<ExpandoColumn> expandoColumns =
+				ExpandoColumnLocalServiceUtil.getDefaultTableColumns(
+					_companyId, className);
+
+			for (ExpandoColumn expandoColumn : expandoColumns) {
+				addPermissions(
+					ExpandoColumn.class, expandoColumn.getColumnId());
+			}
+
+			_expandoColumnsMap.put(className, expandoColumns);
+		}
+
+		ExpandoBridge expandoBridge = classedModel.getExpandoBridge();
+
+		Map<String, Serializable> expandoBridgeAttributes =
+			expandoBridge.getAttributes();
+
+		if (!expandoBridgeAttributes.isEmpty()) {
+			String expandoPath = getExpandoPath(path);
+
+			element.addAttribute("expando-path", expandoPath);
+
+			addZipEntry(expandoPath, expandoBridgeAttributes);
+		}
 	}
 
 	public void addLocks(Class<?> clazz, String key)
@@ -1208,41 +1241,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_startDate = startDate;
 	}
 
-	protected void addExpando(
-			Element element, String path, ClassedModel classedModel)
-		throws PortalException, SystemException {
-
-		Class<?> clazz = classedModel.getModelClass();
-
-		String className = clazz.getName();
-
-		if (!_expandoColumnsMap.containsKey(className)) {
-			List<ExpandoColumn> expandoColumns =
-				ExpandoColumnLocalServiceUtil.getDefaultTableColumns(
-					_companyId, className);
-
-			for (ExpandoColumn expandoColumn : expandoColumns) {
-				addPermissions(
-				ExpandoColumn.class, expandoColumn.getColumnId());
-			}
-
-			_expandoColumnsMap.put(className, expandoColumns);
-		}
-
-		ExpandoBridge expandoBridge = classedModel.getExpandoBridge();
-
-		Map<String, Serializable> expandoBridgeAttributes =
-			expandoBridge.getAttributes();
-
-		if (!expandoBridgeAttributes.isEmpty()) {
-			String expandoPath = getExpandoPath(path);
-
-			element.addAttribute("expando-path", expandoPath);
-
-			addZipEntry(expandoPath, expandoBridgeAttributes);
-		}
-	}
-
 	protected ServiceContext createServiceContext(
 		Element element, String path, ClassedModel classedModel,
 		String namespace) {
@@ -1400,17 +1398,15 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_xStream.alias("DLFileEntry", DLFileEntryImpl.class);
 		_xStream.alias("DLFileShortcut", DLFileShortcutImpl.class);
 		_xStream.alias("DLFileRank", DLFileRankImpl.class);
-		_xStream.alias("IGFolder", IGFolderImpl.class);
-		_xStream.alias("IGImage", IGImageImpl.class);
 		_xStream.alias("JournalArticle", JournalArticleImpl.class);
 		_xStream.alias("JournalFeed", JournalFeedImpl.class);
 		_xStream.alias("JournalStructure", JournalStructureImpl.class);
 		_xStream.alias("JournalTemplate", JournalTemplateImpl.class);
 		_xStream.alias("Lock", LockImpl.class);
+		_xStream.alias("MBBan", MBBanImpl.class);
 		_xStream.alias("MBCategory", MBCategoryImpl.class);
 		_xStream.alias("MBMessage", MBMessageImpl.class);
-		_xStream.alias("MBMessageFlag", MBMessageFlagImpl.class);
-		_xStream.alias("MBBan", MBBanImpl.class);
+		_xStream.alias("MBThreadFlag", MBThreadFlagImpl.class);
 		_xStream.alias("PollsQuestion", PollsQuestionImpl.class);
 		_xStream.alias("PollsChoice", PollsChoiceImpl.class);
 		_xStream.alias("PollsVote", PollsVoteImpl.class);

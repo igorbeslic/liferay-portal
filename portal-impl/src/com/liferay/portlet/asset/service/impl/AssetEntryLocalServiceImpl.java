@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.increment.BufferedIncrement;
 import com.liferay.portal.kernel.increment.NumberIncrement;
+import com.liferay.portal.kernel.lar.ImportExportThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.search.FacetedSearcher;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.facet.AssetEntriesFacet;
@@ -59,7 +61,6 @@ import com.liferay.portlet.asset.util.AssetEntryValidator;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.wiki.model.WikiPage;
@@ -126,6 +127,10 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 		if (entry != null) {
 			deleteEntry(entry);
 		}
+	}
+
+	public AssetEntry fetchEntry(long entryId) throws SystemException {
+		return assetEntryPersistence.fetchByPrimaryKey(entryId);
 	}
 
 	public List<AssetEntry> getAncestorEntries(long entryId)
@@ -321,14 +326,6 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 
 	@BufferedIncrement(incrementClass = NumberIncrement.class)
 	public void incrementViewCounter(
-			long userId, String className, long classPK)
-		throws PortalException, SystemException {
-
-		incrementViewCounter(userId, className, classPK, 1);
-	}
-
-	@BufferedIncrement(incrementClass = NumberIncrement.class)
-	public void incrementViewCounter(
 			long userId, String className, long classPK, int increment)
 		throws PortalException, SystemException {
 
@@ -357,6 +354,16 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 					userId, entry.getEntryId(), ActionKeys.VIEW,
 					StringPool.BLANK);
 			}
+		}
+	}
+
+	public void reindex(List<AssetEntry> entries) throws PortalException {
+		for (AssetEntry entry : entries) {
+			String className = PortalUtil.getClassName(entry.getClassNameId());
+
+			Indexer indexer = IndexerRegistryUtil.getIndexer(className);
+
+			indexer.reindex(className, entry.getClassPK());
 		}
 	}
 
@@ -654,8 +661,12 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 			List<AssetTag> oldTags = assetEntryPersistence.getAssetTags(
 				entry.getEntryId());
 
+			assetEntryPersistence.setAssetTags(entry.getEntryId(), tags);
+
 			if (entry.isVisible()) {
 				boolean isNew = entry.isNew();
+
+				assetEntryPersistence.updateImpl(entry, false);
 
 				if (isNew) {
 					for (AssetTag tag : tags) {
@@ -685,10 +696,6 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 						oldTag.getTagId(), classNameId);
 				}
 			}
-
-			assetEntryPersistence.setAssetTags(entry.getEntryId(), tags);
-
-			assetEntryPersistence.updateImpl(entry, false);
 		}
 
 		// Update entry after tags so that entry listeners have access to the
@@ -794,6 +801,10 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 			String[] tagNames)
 		throws PortalException, SystemException {
 
+		if (ImportExportThreadLocal.isImportInProcess()) {
+			return;
+		}
+
 		AssetEntryValidator validator = (AssetEntryValidator)InstancePool.get(
 			PropsValues.ASSET_ENTRY_VALIDATOR);
 
@@ -852,16 +863,6 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 			long classNameId = PortalUtil.getClassNameId(
 				DLFileEntry.class.getName());
 			long classPK = fileEntryId;
-
-			return assetEntryPersistence.findByC_C(classNameId, classPK);
-		}
-		else if (portletId.equals(PortletKeys.IMAGE_GALLERY_DISPLAY)) {
-			long imageId = GetterUtil.getLong(
-				document.get(Field.ENTRY_CLASS_PK));
-
-			long classNameId = PortalUtil.getClassNameId(
-				IGImage.class.getName());
-			long classPK = imageId;
 
 			return assetEntryPersistence.findByC_C(classNameId, classPK);
 		}

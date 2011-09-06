@@ -105,6 +105,7 @@ AUI().add(
 			instance._unexpectedUploadErrorText = Liferay.Language.get('an-unexpected-error-occurred-while-uploading-your-file');
 			instance._uploadsCompleteText = Liferay.Language.get('all-files-ready-to-be-saved');
 			instance._uploadStatusText = Liferay.Language.get('uploading-file-x-of-x');
+			instance._zeroByteFileText = Liferay.Language.get('the-file-contains-no-data-and-cannot-be-uploaded.-please-use-the-classic-uploader');
 
 			instance._errorMessages = {
 				'1000': instance._duplicateFileText,
@@ -213,6 +214,11 @@ AUI().add(
 					var ul = instance.getFileListUl();
 
 					ul.append('<li class="upload-file upload-error"><span class="file-title">' + file.name + '</span> <span class="error-message">' + instance._invalidFileSizeText + '</span></li>');
+				}
+				else if (error_code == SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE) {
+					var ul = instance.getFileListUl();
+
+					ul.append('<li class="upload-file upload-error"><span class="file-title">' + file.name + '</span> <span class="error-message">' + instance._zeroByteFileText + '</span></li>');
 				}
 			},
 
@@ -779,9 +785,17 @@ AUI().add(
 
 								var movieBoundingBox = instance._movieBoundingBox;
 
+								var metadataContainer = instance._metadataContainer;
+								var metadataExplanationContainer = instance._metadataExplanationContainer;
+
 								if (fallback && fallback.hasClass(newUploaderClass)) {
 									if (movieBoundingBox) {
 										movieBoundingBox.hide();
+									}
+
+									if (metadataContainer && metadataExplanationContainer) {
+										metadataContainer.hide();
+										metadataExplanationContainer.hide();
 									}
 
 									instance._container.hide();
@@ -803,6 +817,21 @@ AUI().add(
 								else {
 									if (movieBoundingBox) {
 										movieBoundingBox.show();
+									}
+
+									if (metadataContainer && metadataExplanationContainer) {
+										var totalFiles = instance._fileList.all('li input[name=' + instance._namespace('selectUploadedFileCheckbox') + ']');
+
+										var selectedFiles = totalFiles.filter(':checked');
+
+										var selectedFilesCount = selectedFiles.size();
+
+										if (selectedFilesCount > 0) {
+											metadataContainer.show();
+										}
+										else {
+											metadataExplanationContainer.show();
+										}
 									}
 
 									instance._container.show();
@@ -950,7 +979,10 @@ AUI().add(
 			_updateMetadataContainer: function() {
 				var instance = this;
 
-				if (instance._metadataContainer && instance._metadataExplanationContainer) {
+				var metadataContainer = instance._metadataContainer;
+				var metadataExplanationContainer = instance._metadataExplanationContainer;
+
+				if (metadataContainer && metadataExplanationContainer) {
 					var totalFiles = instance._fileList.all('li input[name=' + instance._namespace('selectUploadedFileCheckbox') + ']');
 
 					var totalFilesCount = totalFiles.size();
@@ -965,8 +997,8 @@ AUI().add(
 						selectedFileName = selectedFiles.item(0).attr('data-fileName');
 					}
 
-					if (instance._metadataContainer) {
-						instance._metadataContainer.toggle((selectedFilesCount > 0));
+					if (metadataContainer) {
+						metadataContainer.toggle((selectedFilesCount > 0));
 
 						var selectedFilesText = instance._noFilesSelectedText;
 
@@ -980,13 +1012,15 @@ AUI().add(
 							selectedFilesText = instance._allFilesSelectedText;
 						}
 
-						var selectedFilesCountContainer = instance._metadataContainer.one('.selected-files-count');
+						var selectedFilesCountContainer = metadataContainer.one('.selected-files-count');
 
-						selectedFilesCountContainer.setContent(selectedFilesText);
+						if (selectedFilesCountContainer != null) {
+							selectedFilesCountContainer.setContent(selectedFilesText);
+						}
 					}
 
-					if (instance._metadataExplanationContainer) {
-						instance._metadataExplanationContainer.toggle((!selectedFilesCount) && (totalFilesCount > 0));
+					if (metadataExplanationContainer) {
+						metadataExplanationContainer.toggle((!selectedFilesCount) && (totalFilesCount > 0));
 					}
 				}
 			},

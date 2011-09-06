@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.assetpublisher.util;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -21,6 +22,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrimitiveLongList;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -30,17 +32,23 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
+import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
+import com.liferay.portlet.expando.model.ExpandoBridge;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -141,6 +149,50 @@ public class AssetPublisherUtil {
 		}
 
 		portletPreferences.setValues("assetEntryXml", assetEntryXmls);
+	}
+
+	public static void addUserAttributes(
+			User user, String[] customUserAttributeNames,
+			AssetEntryQuery assetEntryQuery)
+		throws Exception {
+
+		if ((user == null) || (customUserAttributeNames.length == 0)) {
+			return;
+		}
+
+		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+			user.getCompanyId());
+
+		long[] allCategoryIds = assetEntryQuery.getAllCategoryIds();
+
+		PrimitiveLongList allCategoryIdsList = new PrimitiveLongList(
+			allCategoryIds.length + customUserAttributeNames.length);
+
+		allCategoryIdsList.addAll(allCategoryIds);
+
+		for (String customUserAttributeName : customUserAttributeNames) {
+			ExpandoBridge userCustomAttributes = user.getExpandoBridge();
+
+			Serializable userCustomFieldValue =
+				userCustomAttributes.getAttribute(customUserAttributeName);
+
+			if (userCustomFieldValue == null) {
+				continue;
+			}
+
+			String userCustomFieldValueString = userCustomFieldValue.toString();
+
+			List<AssetCategory> assetCategories =
+				AssetCategoryLocalServiceUtil.search(
+					companyGroup.getGroupId(), userCustomFieldValueString,
+					new String[0], QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			for (AssetCategory assetCategory : assetCategories) {
+				 allCategoryIdsList.add(assetCategory.getCategoryId());
+			}
+		}
+
+		assetEntryQuery.setAllCategoryIds(allCategoryIdsList.getArray());
 	}
 
 	public static AssetEntryQuery getAssetEntryQuery(
@@ -272,72 +324,83 @@ public class AssetPublisherUtil {
 			portletPreferences.getValue(
 				"anyAssetType", Boolean.TRUE.toString()));
 
-		long[] classNameIds = null;
+		if (anyAssetType) {
+			return availableClassNameIds;
+		}
 
-		if (!anyAssetType &&
-			(portletPreferences.getValues("classNameIds", null) != null)) {
+		long defaultClassNameId = GetterUtil.getLong(
+			portletPreferences.getValue("anyAssetType", null));
 
-			classNameIds = GetterUtil.getLongValues(
-				portletPreferences.getValues("classNameIds", null));
+		if (defaultClassNameId > 0) {
+			return new long[] {defaultClassNameId};
+		}
+
+		long[] classNameIds = GetterUtil.getLongValues(
+			portletPreferences.getValues("classNameIds", null));
+
+		if (classNameIds != null) {
+			return classNameIds;
 		}
 		else {
-			classNameIds = availableClassNameIds;
+			return availableClassNameIds;
 		}
-
-		return classNameIds;
 	}
 
 	public static long[] getGroupIds(
 		PortletPreferences portletPreferences, long scopeGroupId,
 		Layout layout) {
 
-		long[] groupIds = new long[] {scopeGroupId};
-
 		boolean defaultScope = GetterUtil.getBoolean(
 			portletPreferences.getValue("defaultScope", null), true);
 
-		if (!defaultScope) {
-			String[] scopeIds = portletPreferences.getValues(
-				"scopeIds",
-				new String[] {"group" + StringPool.UNDERLINE + scopeGroupId});
+		if (defaultScope) {
+			return new long[] {scopeGroupId};
+		}
 
-			groupIds = new long[scopeIds.length];
+		long defaultScopeId = GetterUtil.getLong(
+			portletPreferences.getValue("defaultScope", null));
 
-			for (int i = 0; i < scopeIds.length; i++) {
-				try {
-					String[] scopeIdFragments = StringUtil.split(
-						scopeIds[i], CharPool.UNDERLINE);
+		if (defaultScopeId > 0) {
+			return new long[] {defaultScopeId};
+		}
 
-					if (scopeIdFragments[0].equals("Layout")) {
-						long scopeIdLayoutId = GetterUtil.getLong(
-							scopeIdFragments[1]);
+		String[] scopeIds = portletPreferences.getValues(
+			"scopeIds",
+			new String[] {"group" + StringPool.UNDERLINE + scopeGroupId});
 
-						Layout scopeIdLayout =
-							LayoutLocalServiceUtil.getLayout(
-								scopeGroupId, layout.isPrivateLayout(),
-								scopeIdLayoutId);
+		long[] groupIds = new long[scopeIds.length];
 
-						Group scopeIdGroup = scopeIdLayout.getScopeGroup();
+		for (int i = 0; i < scopeIds.length; i++) {
+			try {
+				String[] scopeIdFragments = StringUtil.split(
+					scopeIds[i], CharPool.UNDERLINE);
 
-						groupIds[i] = scopeIdGroup.getGroupId();
+				if (scopeIdFragments[0].equals("Layout")) {
+					long scopeIdLayoutId = GetterUtil.getLong(
+						scopeIdFragments[1]);
+
+					Layout scopeIdLayout = LayoutLocalServiceUtil.getLayout(
+						scopeGroupId, layout.isPrivateLayout(),
+						scopeIdLayoutId);
+
+					Group scopeIdGroup = scopeIdLayout.getScopeGroup();
+
+					groupIds[i] = scopeIdGroup.getGroupId();
+				}
+				else {
+					if (scopeIdFragments[1].equals(GroupConstants.DEFAULT)) {
+						groupIds[i] = scopeGroupId;
 					}
 					else {
-						if (scopeIdFragments[1].equals(
-								GroupConstants.DEFAULT)) {
+						long scopeIdGroupId = GetterUtil.getLong(
+							scopeIdFragments[1]);
 
-							groupIds[i] = scopeGroupId;
-						}
-						else {
-							long scopeIdGroupId = GetterUtil.getLong(
-								scopeIdFragments[1]);
-
-							groupIds[i] = scopeIdGroupId;
-						}
+						groupIds[i] = scopeIdGroupId;
 					}
 				}
-				catch (Exception e) {
-					continue;
-				}
+			}
+			catch (Exception e) {
+				continue;
 			}
 		}
 

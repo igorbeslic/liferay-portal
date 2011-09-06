@@ -245,7 +245,7 @@ public class BookmarksEntryLocalServiceImpl
 		bookmarksEntryPersistence.update(entry, false);
 
 		assetEntryLocalService.incrementViewCounter(
-			userId, BookmarksEntry.class.getName(), entryId);
+			userId, BookmarksEntry.class.getName(), entryId, 1);
 
 		return entry;
 	}
@@ -260,7 +260,7 @@ public class BookmarksEntryLocalServiceImpl
 			entry.getEntryId(), entry.getUuid(), assetCategoryIds,
 			assetTagNames, true, null, null, null, null,
 			ContentTypes.TEXT_PLAIN, entry.getName(), entry.getDescription(),
-			null, null, entry.getUrl(), 0, 0, null, false);
+			null, entry.getUrl(), null, 0, 0, null, false);
 
 		assetLinkLocalService.updateLinks(
 			userId, assetEntry.getEntryId(), assetLinkEntryIds,

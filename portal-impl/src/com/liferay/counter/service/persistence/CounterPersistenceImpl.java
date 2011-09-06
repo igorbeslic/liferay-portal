@@ -425,10 +425,7 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	 */
 	public List<Counter> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<Counter> list = (List<Counter>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -587,10 +584,12 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(CounterPersistenceImpl.class);
 	private static Counter _nullCounter = new CounterImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<Counter> toCacheModel() {
 				return _nullCounterCacheModel;
 			}

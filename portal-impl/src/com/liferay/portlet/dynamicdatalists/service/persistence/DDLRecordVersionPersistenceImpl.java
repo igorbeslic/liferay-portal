@@ -550,8 +550,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		Object[] finderArgs = new Object[] {
 				recordId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_RECORDID,
@@ -1039,8 +1038,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		Object[] finderArgs = new Object[] {
 				recordId, status,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_R_S,
@@ -1381,10 +1379,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	 */
 	public List<DDLRecordVersion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -1779,10 +1774,12 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(DDLRecordVersionPersistenceImpl.class);
 	private static DDLRecordVersion _nullDDLRecordVersion = new DDLRecordVersionImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<DDLRecordVersion> toCacheModel() {
 				return _nullDDLRecordVersionCacheModel;
 			}

@@ -17,6 +17,7 @@ package com.liferay.portlet.journal.action;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -44,6 +45,9 @@ import com.liferay.portlet.journal.util.JournalUtil;
 import com.liferay.util.JS;
 
 import java.io.File;
+
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -211,39 +215,47 @@ public class EditTemplateAction extends PortletAction {
 	protected JournalTemplate updateTemplate(ActionRequest actionRequest)
 		throws Exception {
 
-		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(
-			actionRequest);
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		String cmd = ParamUtil.getString(uploadRequest, Constants.CMD);
+		String cmd = ParamUtil.getString(uploadPortletRequest, Constants.CMD);
 
-		long groupId = ParamUtil.getLong(uploadRequest, "groupId");
+		long groupId = ParamUtil.getLong(uploadPortletRequest, "groupId");
 
-		String templateId = ParamUtil.getString(uploadRequest, "templateId");
+		String templateId = ParamUtil.getString(
+			uploadPortletRequest, "templateId");
 		boolean autoTemplateId = ParamUtil.getBoolean(
-			uploadRequest, "autoTemplateId");
+			uploadPortletRequest, "autoTemplateId");
 
-		String structureId = ParamUtil.getString(uploadRequest, "structureId");
-		String name = ParamUtil.getString(uploadRequest, "name");
-		String description = ParamUtil.getString(uploadRequest, "description");
+		String structureId = ParamUtil.getString(
+			uploadPortletRequest, "structureId");
+		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
+			actionRequest, "name");
+		Map<Locale, String> descriptionMap =
+			LocalizationUtil.getLocalizationMap(actionRequest, "description");
 
-		String xsl = ParamUtil.getString(uploadRequest, "xsl");
+		String xsl = ParamUtil.getString(uploadPortletRequest, "xsl");
 		String xslContent = JS.decodeURIComponent(
-			ParamUtil.getString(uploadRequest, "xslContent"));
-		boolean formatXsl = ParamUtil.getBoolean(uploadRequest, "formatXsl");
+			ParamUtil.getString(uploadPortletRequest, "xslContent"));
+		boolean formatXsl = ParamUtil.getBoolean(
+			uploadPortletRequest, "formatXsl");
 
 		if (Validator.isNull(xsl)) {
 			xsl = xslContent;
 		}
 
 		String langType = ParamUtil.getString(
-			uploadRequest, "langType", JournalTemplateConstants.LANG_TYPE_XSL);
+			uploadPortletRequest, "langType",
+			JournalTemplateConstants.LANG_TYPE_XSL);
 
-		boolean cacheable = ParamUtil.getBoolean(uploadRequest, "cacheable");
+		boolean cacheable = ParamUtil.getBoolean(
+			uploadPortletRequest, "cacheable");
 
-		boolean smallImage = ParamUtil.getBoolean(uploadRequest, "smallImage");
+		boolean smallImage = ParamUtil.getBoolean(
+			uploadPortletRequest, "smallImage");
 		String smallImageURL = ParamUtil.getString(
-			uploadRequest, "smallImageURL");
-		File smallFile = uploadRequest.getFile("smallFile");
+			uploadPortletRequest, "smallImageURL");
+		File smallFile = uploadPortletRequest.getFile("smallFile");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			JournalTemplate.class.getName(), actionRequest);
@@ -255,8 +267,8 @@ public class EditTemplateAction extends PortletAction {
 			// Add template
 
 			template = JournalTemplateServiceUtil.addTemplate(
-				groupId, templateId, autoTemplateId, structureId, name,
-				description, xsl, formatXsl, langType, cacheable, smallImage,
+				groupId, templateId, autoTemplateId, structureId, nameMap,
+				descriptionMap, xsl, formatXsl, langType, cacheable, smallImage,
 				smallImageURL, smallFile, serviceContext);
 		}
 		else {
@@ -264,7 +276,7 @@ public class EditTemplateAction extends PortletAction {
 			// Update template
 
 			template = JournalTemplateServiceUtil.updateTemplate(
-				groupId, templateId, structureId, name, description, xsl,
+				groupId, templateId, structureId, nameMap, descriptionMap, xsl,
 				formatXsl, langType, cacheable, smallImage, smallImageURL,
 				smallFile, serviceContext);
 		}

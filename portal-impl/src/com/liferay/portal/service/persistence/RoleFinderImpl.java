@@ -215,6 +215,7 @@ public class RoleFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			setJoin(qPos, params);
+
 			qPos.add(companyId);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
@@ -285,7 +286,7 @@ public class RoleFinderImpl
 
 			qPos.add(companyId);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -314,7 +315,7 @@ public class RoleFinderImpl
 			qPos.add(userId);
 			qPos.add(groupId);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -343,7 +344,7 @@ public class RoleFinderImpl
 			qPos.add(userId);
 			qPos.add(groupId);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -426,7 +427,7 @@ public class RoleFinderImpl
 			qPos.add(userId);
 			qPos.add(groupIds);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -502,6 +503,7 @@ public class RoleFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			setJoin(qPos, params);
+
 			qPos.add(companyId);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
@@ -596,7 +598,7 @@ public class RoleFinderImpl
 			qPos.add(primKey);
 			qPos.add(actionId);
 
-			return q.list();
+			return q.list(true);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);

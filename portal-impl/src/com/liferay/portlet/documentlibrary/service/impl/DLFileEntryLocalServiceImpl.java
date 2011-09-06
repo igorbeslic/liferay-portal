@@ -70,10 +70,12 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.model.FileModel;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
 import com.liferay.portlet.documentlibrary.service.base.DLFileEntryLocalServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelModifiedDateComparator;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -226,9 +228,15 @@ public class DLFileEntryLocalServiceImpl
 
 		// Workflow
 
+		Map<String, Serializable> workflowContext =
+			new HashMap<String, Serializable>();
+
+		workflowContext.put("event", DLSyncConstants.EVENT_ADD);
+
 		WorkflowHandlerRegistryUtil.startWorkflowInstance(
 			user.getCompanyId(), groupId, userId, DLFileEntry.class.getName(),
-			dlFileVersion.getFileVersionId(), dlFileVersion, serviceContext);
+			dlFileVersion.getFileVersionId(), dlFileVersion, serviceContext,
+			workflowContext);
 
 		return dlFileEntry;
 	}
@@ -284,6 +292,9 @@ public class DLFileEntryLocalServiceImpl
 		catch (NoSuchFileException nsfe) {
 		}
 
+		DLPreviewableProcessor.deleteFiles(
+			new LiferayFileVersion(dlFileVersion));
+
 		lockLocalService.unlock(DLFileEntry.class.getName(), fileEntryId);
 	}
 
@@ -336,8 +347,7 @@ public class DLFileEntryLocalServiceImpl
 		DLStoreUtil.updateFileVersion(
 			user.getCompanyId(), dlFileEntry.getDataRepositoryId(),
 			dlFileEntry.getName(),
-			DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION, version,
-			dlFileEntry.getTitle());
+			DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION, version);
 
 		// Index
 
@@ -348,10 +358,15 @@ public class DLFileEntryLocalServiceImpl
 		if (serviceContext.getWorkflowAction() ==
 				WorkflowConstants.ACTION_PUBLISH) {
 
+			Map<String, Serializable> workflowContext =
+				new HashMap<String, Serializable>();
+
+			workflowContext.put("event", DLSyncConstants.EVENT_UPDATE);
+
 			WorkflowHandlerRegistryUtil.startWorkflowInstance(
 				user.getCompanyId(), dlFileEntry.getGroupId(), userId,
 				DLFileEntry.class.getName(), dlFileVersion.getFileVersionId(),
-				dlFileVersion, serviceContext);
+				dlFileVersion, serviceContext, workflowContext);
 		}
 
 		lockLocalService.unlock(DLFileEntry.class.getName(), fileEntryId);
@@ -453,8 +468,7 @@ public class DLFileEntryLocalServiceImpl
 			DLStoreUtil.copyFileVersion(
 				user.getCompanyId(), dlFileEntry.getDataRepositoryId(),
 				dlFileEntry.getName(), version,
-				DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION,
-				dlFileVersion.getTitle());
+				DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION);
 
 			copyFileEntryMetadata(
 				dlFileEntry.getCompanyId(), dlFileVersion.getFileEntryTypeId(),
@@ -587,10 +601,40 @@ public class DLFileEntryLocalServiceImpl
 		}
 	}
 
+	public DLFileEntry fetchFileEntryByAnyImageId(long imageId)
+		throws SystemException {
+
+		return dlFileEntryFinder.fetchByAnyImageId(imageId);
+	}
+
 	public List<DLFileEntry> getExtraSettingsFileEntries(int start, int end)
 		throws SystemException {
 
 		return dlFileEntryFinder.findByExtraSettings(start, end);
+	}
+
+	public File getFile(
+			long userId, long fileEntryId, String version,
+			boolean incrementCounter)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
+			fileEntryId);
+
+		if (PropsValues.DL_FILE_ENTRY_READ_COUNT_ENABLED &&
+			incrementCounter) {
+
+			dlFileEntry.setReadCount(dlFileEntry.getReadCount() + 1);
+
+			dlFileEntryPersistence.update(dlFileEntry, false);
+		}
+
+		dlAppHelperLocalService.getFileAsStream(
+			userId, new LiferayFileEntry(dlFileEntry), incrementCounter);
+
+		return DLStoreUtil.getFile(
+			dlFileEntry.getCompanyId(), dlFileEntry.getDataRepositoryId(),
+			dlFileEntry.getName(), version);
 	}
 
 	public InputStream getFileAsStream(
@@ -951,6 +995,7 @@ public class DLFileEntryLocalServiceImpl
 
 	public DLFileEntry updateStatus(
 			long userId, long fileVersionId, int status,
+			Map<String, Serializable> workflowContext,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -978,6 +1023,7 @@ public class DLFileEntryLocalServiceImpl
 					dlFileEntry.getVersion(),
 					dlFileVersion.getVersion()) <= 0) {
 
+				dlFileEntry.setExtension(dlFileVersion.getExtension());
 				dlFileEntry.setTitle(dlFileVersion.getTitle());
 				dlFileEntry.setDescription(dlFileVersion.getDescription());
 				dlFileEntry.setExtraSettings(dlFileVersion.getExtraSettings());
@@ -1041,7 +1087,7 @@ public class DLFileEntryLocalServiceImpl
 
 		dlAppHelperLocalService.updateStatus(
 			userId, new LiferayFileEntry(dlFileEntry),
-			new LiferayFileVersion(dlFileVersion), status);
+			new LiferayFileVersion(dlFileVersion), status, workflowContext);
 
 		return dlFileEntry;
 	}
@@ -1524,7 +1570,7 @@ public class DLFileEntryLocalServiceImpl
 			assetEntry.getEntryId());
 
 		long[] assetLinkIds = StringUtil.split(
-			ListUtil.toString(assetLinks, AssetLink.LINK_ID_ACCESSOR), 0L);
+			ListUtil.toString(assetLinks, AssetLink.ENTRY_ID2_ACCESSOR), 0L);
 
 		return updateAsset(
 			userId, dlFileEntry, dlFileVersion, assetCategoryIds, assetTagNames,

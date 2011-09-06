@@ -49,8 +49,9 @@ import com.liferay.portlet.messageboards.NoSuchMessageException;
 import com.liferay.portlet.messageboards.RequiredMessageException;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageConstants;
-import com.liferay.portlet.messageboards.service.MBMessageFlagLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
+import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadServiceUtil;
 import com.liferay.portlet.messageboards.service.permission.MBMessagePermission;
 
@@ -74,6 +75,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * @author Brian Wing Shun Chan
  * @author Daniel Sanz
+ * @author Shuyang Zhou
  */
 public class EditMessageAction extends PortletAction {
 
@@ -96,6 +98,13 @@ public class EditMessageAction extends PortletAction {
 			}
 			else if (cmd.equals(Constants.LOCK)) {
 				lockThreads(actionRequest);
+			}
+			else if (cmd.equals(Constants.PREVIEW)) {
+				long messageId = ParamUtil.getLong(actionRequest, "messageId");
+
+				if (messageId > 0) {
+					message = MBMessageLocalServiceUtil.getMBMessage(messageId);
+				}
 			}
 			else if (cmd.equals(Constants.SUBSCRIBE)) {
 				subscribeMessage(actionRequest);
@@ -181,18 +190,19 @@ public class EditMessageAction extends PortletAction {
 		ActionRequest actionRequest, ActionResponse actionResponse,
 		MBMessage message) {
 
-		if (message == null) {
-			String redirect = ParamUtil.getString(actionRequest, "redirect");
-
-			return redirect;
-		}
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		int workflowAction = ParamUtil.getInteger(
 			actionRequest, "workflowAction", WorkflowConstants.ACTION_PUBLISH);
 
-		if (workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT) {
+		if (((message == null) && cmd.equals(Constants.PREVIEW)) ||
+			(workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
+
 			return getSaveAndContinueRedirect(
 				actionRequest, actionResponse, message);
+		}
+		else if (message == null) {
+			return ParamUtil.getString(actionRequest, "redirect");
 		}
 
 		ActionResponseImpl actionResponseImpl =
@@ -214,6 +224,9 @@ public class EditMessageAction extends PortletAction {
 
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 
+		String subject = ParamUtil.getString(actionRequest, "subject");
+		String body = ParamUtil.getString(actionRequest, "body");
+
 		boolean preview = ParamUtil.getBoolean(actionRequest, "preview");
 
 		PortletURL portletURL =
@@ -222,9 +235,16 @@ public class EditMessageAction extends PortletAction {
 		portletURL.setParameter(
 			"struts_action", "/message_boards/edit_message");
 		portletURL.setParameter("redirect", redirect);
-		portletURL.setParameter(
-			"messageId", String.valueOf(message.getMessageId()));
 		portletURL.setParameter("preview", String.valueOf(preview));
+
+		if (message != null) {
+			portletURL.setParameter(
+				"messageId", String.valueOf(message.getMessageId()));
+		}
+		else {
+			portletURL.setParameter("body", body);
+			portletURL.setParameter("subject", subject);
+		}
 
 		return portletURL.toString();
 	}
@@ -307,12 +327,13 @@ public class EditMessageAction extends PortletAction {
 			new ArrayList<ObjectValuePair<String, File>>();
 
 		if (attachments) {
-			UploadPortletRequest uploadRequest =
+			UploadPortletRequest uploadPortletRequest =
 				PortalUtil.getUploadPortletRequest(actionRequest);
 
 			for (int i = 1; i <= 5; i++) {
-				File file = uploadRequest.getFile("msgFile" + i);
-				String fileName = uploadRequest.getFileName("msgFile" + i);
+				File file = uploadPortletRequest.getFile("msgFile" + i);
+				String fileName = uploadPortletRequest.getFileName(
+					"msgFile" + i);
 
 				if ((file != null) && file.exists()) {
 					ObjectValuePair<String, File> ovp =
@@ -352,8 +373,8 @@ public class EditMessageAction extends PortletAction {
 					anonymous, priority, allowPingbacks, serviceContext);
 
 				if (question) {
-					MBMessageFlagLocalServiceUtil.addQuestionFlag(
-						message.getMessageId());
+					MBThreadLocalServiceUtil.updateQuestion(
+						message.getThreadId(), true);
 				}
 			}
 			else {
@@ -385,13 +406,8 @@ public class EditMessageAction extends PortletAction {
 				allowPingbacks, serviceContext);
 
 			if (message.isRoot()) {
-				if (question) {
-					MBMessageFlagLocalServiceUtil.addQuestionFlag(messageId);
-				}
-				else {
-					MBMessageFlagLocalServiceUtil.deleteQuestionAndAnswerFlags(
-						message.getThreadId());
-				}
+				MBThreadLocalServiceUtil.updateQuestion(
+					message.getThreadId(), question);
 			}
 		}
 

@@ -52,8 +52,6 @@ import com.liferay.portlet.expando.service.persistence.ExpandoColumnPersistenceT
 import com.liferay.portlet.expando.service.persistence.ExpandoRowPersistenceTest;
 import com.liferay.portlet.expando.service.persistence.ExpandoTablePersistenceTest;
 import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistenceTest;
-import com.liferay.portlet.imagegallery.service.persistence.IGFolderPersistenceTest;
-import com.liferay.portlet.imagegallery.service.persistence.IGImagePersistenceTest;
 import com.liferay.portlet.journal.service.persistence.JournalArticleImagePersistenceTest;
 import com.liferay.portlet.journal.service.persistence.JournalArticlePersistenceTest;
 import com.liferay.portlet.journal.service.persistence.JournalArticleResourcePersistenceTest;
@@ -65,9 +63,9 @@ import com.liferay.portlet.messageboards.service.persistence.MBBanPersistenceTes
 import com.liferay.portlet.messageboards.service.persistence.MBCategoryPersistenceTest;
 import com.liferay.portlet.messageboards.service.persistence.MBDiscussionPersistenceTest;
 import com.liferay.portlet.messageboards.service.persistence.MBMailingListPersistenceTest;
-import com.liferay.portlet.messageboards.service.persistence.MBMessageFlagPersistenceTest;
 import com.liferay.portlet.messageboards.service.persistence.MBMessagePersistenceTest;
 import com.liferay.portlet.messageboards.service.persistence.MBStatsUserPersistenceTest;
+import com.liferay.portlet.messageboards.service.persistence.MBThreadFlagPersistenceTest;
 import com.liferay.portlet.messageboards.service.persistence.MBThreadPersistenceTest;
 import com.liferay.portlet.mobiledevicerules.service.persistence.MDRActionPersistenceTest;
 import com.liferay.portlet.mobiledevicerules.service.persistence.MDRRuleGroupPersistenceTest;
@@ -228,9 +226,6 @@ public class PersistenceTestSuite extends TestSuite {
 		testSuite.addTestSuite(ExpandoTablePersistenceTest.class);
 		testSuite.addTestSuite(ExpandoValuePersistenceTest.class);
 
-		testSuite.addTestSuite(IGFolderPersistenceTest.class);
-		testSuite.addTestSuite(IGImagePersistenceTest.class);
-
 		testSuite.addTestSuite(JournalArticleImagePersistenceTest.class);
 		testSuite.addTestSuite(JournalArticlePersistenceTest.class);
 		testSuite.addTestSuite(JournalArticleResourcePersistenceTest.class);
@@ -243,9 +238,9 @@ public class PersistenceTestSuite extends TestSuite {
 		testSuite.addTestSuite(MBCategoryPersistenceTest.class);
 		testSuite.addTestSuite(MBDiscussionPersistenceTest.class);
 		testSuite.addTestSuite(MBMailingListPersistenceTest.class);
-		testSuite.addTestSuite(MBMessageFlagPersistenceTest.class);
 		testSuite.addTestSuite(MBMessagePersistenceTest.class);
 		testSuite.addTestSuite(MBStatsUserPersistenceTest.class);
+		testSuite.addTestSuite(MBThreadFlagPersistenceTest.class);
 		testSuite.addTestSuite(MBThreadPersistenceTest.class);
 
 		testSuite.addTestSuite(MDRActionPersistenceTest.class);

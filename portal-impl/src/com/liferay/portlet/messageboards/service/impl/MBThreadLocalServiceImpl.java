@@ -22,6 +22,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -37,13 +39,12 @@ import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageDisplay;
-import com.liferay.portlet.messageboards.model.MBMessageFlag;
-import com.liferay.portlet.messageboards.model.MBMessageFlagConstants;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.model.MBThreadConstants;
 import com.liferay.portlet.messageboards.model.MBTreeWalker;
 import com.liferay.portlet.messageboards.service.base.MBThreadLocalServiceBaseImpl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -52,8 +53,62 @@ import java.util.List;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Shuyang Zhou
  */
 public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
+
+	public MBThread addThread(long categoryId, MBMessage message)
+		throws PortalException, SystemException {
+
+		// Thread
+
+		long threadId = message.getThreadId();
+
+		if (!message.isRoot() || (threadId <= 0)) {
+			threadId = counterLocalService.increment();
+		}
+
+		MBThread thread = mbThreadPersistence.create(threadId);
+
+		thread.setGroupId(message.getGroupId());
+		thread.setCompanyId(message.getCompanyId());
+		thread.setCategoryId(categoryId);
+		thread.setRootMessageId(message.getMessageId());
+		thread.setRootMessageUserId(message.getUserId());
+
+		if (message.isAnonymous()) {
+			thread.setLastPostByUserId(0);
+		}
+		else {
+			thread.setLastPostByUserId(message.getUserId());
+		}
+
+		thread.setLastPostDate(message.getCreateDate());
+
+		if (message.getPriority() != MBThreadConstants.PRIORITY_NOT_GIVEN) {
+			thread.setPriority(message.getPriority());
+		}
+
+		thread.setStatus(message.getStatus());
+		thread.setStatusByUserId(message.getStatusByUserId());
+		thread.setStatusByUserName(message.getStatusByUserName());
+		thread.setStatusDate(message.getStatusDate());
+
+		mbThreadPersistence.update(thread, false);
+
+		// Asset
+
+		if (categoryId >= 0) {
+			assetEntryLocalService.updateEntry(
+				message.getUserId(), message.getGroupId(),
+				MBThread.class.getName(), thread.getThreadId(), null,
+				new long[0], new String[0], false, null, null, null, null, null,
+				String.valueOf(thread.getRootMessageId()), null, null, null,
+				null, 0, 0, null, false);
+		}
+
+		return thread;
+	}
 
 	public void deleteThread(long threadId)
 		throws PortalException, SystemException {
@@ -87,6 +142,10 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		catch (NoSuchDirectoryException nsde) {
 		}
 
+		// Thread flags
+
+		mbThreadFlagPersistence.removeByThreadId(thread.getThreadId());
+
 		// Messages
 
 		List<MBMessage> messages = mbMessagePersistence.findByThreadId(
@@ -108,10 +167,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 			assetEntryLocalService.deleteEntry(
 				MBMessage.class.getName(), message.getMessageId());
-
-			// Message flags
-
-			mbMessageFlagPersistence.removeByMessageId(message.getMessageId());
 
 			// Resources
 
@@ -155,6 +210,11 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 			mbCategoryPersistence.update(category, false);
 		}
+
+		// Thread Asset
+
+		assetEntryLocalService.deleteEntry(
+			MBThread.class.getName(), thread.getThreadId());
 
 		// Thread
 
@@ -326,6 +386,10 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		}
 	}
 
+	public List<MBThread> getNoAssetThreads() throws SystemException {
+		return mbThreadFinder.findByNoAssets();
+	}
+
 	public List<MBThread> getPriorityThreads(long categoryId, double priority)
 		throws PortalException, SystemException {
 
@@ -389,11 +453,15 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		}
 	}
 
-	@BufferedIncrement(incrementClass = NumberIncrement.class)
-	public void incrementViewCounter(long threadId)
-		throws PortalException, SystemException {
+	public boolean hasAnswerMessage(long threadId) throws SystemException {
+		int count = mbMessagePersistence.countByT_A(threadId, true);
 
-		incrementViewCounter(threadId, 1);
+		if (count > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	@BufferedIncrement(incrementClass = NumberIncrement.class)
@@ -494,21 +562,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		// Message flags
 
-		mbMessageFlagLocalService.deleteAnswerFlags(
-			oldThread.getThreadId(), message.getMessageId());
-
-		int count = mbMessageFlagPersistence.countByT_F(
-			oldThread.getThreadId(), MBMessageFlagConstants.ANSWER_FLAG);
-
-		if (count == 1) {
-			MBMessageFlag messageFlag = mbMessageFlagPersistence.fetchByU_M_F(
-				rootMessage.getUserId(), rootMessage.getMessageId(),
-				MBMessageFlagConstants.ANSWER_FLAG);
-
-			messageFlag.setFlag(MBMessageFlagConstants.QUESTION_FLAG);
-
-			mbMessageFlagPersistence.update(messageFlag, false);
-		}
+		mbMessageLocalService.updateAnswer(message, false, true);
 
 		// Create new thread
 
@@ -604,6 +658,27 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		return thread;
 	}
 
+	public void updateQuestion(long threadId, boolean question)
+		throws PortalException, SystemException {
+
+		MBThread thread = mbThreadPersistence.findByPrimaryKey(threadId);
+
+		if (thread.isQuestion() == question) {
+			return;
+		}
+
+		thread.setQuestion(question);
+
+		mbThreadPersistence.update(thread, false);
+
+		if (!question) {
+			MBMessage message = mbMessagePersistence.findByPrimaryKey(
+				thread.getRootMessageId());
+
+			mbMessageLocalService.updateAnswer(message, false, true);
+		}
+	}
+
 	/**
 	 * @deprecated {@link #incrementViewCounter(long, int)}
 	 */
@@ -619,41 +694,46 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		return thread;
 	}
 
-	protected MBThread addThread(long categoryId, MBMessage message)
-		throws SystemException {
+	protected void moveAttachmentFromOldThread(
+			long companyId, String fileName, String newAttachmentsDir)
+		throws PortalException, SystemException {
 
-		long threadId = counterLocalService.increment();
+		long repositoryId = CompanyConstants.SYSTEM;
 
-		MBThread thread = mbThreadPersistence.create(threadId);
+		StringBundler sb = new StringBundler(4);
 
-		thread.setGroupId(message.getGroupId());
-		thread.setCompanyId(message.getCompanyId());
-		thread.setCategoryId(categoryId);
-		thread.setRootMessageId(message.getMessageId());
-		thread.setRootMessageUserId(message.getUserId());
-		thread.setStatus(message.getStatus());
-		thread.setStatusByUserId(message.getStatusByUserId());
-		thread.setStatusByUserName(message.getStatusByUserName());
-		thread.setStatusDate(message.getStatusDate());
+		sb.append(newAttachmentsDir);
+		sb.append(StringPool.SLASH);
+		sb.append(StringUtil.extractLast(fileName, CharPool.SLASH));
 
-		thread.setMessageCount(thread.getMessageCount() + 1);
+		String newFileName = sb.toString();
 
-		if (message.isAnonymous()) {
-			thread.setLastPostByUserId(0);
+		try {
+			File file = DLStoreUtil.getFile(
+				companyId, repositoryId, fileName);
+
+			DLStoreUtil.addFile(
+				companyId, repositoryId, newFileName, false, file);
 		}
-		else {
-			thread.setLastPostByUserId(message.getUserId());
+		catch (UnsupportedOperationException uoe) {
+			InputStream is = DLStoreUtil.getFileAsStream(
+				companyId, repositoryId, fileName);
+
+			try {
+				DLStoreUtil.addFile(
+					companyId, repositoryId, newFileName, false, is);
+			}
+			finally {
+				try {
+					is.close();
+				}
+				catch (IOException ioe) {
+					_log.error(ioe);
+				}
+			}
 		}
 
-		thread.setLastPostDate(message.getCreateDate());
-
-		if (message.getPriority() != MBThreadConstants.PRIORITY_NOT_GIVEN) {
-			thread.setPriority(message.getPriority());
-		}
-
-		mbThreadPersistence.update(thread, false);
-
-		return thread;
+		DLStoreUtil.deleteFile(companyId, repositoryId, fileName);
 	}
 
 	protected void moveAttachmentsFromOldThread(
@@ -679,25 +759,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			companyId, repositoryId, oldAttachmentsDir);
 
 		for (String fileName : fileNames) {
-			String name = StringUtil.extractLast(fileName, StringPool.SLASH);
-			InputStream is = DLStoreUtil.getFileAsStream(
-				companyId, repositoryId, fileName);
-
-			try {
-				DLStoreUtil.addFile(
-					companyId, repositoryId, newAttachmentsDir + "/" + name,
-					false, is);
-			}
-			finally {
-				try {
-					is.close();
-				}
-				catch (IOException ioe) {
-					_log.error(ioe);
-				}
-			}
-
-			DLStoreUtil.deleteFile(companyId, repositoryId, fileName);
+			moveAttachmentFromOldThread(companyId, fileName, newAttachmentsDir);
 		}
 
 		try {

@@ -206,18 +206,50 @@ public class StringUtil {
 		return sb.toString();
 	}
 
+	public static String extractFirst(String s, char delimiter) {
+		if (s == null) {
+			return null;
+		}
+		else {
+			int index = s.indexOf(delimiter);
+
+			if (index < 0) {
+				return null;
+			}
+			else {
+				return s.substring(0, index);
+			}
+		}
+	}
+
 	public static String extractFirst(String s, String delimiter) {
 		if (s == null) {
 			return null;
 		}
 		else {
-			String[] array = split(s, delimiter);
+			int index = s.indexOf(delimiter);
 
-			if (array.length > 0) {
-				return array[0];
+			if (index < 0) {
+				return null;
 			}
 			else {
+				return s.substring(0, index);
+			}
+		}
+	}
+
+	public static String extractLast(String s, char delimiter) {
+		if (s == null) {
+			return null;
+		}
+		else {
+			int index = s.lastIndexOf(delimiter);
+
+			if (index < 0) {
 				return null;
+			}
+			else {
+				return s.substring(index + 1);
 			}
 		}
 	}
@@ -227,13 +259,13 @@ public class StringUtil {
 			return null;
 		}
 		else {
-			String[] array = split(s, delimiter);
+			int index = s.lastIndexOf(delimiter);
 
-			if (array.length > 0) {
-				return array[array.length - 1];
+			if (index < 0) {
+				return null;
 			}
 			else {
-				return null;
+				return s.substring(index + delimiter.length());
 			}
 		}
 	}
@@ -305,14 +337,14 @@ public class StringUtil {
 		}
 
 		if (offset > s.length()) {
-			offset = s.length();
+			return s.concat(insert);
 		}
+		else {
+			String prefix = s.substring(0, offset);
+			String postfix = s.substring(offset);
 
-		StringBuilder sb = new StringBuilder(s);
-
-		sb.insert(offset, insert);
-
-		return sb.toString();
+			return prefix.concat(insert).concat(postfix);
+		}
 	}
 
 	public static String lowerCase(String s) {

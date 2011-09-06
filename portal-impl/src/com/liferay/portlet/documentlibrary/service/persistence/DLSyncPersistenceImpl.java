@@ -343,6 +343,7 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		dlSyncImpl.setModifiedDate(dlSync.getModifiedDate());
 		dlSyncImpl.setFileId(dlSync.getFileId());
 		dlSyncImpl.setRepositoryId(dlSync.getRepositoryId());
+		dlSyncImpl.setParentFolderId(dlSync.getParentFolderId());
 		dlSyncImpl.setEvent(dlSync.getEvent());
 		dlSyncImpl.setType(dlSync.getType());
 
@@ -634,8 +635,7 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		Object[] finderArgs = new Object[] {
 				companyId, modifiedDate, repositoryId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<DLSync> list = (List<DLSync>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_C_M_R,
@@ -1014,10 +1014,7 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	 */
 	public List<DLSync> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<DLSync> list = (List<DLSync>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -1352,10 +1349,12 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(DLSyncPersistenceImpl.class);
 	private static DLSync _nullDLSync = new DLSyncImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<DLSync> toCacheModel() {
 				return _nullDLSyncCacheModel;
 			}

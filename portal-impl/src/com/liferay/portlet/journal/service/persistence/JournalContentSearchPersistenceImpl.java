@@ -655,8 +655,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				articleId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_ARTICLEID,
@@ -1017,8 +1016,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				groupId, privateLayout,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P,
@@ -1372,8 +1370,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				groupId, articleId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_A,
@@ -1754,8 +1751,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				groupId, privateLayout, layoutId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_L,
@@ -2133,8 +2129,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				groupId, privateLayout, articleId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_A,
@@ -2541,8 +2536,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		Object[] finderArgs = new Object[] {
 				groupId, privateLayout, layoutId, portletId,
 				
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
+				start, end, orderByComparator
 			};
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_BY_G_P_L_P,
@@ -3154,10 +3148,7 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	 */
 	public List<JournalContentSearch> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -3999,10 +3990,12 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(JournalContentSearchPersistenceImpl.class);
 	private static JournalContentSearch _nullJournalContentSearch = new JournalContentSearchImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<JournalContentSearch> toCacheModel() {
 				return _nullJournalContentSearchCacheModel;
 			}

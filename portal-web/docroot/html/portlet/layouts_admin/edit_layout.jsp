@@ -43,7 +43,9 @@ String layoutSetBranchName = StringPool.BLANK;
 boolean incomplete = false;
 
 if (layoutRevision != null) {
-	long recentLayoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(user);
+	LayoutSet layoutSet = selLayout.getLayoutSet();
+
+	long recentLayoutSetBranchId = StagingUtil.getRecentLayoutSetBranchId(user, layoutSet.getLayoutSetId());
 
 	incomplete = StagingUtil.isIncomplete(selLayout, recentLayoutSetBranchId);
 
@@ -74,7 +76,7 @@ String[][] categorySections = {mainSections};
 </div>
 
 <portlet:actionURL var="editLayoutURL">
-	<portlet:param name="struts_action" value="/manage_pages/edit_layouts" />
+	<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
 </portlet:actionURL>
 
 <aui:form action="<%= editLayoutURL %>" cssClass="edit-layout-form" enctype="multipart/form-data" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "saveLayout();" %>'>
@@ -83,9 +85,9 @@ String[][] categorySections = {mainSections};
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
 	<aui:input name="liveGroupId" type="hidden" value="<%= liveGroupId %>" />
 	<aui:input name="stagingGroupId" type="hidden" value="<%= stagingGroupId %>" />
+	<aui:input name="selPlid" type="hidden" value="<%= selPlid %>" />
 	<aui:input name="privateLayout" type="hidden" value="<%= privateLayout %>" />
 	<aui:input name="layoutId" type="hidden" value="<%= layoutId %>" />
-	<aui:input name="selPlid" type="hidden" value="<%= selPlid %>" />
 	<aui:input name="<%= PortletDataHandlerKeys.SELECTED_LAYOUTS %>" type="hidden" />
 
 	<c:if test="<%= layoutRevision != null && !incomplete%>">

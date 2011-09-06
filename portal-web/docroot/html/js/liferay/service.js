@@ -41,6 +41,7 @@ Liferay.Service.registerClass(
 	Liferay.Service.Portal, "Country",
 	{
 		addCountry: true,
+		fetchCountry: true,
 		getCountries: true,
 		getCountry: true,
 		getCountryByA2: true,
@@ -517,14 +518,17 @@ Liferay.Service.registerClass(
 	Liferay.Service.Asset, "AssetCategory",
 	{
 		addCategory: true,
+		deleteCategories: true,
 		deleteCategory: true,
 		getCategories: true,
 		getCategory: true,
 		getChildCategories: true,
+		getJSONVocabularyCategories: true,
 		getVocabularyCategories: true,
+		getVocabularyCategoriesCount: true,
 		getVocabularyRootCategories: true,
-		search: true,
 		moveCategory: true,
+		search: true,
 		updateCategory: true
 	}
 );
@@ -590,10 +594,13 @@ Liferay.Service.registerClass(
 	Liferay.Service.Asset, "AssetVocabulary",
 	{
 		addVocabulary: true,
+		deleteVocabularies: true,
 		deleteVocabulary: true,
 		getCompanyVocabularies: true,
 		getGroupsVocabularies: true,
 		getGroupVocabularies: true,
+		getGroupVocabulariesCount: true,
+		getJSONGroupVocabularies: true,
 		getVocabularies: true,
 		getVocabulary: true,
 		updateVocabulary: true
@@ -701,6 +708,7 @@ Liferay.Service.registerClass(
 		refreshFileEntryLock: true,
 		refreshFolderLock: true,
 		revertFileEntry: true,
+		search: true,
 		unlockFolder: true,
 		updateFileShortcut: true,
 		updateFolder: true,
@@ -845,6 +853,7 @@ Liferay.Service.registerClass(
 	{
 		addTemplate: true,
 		deleteTemplate: true,
+		getTemplates: true,
 		updateTemplate: true
 	}
 );
@@ -865,6 +874,7 @@ Liferay.Service.registerClass(
 	Liferay.Service.Expando, "ExpandoValue",
 	{
 		addValue: true,
+		addValues: true,
 		getData: true,
 		getJSONData: true
 	}
@@ -881,37 +891,6 @@ Liferay.Service.registerClass(
 
 Liferay.Service.register("Liferay.Service.IG", "com.liferay.portlet.imagegallery.service");
 
-Liferay.Service.registerClass(
-	Liferay.Service.IG, "IGFolder",
-	{
-		addFolder: true,
-		copyFolder: true,
-		deleteFolder: true,
-		getFolder: true,
-		getFolders: true,
-		getFoldersCount: true,
-		getSubfolderIds: true,
-		updateFolder: true
-	}
-);
-
-Liferay.Service.registerClass(
-	Liferay.Service.IG, "IGImage",
-	{
-		deleteImage: true,
-		deleteImageByFolderIdAndNameWithExtension: true,
-		getFoldersImagesCount: true,
-		getGroupImages: true,
-		getGroupImagesCount: true,
-		getImage: true,
-		getImageByFolderIdAndNameWithExtension: true,
-		getImageByLargeImageId: true,
-		getImageBySmallImageId: true,
-		getImages: true,
-		getImagesCount: true
-	}
-);
-
 Liferay.Service.register("Liferay.Service.Journal", "com.liferay.portlet.journal.service");
 
 Liferay.Service.registerClass(
@@ -923,6 +902,7 @@ Liferay.Service.registerClass(
 		expireArticle: true,
 		getArticle: true,
 		getArticleByUrlTitle: true,
+		getArticlesByLayoutUuid: true,
 		getLatestArticle: true,
 		removeArticleLocale: true,
 		search: true,
@@ -967,6 +947,8 @@ Liferay.Service.registerClass(
 		deleteTemplate: true,
 		getStructureTemplates: true,
 		getTemplate: true,
+		search: true,
+		searchCount: true,
 		updateTemplate: true
 	}
 );
@@ -1015,16 +997,9 @@ Liferay.Service.registerClass(
 		getThreadMessagesCount: true,
 		subscribeMessage: true,
 		unsubscribeMessage: true,
+		updateAnswer: true,
 		updateDiscussionMessage: true,
 		updateMessage: true
-	}
-);
-
-Liferay.Service.registerClass(
-	Liferay.Service.MB, "MBMessageFlag",
-	{
-		addAnswerFlag: true,
-		deleteAnswerFlag: true
 	}
 );
 

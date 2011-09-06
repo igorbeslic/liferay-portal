@@ -161,6 +161,11 @@ public class AssetCategoryLocalServiceImpl
 	public void deleteCategory(AssetCategory category)
 		throws PortalException, SystemException {
 
+		// Entries
+
+		List<AssetEntry> entries = assetTagPersistence.getAssetEntries(
+			category.getCategoryId());
+
 		// Category
 
 		assetCategoryPersistence.remove(category);
@@ -185,6 +190,10 @@ public class AssetCategoryLocalServiceImpl
 
 		assetCategoryPropertyLocalService.deleteCategoryProperties(
 			category.getCategoryId());
+
+		// Indexer
+
+		assetEntryLocalService.reindex(entries);
 	}
 
 	public void deleteCategory(long categoryId)
@@ -207,20 +216,8 @@ public class AssetCategoryLocalServiceImpl
 		}
 	}
 
-	public String[] getCategoryNames() throws SystemException {
-		return getCategoryNames(getCategories());
-	}
-
-	public String[] getCategoryNames(long classNameId, long classPK)
-		throws SystemException {
-
-		return getCategoryNames(getCategories(classNameId, classPK));
-	}
-
-	public String[] getCategoryNames(String className, long classPK)
-		throws SystemException {
-
-		return getCategoryNames(getCategories(className, classPK));
+	public AssetCategory fetchCategory(long categoryId) throws SystemException {
+		return assetCategoryPersistence.fetchByPrimaryKey(categoryId);
 	}
 
 	public List<AssetCategory> getCategories() throws SystemException {
@@ -252,6 +249,22 @@ public class AssetCategoryLocalServiceImpl
 		throws SystemException {
 
 		return getCategoryIds(getCategories(className, classPK));
+	}
+
+	public String[] getCategoryNames() throws SystemException {
+		return getCategoryNames(getCategories());
+	}
+
+	public String[] getCategoryNames(long classNameId, long classPK)
+		throws SystemException {
+
+		return getCategoryNames(getCategories(classNameId, classPK));
+	}
+
+	public String[] getCategoryNames(String className, long classPK)
+		throws SystemException {
+
+		return getCategoryNames(getCategories(className, classPK));
 	}
 
 	public List<AssetCategory> getChildCategories(long parentCategoryId)
@@ -411,6 +424,8 @@ public class AssetCategoryLocalServiceImpl
 		AssetCategory category = assetCategoryPersistence.findByPrimaryKey(
 			categoryId);
 
+		String oldName = category.getName();
+
 		if (vocabularyId != category.getVocabularyId()) {
 			assetVocabularyPersistence.findByPrimaryKey(vocabularyId);
 
@@ -459,6 +474,15 @@ public class AssetCategoryLocalServiceImpl
 			}
 		}
 
+		// Indexer
+
+		if (!oldName.equals(name)) {
+			List<AssetEntry> entries = assetCategoryPersistence.getAssetEntries(
+				category.getCategoryId());
+
+			assetEntryLocalService.reindex(entries);
+		}
+
 		return category;
 	}
 
@@ -502,16 +526,8 @@ public class AssetCategoryLocalServiceImpl
 			throw new AssetCategoryNameException();
 		}
 
-		List<AssetCategory> categories = null;
-
-		if (parentCategoryId == 0) {
-			categories = assetCategoryPersistence.findByN_V(
-				name, vocabularyId);
-		}
-		else {
-			categories = assetCategoryPersistence.findByP_N(
-				parentCategoryId, name);
-		}
+		List<AssetCategory> categories = assetCategoryPersistence.findByP_N(
+			parentCategoryId, name);
 
 		if ((categories.size() > 0) &&
 			(categories.get(0).getCategoryId() != categoryId)) {

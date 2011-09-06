@@ -789,10 +789,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 */
 	public List<Shard> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				String.valueOf(start), String.valueOf(end),
-				String.valueOf(orderByComparator)
-			};
+		Object[] finderArgs = new Object[] { start, end, orderByComparator };
 
 		List<Shard> list = (List<Shard>)FinderCacheUtil.getResult(FINDER_PATH_FIND_ALL,
 				finderArgs, this);
@@ -1234,10 +1231,12 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = com.liferay.portal.util.PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE;
 	private static Log _log = LogFactoryUtil.getLog(ShardPersistenceImpl.class);
 	private static Shard _nullShard = new ShardImpl() {
+			@Override
 			public Object clone() {
 				return this;
 			}
 
+			@Override
 			public CacheModel<Shard> toCacheModel() {
 				return _nullShardCacheModel;
 			}

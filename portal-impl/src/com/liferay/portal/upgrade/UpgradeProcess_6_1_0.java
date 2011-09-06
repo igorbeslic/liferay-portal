@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeAdminPortlets;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeAsset;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeBlogs;
+import com.liferay.portal.upgrade.v6_1_0.UpgradeCamelCasePortletPreferences;
+import com.liferay.portal.upgrade.v6_1_0.UpgradeCountry;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeDocumentLibrary;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeExpando;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeGroup;
@@ -26,7 +28,6 @@ import com.liferay.portal.upgrade.v6_1_0.UpgradeImageGallery;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeJournal;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeLayout;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeLock;
-import com.liferay.portal.upgrade.v6_1_0.UpgradeLookAndFeel;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeMessageBoards;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeNavigation;
 import com.liferay.portal.upgrade.v6_1_0.UpgradePermission;
@@ -36,6 +37,7 @@ import com.liferay.portal.upgrade.v6_1_0.UpgradeScheduler;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeSchema;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeScopes;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeSubscription;
+import com.liferay.portal.upgrade.v6_1_0.UpgradeUserGroup;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeUserName;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeVirtualHost;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeWorkflow;
@@ -43,6 +45,7 @@ import com.liferay.portal.upgrade.v6_1_0.UpgradeWorkflow;
 /**
  * @author Jorge Ferrer
  * @author Juan Fernández
+ * @author Miguel Pastor
  */
 public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 
@@ -54,9 +57,12 @@ public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		upgrade(UpgradeSchema.class);
+		upgrade(UpgradeUserName.class);
 		upgrade(UpgradeAsset.class);
 		upgrade(UpgradeAdminPortlets.class);
 		upgrade(UpgradeBlogs.class);
+		upgrade(UpgradeCamelCasePortletPreferences.class);
+		upgrade(UpgradeCountry.class);
 		upgrade(UpgradeDocumentLibrary.class);
 		upgrade(UpgradeExpando.class);
 		upgrade(UpgradeGroup.class);
@@ -64,7 +70,6 @@ public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 		upgrade(UpgradeJournal.class);
 		upgrade(UpgradeLayout.class);
 		upgrade(UpgradeLock.class);
-		upgrade(UpgradeLookAndFeel.class);
 		upgrade(UpgradeMessageBoards.class);
 		upgrade(UpgradeNavigation.class);
 		upgrade(UpgradePermission.class);
@@ -73,7 +78,7 @@ public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 		upgrade(UpgradeScheduler.class);
 		upgrade(UpgradeScopes.class);
 		upgrade(UpgradeSubscription.class);
-		upgrade(UpgradeUserName.class);
+		upgrade(UpgradeUserGroup.class);
 		upgrade(UpgradeVirtualHost.class);
 		upgrade(UpgradeWorkflow.class);
 	}

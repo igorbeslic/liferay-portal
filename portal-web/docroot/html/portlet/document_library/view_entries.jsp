@@ -19,8 +19,6 @@
 <%
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
-long defaultFolderId = GetterUtil.getLong(preferences.getValue("rootFolderId", StringPool.BLANK), DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 
 long repositoryId = GetterUtil.getLong((String)request.getAttribute("view.jsp-repositoryId"));
@@ -63,7 +61,7 @@ SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, nul
 
 List<String> headerNames = new ArrayList<String>();
 
-headerNames.add("name");
+headerNames.add("title");
 headerNames.add("description");
 headerNames.add("size");
 headerNames.add("create-date");
@@ -77,7 +75,7 @@ searchContainer.setRowChecker(new EntriesChecker(liferayPortletRequest, liferayP
 
 Map<String, String> orderableHeaders = new HashMap<String, String>();
 
-orderableHeaders.put("name", "name");
+orderableHeaders.put("title", "title");
 orderableHeaders.put("size", "size");
 orderableHeaders.put("create-date", "creationDate");
 orderableHeaders.put("modified-date", "modifiedDate");
@@ -93,8 +91,11 @@ searchContainer.setOrderByCol(orderByCol);
 searchContainer.setOrderByType(orderByType);
 searchContainer.setOrderByComparator(orderByComparator);
 
-int start = ParamUtil.getInteger(request, "start", searchContainer.getStart());
-int end = ParamUtil.getInteger(request, "end", searchContainer.getEnd());
+int entryStart = ParamUtil.getInteger(request, "entryStart", searchContainer.getStart());
+int entryEnd = ParamUtil.getInteger(request, "entryEnd", searchContainer.getEnd());
+
+int folderStart = ParamUtil.getInteger(request, "folderStart");
+int folderEnd = ParamUtil.getInteger(request, "folderEnd", SearchContainer.DEFAULT_DELTA);
 
 List results = null;
 int total = 0;
@@ -147,7 +148,7 @@ else {
 			total = AssetEntryServiceUtil.getEntriesCount(assetEntryQuery);
 		}
 		else {
-			results = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcuts(repositoryId, folderId, status, false, start, end, searchContainer.getOrderByComparator());
+			results = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcuts(repositoryId, folderId, status, false, entryStart, entryEnd, searchContainer.getOrderByComparator());
 			total = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(repositoryId, folderId, status, false);
 		}
 	}
@@ -158,23 +159,21 @@ else {
 			groupFileEntriesUserId = user.getUserId();
 		}
 
-		results = DLAppServiceUtil.getGroupFileEntries(repositoryId, groupFileEntriesUserId, defaultFolderId, start, end);
-		total = DLAppServiceUtil.getGroupFileEntriesCount(repositoryId, groupFileEntriesUserId, defaultFolderId);
+		results= DLAppServiceUtil.getGroupFileEntries(repositoryId, groupFileEntriesUserId, folderId, entryStart, entryEnd);
+		total= DLAppServiceUtil.getGroupFileEntriesCount(repositoryId, groupFileEntriesUserId, folderId);
 	}
 }
 
 searchContainer.setResults(results);
 searchContainer.setTotal(total);
+
+request.setAttribute("view_entries.jsp-total", String.valueOf(total));
 %>
 
-<c:if test='<%= !displayStyle.equals("list") %>'>
-	<c:choose>
-		<c:when test="<%= results.isEmpty() %>">
-			<div class="portlet-msg-info">
-				<%= LanguageUtil.get(pageContext, "there-are-no-documents-in-this-folder") %>
-			</div>
-		</c:when>
-	</c:choose>
+<c:if test="<%= results.isEmpty() %>">
+	<div class="portlet-msg-info">
+		<%= LanguageUtil.get(pageContext, "there-are-no-documents-in-this-folder") %>
+	</div>
 </c:if>
 
 <%
@@ -242,15 +241,10 @@ for (int i = 0; i < results.size(); i++) {
 					rowURL.setParameter("fileEntryId", String.valueOf(fileEntry.getFileEntryId()));
 
 					row.addText(fileEntryTitle, rowURL);
-
 					row.addText(fileEntry.getDescription(), rowURL);
-
 					row.addText(TextFormatter.formatKB(fileEntry.getSize(), locale) + "k");
-
 					row.addText(dateFormatDateTime.format(fileEntry.getCreateDate()));
-
 					row.addText(dateFormatDateTime.format(fileEntry.getModifiedDate()));
-
 					row.addText(String.valueOf(fileEntry.getReadCount()));
 
 					row.addJSP("/html/portlet/document_library/file_entry_action.jsp");
@@ -273,8 +267,11 @@ for (int i = 0; i < results.size(); i++) {
 				<portlet:param name="viewEntries" value="<%= Boolean.TRUE.toString() %>" />
 				<portlet:param name="viewFileEntrySearch" value="<%= Boolean.TRUE.toString() %>" />
 				<portlet:param name="viewFolders" value="<%= Boolean.TRUE.toString() %>" />
-				<portlet:param name="start" value="0" />
-				<portlet:param name="end" value="<%= String.valueOf(end - start) %>" />
+				<portlet:param name="viewSortButton" value="<%= Boolean.TRUE.toString() %>" />
+				<portlet:param name="entryStart" value="0" />
+				<portlet:param name="entryEnd" value="<%= String.valueOf(entryEnd - entryStart) %>" />
+				<portlet:param name="folderStart" value="0" />
+				<portlet:param name="folderEnd" value="<%= String.valueOf(folderEnd - folderStart) %>" />
 			</liferay-portlet:resourceURL>
 
 			<c:choose>
@@ -327,6 +324,8 @@ for (int i = 0; i < results.size(); i++) {
 					Map<String,Object> data = new HashMap<String,Object>();
 
 					data.put("folder", true);
+					data.put("folder-id", curFolder.getFolderId());
+					data.put("refresh-folders", true);
 					data.put("resource-url", viewEntriesURL);
 
 					TextSearchEntry folderTitleSearchEntry = new TextSearchEntry();
@@ -341,7 +340,7 @@ for (int i = 0; i < results.size(); i++) {
 
 					folderDescriptionSearchEntry.setData(data);
 					folderDescriptionSearchEntry.setHref(rowURL.toString());
-					folderDescriptionSearchEntry.setName(folderTitle);
+					folderDescriptionSearchEntry.setName(curFolder.getDescription());
 
 					row.addSearchEntry(folderDescriptionSearchEntry);
 
@@ -381,11 +380,16 @@ for (int i = 0; i < results.size(); i++) {
 
 <aui:script>
 	Liferay.fire(
-		'viewEntriesLoaded',
+		'<portlet:namespace />pageLoaded',
 		{
-			page: <%= end / (end - start) %>,
-			paginationURL: '<%= paginationURL %>',
-			total: <%= total %>
+			paginator: {
+				name: 'entryPaginator',
+				state: {
+					page: <%= entryEnd / (entryEnd - entryStart) %>,
+					rowsPerPage: <%= (entryEnd - entryStart) %>,
+					total: <%= total %>
+				}
+			}
 		}
 	);
 </aui:script>
