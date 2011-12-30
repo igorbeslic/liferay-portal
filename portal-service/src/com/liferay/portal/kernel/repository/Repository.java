@@ -111,7 +111,7 @@ public interface Repository {
 		throws SystemException;
 
 	public int getFileEntriesAndFileShortcutsCount(
-			long folderId, String[] mimeTypes, int status)
+			long folderId, int status, String[] mimeTypes)
 		throws PortalException, SystemException;
 
 	public int getFileEntriesCount(long folderId)

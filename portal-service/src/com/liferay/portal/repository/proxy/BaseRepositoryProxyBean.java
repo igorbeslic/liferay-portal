@@ -212,12 +212,12 @@ public class BaseRepositoryProxyBean
 			folderId, status);
 	}
 
-	public int getFileEntriesAndFileShortcutsCount(long folderId,
-			String[] mimeTypes, int status)
+	public int getFileEntriesAndFileShortcutsCount(
+			long folderId, int status, String[] mimeTypes)
 		throws PortalException, SystemException {
 
 		return _baseRepository.getFileEntriesAndFileShortcutsCount(
-			folderId, mimeTypes, status);
+			folderId, status, mimeTypes);
 	}
 
 	public int getFileEntriesCount(long folderId)

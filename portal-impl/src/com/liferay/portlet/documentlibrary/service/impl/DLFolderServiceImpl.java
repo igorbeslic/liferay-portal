@@ -130,7 +130,7 @@ public class DLFolderServiceImpl extends DLFolderServiceBaseImpl {
 	}
 
 	public int getFileEntriesAndFileShortcutsCount(
-			long groupId, long folderId, String[] mimeTypes, int status)
+			long groupId, long folderId, int status, String[] mimeTypes)
 		throws SystemException {
 
 		return dlFolderFinder.filterCountFE_FS_ByG_F_S(

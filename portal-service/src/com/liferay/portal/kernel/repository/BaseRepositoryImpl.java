@@ -117,7 +117,7 @@ public abstract class BaseRepositoryImpl implements BaseRepository {
 	}
 
 	public int getFileEntriesAndFileShortcutsCount(
-			long folderId, String[] mimeTypes, int status)
+			long folderId, int status, String[] mimeTypes)
 		throws PortalException, SystemException {
 
 		return getFileEntriesCount(folderId, mimeTypes);
