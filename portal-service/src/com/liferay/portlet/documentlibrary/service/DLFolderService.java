@@ -71,7 +71,7 @@ public interface DLFolderService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getFileEntriesAndFileShortcutsCount(long groupId, long folderId,
-		java.lang.String[] mimeTypes, int status)
+		int status, java.lang.String[] mimeTypes)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

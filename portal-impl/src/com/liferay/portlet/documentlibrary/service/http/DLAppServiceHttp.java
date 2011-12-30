@@ -1065,7 +1065,7 @@ public class DLAppServiceHttp {
 
 	public static int getFileEntriesAndFileShortcutsCount(
 		HttpPrincipal httpPrincipal, long repositoryId, long folderId,
-		java.lang.String[] mediaTypes, int status)
+		int status, java.lang.String[] mimeTypes)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -1074,7 +1074,7 @@ public class DLAppServiceHttp {
 					_getFileEntriesAndFileShortcutsCountParameterTypes27);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
-					repositoryId, folderId, mediaTypes, status);
+					repositoryId, folderId, status, mimeTypes);
 
 			Object returnObj = null;
 
@@ -3557,7 +3557,7 @@ public class DLAppServiceHttp {
 	private static final Class<?>[] _getFileEntriesAndFileShortcutsCountParameterTypes26 =
 		new Class[] { long.class, long.class, int.class };
 	private static final Class<?>[] _getFileEntriesAndFileShortcutsCountParameterTypes27 =
-		new Class[] { long.class, long.class, java.lang.String[].class, int.class };
+		new Class[] { long.class, long.class, int.class, java.lang.String[].class };
 	private static final Class<?>[] _getFileEntriesCountParameterTypes28 = new Class[] {
 			long.class, long.class
 		};

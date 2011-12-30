@@ -227,8 +227,8 @@ public class DLFolderServiceHttp {
 	}
 
 	public static int getFileEntriesAndFileShortcutsCount(
-		HttpPrincipal httpPrincipal, long groupId, long folderId,
-		java.lang.String[] mimeTypes, int status)
+		HttpPrincipal httpPrincipal, long groupId, long folderId, int status,
+		java.lang.String[] mimeTypes)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(DLFolderServiceUtil.class.getName(),
@@ -236,7 +236,7 @@ public class DLFolderServiceHttp {
 					_getFileEntriesAndFileShortcutsCountParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					folderId, mimeTypes, status);
+					folderId, status, mimeTypes);
 
 			Object returnObj = null;
 
@@ -1213,7 +1213,7 @@ public class DLFolderServiceHttp {
 	private static final Class<?>[] _getFileEntriesAndFileShortcutsCountParameterTypes4 =
 		new Class[] { long.class, long.class, int.class };
 	private static final Class<?>[] _getFileEntriesAndFileShortcutsCountParameterTypes5 =
-		new Class[] { long.class, long.class, java.lang.String[].class, int.class };
+		new Class[] { long.class, long.class, int.class, java.lang.String[].class };
 	private static final Class<?>[] _getFolderParameterTypes6 = new Class[] {
 			long.class
 		};

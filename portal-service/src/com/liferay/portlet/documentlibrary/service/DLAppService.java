@@ -670,15 +670,15 @@ public interface DLAppService {
 	*
 	* @param repositoryId the primary key of the repository
 	* @param folderId the primary key of the folder
-	* @param mediaTypes allowed media types
 	* @param status the workflow status
+	* @param mimeTypes allowed media types
 	* @return the number of file entries and shortcuts in the folder
 	* @throws PortalException if the folder ould not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getFileEntriesAndFileShortcutsCount(long repositoryId,
-		long folderId, java.lang.String[] mediaTypes, int status)
+		long folderId, int status, java.lang.String[] mimeTypes)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

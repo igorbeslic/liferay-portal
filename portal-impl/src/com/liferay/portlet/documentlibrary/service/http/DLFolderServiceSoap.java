@@ -125,11 +125,11 @@ public class DLFolderServiceSoap {
 	}
 
 	public static int getFileEntriesAndFileShortcutsCount(long groupId,
-		long folderId, java.lang.String[] mimeTypes, int status)
+		long folderId, int status, java.lang.String[] mimeTypes)
 		throws RemoteException {
 		try {
 			int returnValue = DLFolderServiceUtil.getFileEntriesAndFileShortcutsCount(groupId,
-					folderId, mimeTypes, status);
+					folderId, status, mimeTypes);
 
 			return returnValue;
 		}
