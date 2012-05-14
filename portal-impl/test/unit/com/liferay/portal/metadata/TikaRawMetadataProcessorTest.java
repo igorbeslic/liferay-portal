@@ -15,9 +15,8 @@
 package com.liferay.portal.metadata;
 
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.xuggler.XugglerUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.InputStream;
 
@@ -52,8 +51,7 @@ public class TikaRawMetadataProcessorTest extends PowerMockito {
 
 		try {
 			when(
-				PrefsPropsUtil.getBoolean(
-					PropsKeys.XUGGLER_ENABLED, PropsValues.XUGGLER_ENABLED)
+				XugglerUtil.isEnabled()
 			).thenReturn(
 				Boolean.FALSE
 			);

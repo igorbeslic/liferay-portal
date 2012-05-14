@@ -238960,6 +238960,11 @@ which are later inherited by users assigned to the UserGroup
 				<comment><![CDATA[the primary key of the group's creator/owner]]></comment>
 			</param>
 			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
 				<name>className</name>
 				<type>java.lang.String</type>
 				<comment><![CDATA[the entity's class name]]></comment>
@@ -239030,6 +239035,11 @@ which are later inherited by users assigned to the UserGroup
 				<name>userId</name>
 				<type>long</type>
 				<comment><![CDATA[the primary key of the group's creator/owner]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
 			</param>
 			<param>
 				<name>className</name>
@@ -240487,38 +240497,16 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>updateGroup</name>
-			<comment><![CDATA[Updates the group's type settings.]]></comment>
-			<param>
-				<name>groupId</name>
-				<type>long</type>
-				<comment><![CDATA[the primary key of the group]]></comment>
-			</param>
-			<param>
-				<name>typeSettings</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the group's new type settings (optionally <code>null</code>)]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[the group]]></comment>
-			</return>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[if a group with the primary key could not be found]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[if a system exception occurred]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>updateGroup</name>
 			<comment><![CDATA[Updates the group.]]></comment>
 			<param>
 				<name>groupId</name>
 				<type>long</type>
 				<comment><![CDATA[the primary key of the group]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
 			</param>
 			<param>
 				<name>name</name>
@@ -240557,6 +240545,33 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[if a group with the primary key could not be found or if the friendly URL was invalid or could one not be created]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>updateGroup</name>
+			<comment><![CDATA[Updates the group's type settings.]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the group]]></comment>
+			</param>
+			<param>
+				<name>typeSettings</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's new type settings (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the group]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[if a group with the primary key could not be found]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>
@@ -240908,6 +240923,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			<name>addGroup</name>
 			<comment><![CDATA[Adds a group.]]></comment>
 			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
 				<name>liveGroupId</name>
 				<type>long</type>
 				<comment><![CDATA[the primary key of the live group]]></comment>
@@ -240964,6 +240984,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		<method>
 			<name>addGroup</name>
 			<comment><![CDATA[Adds the group using the group default live group ID.]]></comment>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
 			<param>
 				<name>name</name>
 				<type>java.lang.String</type>
@@ -241540,38 +241565,16 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>updateGroup</name>
-			<comment><![CDATA[Updates the group's type settings.]]></comment>
-			<param>
-				<name>groupId</name>
-				<type>long</type>
-				<comment><![CDATA[the primary key of the group]]></comment>
-			</param>
-			<param>
-				<name>typeSettings</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the group's new type settings (optionally <code>null</code>)]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[the group]]></comment>
-			</return>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[if the user did not have permission to update the group or if a group with the primary key could not be found]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[if a system exception occurred]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>updateGroup</name>
 			<comment><![CDATA[Updates the group.]]></comment>
 			<param>
 				<name>groupId</name>
 				<type>long</type>
 				<comment><![CDATA[the primary key of the group]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
 			</param>
 			<param>
 				<name>name</name>
@@ -241610,6 +241613,33 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[if the user did not have permission to update the group, if a group with the primary key could not be found, if the friendly URL was invalid or could one not be created]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>updateGroup</name>
+			<comment><![CDATA[Updates the group's type settings.]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the group]]></comment>
+			</param>
+			<param>
+				<name>typeSettings</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's new type settings (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the group]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[if the user did not have permission to update the group or if a group with the primary key could not be found]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>

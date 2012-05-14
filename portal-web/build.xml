@@ -73,7 +73,7 @@
 
 				<!-- JavaScript -->
 
-				<copy todir="docroot/html/js/aui" overwrite="true">
+				<copy todir="docroot/html/js/aui" overwrite="true" preservelastmodified="true">
 					<fileset dir="docroot/html/ALLOY_ZIP/build/" />
 				</copy>
 
@@ -121,9 +121,9 @@
 						/>
 					</path>
 					<sequential>
-						<basename property="dir.name" file="@{dir}"/>
+						<basename property="dir.name" file="@{dir}" />
 						<if>
-							<available file="docroot/html/js/aui/${dir.name}/assets/skins/sam/${dir.name}.css"/>
+							<available file="docroot/html/js/aui/${dir.name}/assets/skins/sam/${dir.name}.css" />
 							<then>
 								<concat append="true" destfile="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/alloy.css">
 									<filelist
@@ -134,7 +134,7 @@
 							</then>
 						</if>
 						<if>
-							<available file="docroot/html/js/aui/${dir.name}/assets/skins/sam/"/>
+							<available file="docroot/html/js/aui/${dir.name}/assets/skins/sam/" />
 							<then>
 								<copy todir="docroot/html/themes/_unstyled/images/aui/">
 									<fileset dir="docroot/html/js/aui/${dir.name}/assets/skins/sam/" includes="**/*.png,**/*.jpg,**/*.gif" />
@@ -263,7 +263,7 @@
 					</then>
 				</if>
 
-				<copy todir="docroot/html/js/editor/ckeditor" overwrite="true">
+				<copy todir="docroot/html/js/editor/ckeditor" overwrite="true" preservelastmodified="true">
 					<fileset dir="docroot/html/js/editor/ckeditor_diffs" />
 				</copy>
 			</then>
@@ -410,7 +410,7 @@
 					<fileset dir="docroot/html/js/editor/fckeditor/editor/filemanager/browser/default" />
 				</copy>
 
-				<copy todir="docroot/html/js/editor/fckeditor" overwrite="true">
+				<copy todir="docroot/html/js/editor/fckeditor" overwrite="true" preservelastmodified="true">
 					<fileset dir="docroot/html/js/editor/fckeditor_diffs" />
 				</copy>
 
@@ -622,7 +622,7 @@ var defaultTypes = []]>
 				</replace>
 
 				<replace dir="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay">
-					<include name="**/*.html"/>
+					<include name="**/*.html" />
 					<replacetoken><![CDATA[<html>]]></replacetoken>
 					<replacevalue><![CDATA[<html xmlns="http://www.w3.org/1999/xhtml">]]></replacevalue>
 				</replace>
@@ -651,6 +651,11 @@ var defaultTypes = []]>
 
 	window.top.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);]]>
 					</replacevalue>
+				</replace>
+
+				<replace file="docroot/html/js/editor/ckeditor/editor/filemanager/browser/liferay/frmresourceslist.html">
+					<replacetoken><![CDATA[var sCurrentFolderPath	= oFolderNode.attributes.getNamedItem('path').value ;]]></replacetoken>
+					<replacevalue><![CDATA[var sCurrentFolderPath	= oFolderNode.attributes.getNamedItem('path').value.replace( /"/g, '') ;]]></replacevalue>
 				</replace>
 			</then>
 			<else>
@@ -716,14 +721,14 @@ var defaultTypes = []]>
 					</then>
 				</if>
 
-				<copy todir="@{module.name}" overwrite="true">
+				<copy todir="@{module.name}" overwrite="true" preservelastmodified="true">
 					<fileset
 						dir="docroot/html/themes/_unstyled"
 						excludes="templates/init.vm"
 					/>
 				</copy>
 
-				<copy todir="@{module.name}" overwrite="true">
+				<copy todir="@{module.name}" overwrite="true" preservelastmodified="true">
 					<fileset
 						dir="docroot/html/themes/_styled"
 					/>
@@ -732,7 +737,7 @@ var defaultTypes = []]>
 				<if>
 					<available file="@{module.name}/_diffs" />
 					<then>
-						<copy todir="@{module.name}" overwrite="true">
+						<copy todir="@{module.name}" overwrite="true" preservelastmodified="true">
 							<fileset
 								dir="@{module.name}/_diffs"
 							/>
@@ -811,7 +816,7 @@ var defaultTypes = []]>
 
 				<move file="docroot/html/js/editor/tinymce/jscripts/tiny_mce" todir="docroot/html/js/editor" />
 
-				<copy todir="docroot/html/js/editor/tiny_mce" overwrite="true">
+				<copy todir="docroot/html/js/editor/tiny_mce" overwrite="true" preservelastmodified="true">
 					<fileset dir="docroot/html/js/editor/tiny_mce_diffs" />
 				</copy>
 
@@ -987,8 +992,8 @@ Please set the property "jdk.6.home" in build.properties.
 		<property name="jspc.classes.dir" value="classes/${app.server.type}" />
 
 		<path id="jspc.classpath">
-			<pathelement location="${env.JAVA_HOME}/jre/lib/rt.jar" />
-			<pathelement location="${env.JAVA_HOME}/lib/tools.jar" />
+			<pathelement location="${jdk.6.home}/jre/lib/rt.jar" />
+			<pathelement location="${jdk.6.home}/lib/tools.jar" />
 			<path refid="jspc.common.classpath" />
 			<pathelement location="${app.server.dir}/lib/resin.jar" />
 			<pathelement location="${project.dir}/lib/portal/abdera.jar" />

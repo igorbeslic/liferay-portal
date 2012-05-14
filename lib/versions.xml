@@ -374,7 +374,7 @@
 	</library>
 	<library>
 		<file-name>development/jetty-server.jar</file-name>
-		<version>7.5.4</version>
+		<version>7.6.3</version>
 		<project-name>Jetty</project-name>
 		<project-url>http://www.eclipse.org/jetty</project-url>
 		<licenses>
@@ -388,7 +388,7 @@
 	</library>
 	<library>
 		<file-name>development/jetty-util.jar</file-name>
-		<version>7.5.4</version>
+		<version>7.6.3</version>
 		<project-name>Jetty</project-name>
 		<project-url>http://www.eclipse.org/jetty</project-url>
 		<licenses>
@@ -512,6 +512,9 @@
 				<license-name>Sun Binary Code License Agreement</license-name>
 			</license>
 		</licenses>
+		<comments>
+			See LPS-27200.
+		</comments>
 	</library>
 	<library>
 		<file-name>development/jtds.jar</file-name>
@@ -829,7 +832,7 @@
 	</library>
 	<library>
 		<file-name>development/spring-instrument.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -840,7 +843,7 @@
 	</library>
 	<library>
 		<file-name>development/spring-instrument-tomcat.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -851,7 +854,7 @@
 	</library>
 	<library>
 		<file-name>development/spring-test.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -1795,7 +1798,7 @@
 	</library>
 	<library>
 		<file-name>portal/hibernate3.jar</file-name>
-		<version>3.6.4</version>
+		<version>3.6.10</version>
 		<project-name>Hibernate</project-name>
 		<project-url>http://www.hibernate.org</project-url>
 		<licenses>
@@ -1870,7 +1873,7 @@
 	</library>
 	<library>
 		<file-name>portal/jackrabbit-api.jar</file-name>
-		<version>2.1.2</version>
+		<version>2.1.6</version>
 		<project-name>Jackrabbit</project-name>
 		<project-url>http://jackrabbit.apache.org</project-url>
 		<licenses>
@@ -1881,7 +1884,7 @@
 	</library>
 	<library>
 		<file-name>portal/jackrabbit-core.jar</file-name>
-		<version>2.1.2</version>
+		<version>2.1.6</version>
 		<project-name>Jackrabbit</project-name>
 		<project-url>http://jackrabbit.apache.org</project-url>
 		<licenses>
@@ -1895,7 +1898,7 @@
 	</library>
 	<library>
 		<file-name>portal/jackrabbit-jcr-commons.jar</file-name>
-		<version>2.1.2</version>
+		<version>2.1.6</version>
 		<project-name>Jackrabbit</project-name>
 		<project-url>http://jackrabbit.apache.org</project-url>
 		<licenses>
@@ -1906,7 +1909,7 @@
 	</library>
 	<library>
 		<file-name>portal/jackrabbit-spi.jar</file-name>
-		<version>2.1.2</version>
+		<version>2.1.6</version>
 		<project-name>Jackrabbit</project-name>
 		<project-url>http://jackrabbit.apache.org</project-url>
 		<licenses>
@@ -1917,7 +1920,7 @@
 	</library>
 	<library>
 		<file-name>portal/jackrabbit-spi-commons.jar</file-name>
-		<version>2.1.2</version>
+		<version>2.1.6</version>
 		<project-name>Jackrabbit</project-name>
 		<project-url>http://jackrabbit.apache.org</project-url>
 		<licenses>
@@ -2182,7 +2185,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd.jar</file-name>
-		<version>3.2.8-20111031</version>
+		<version>3.3.3</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2193,7 +2196,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd-wot.jar</file-name>
-		<version>3.2.8-20111031</version>
+		<version>3.3.3</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2798,7 +2801,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-aop.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2812,7 +2815,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-asm.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2823,7 +2826,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-aspects.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2834,7 +2837,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-beans.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2844,12 +2847,12 @@
 		</licenses>
 		<comments>
 			3.0.3 included a public patch from SPR-7441. That patch is no longer needed
-			since 3.0.6 includes a different fix.
+			since 3.0.7 includes a different fix.
 		</comments>
 	</library>
 	<library>
 		<file-name>portal/spring-context.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2860,7 +2863,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-context-support.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2871,7 +2874,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-core.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2882,7 +2885,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-expression.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2893,7 +2896,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-jdbc.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2904,7 +2907,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-jms.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2915,7 +2918,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-orm.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2926,7 +2929,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-oxm.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2937,7 +2940,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-transaction.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2948,7 +2951,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-web.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2959,7 +2962,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-web-portlet.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2970,7 +2973,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-web-servlet.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -2981,7 +2984,7 @@
 	</library>
 	<library>
 		<file-name>portal/spring-web-struts.jar</file-name>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 		<project-name>Spring</project-name>
 		<project-url>http://www.springframework.org</project-url>
 		<licenses>
@@ -3341,8 +3344,8 @@
 		</licenses>
 	</library>
 	<library>
-		<file-name>portal/xuggle-xuggler.jar</file-name>
-		<version>3.4.1012</version>
+		<file-name>portal/xuggle-xuggler-noarch.jar</file-name>
+		<version>5.4</version>
 		<project-name>Xuggler</project-name>
 		<project-url>http://www.xuggle.com</project-url>
 		<licenses>
@@ -3350,9 +3353,5 @@
 				<license-name>LGPL 3</license-name>
 			</license>
 		</licenses>
-		<comments>
-			This includes a public patch from
-			http://code.google.com/p/xuggle/issues/detail?id=252.
-		</comments>
 	</library>
 </libraries>

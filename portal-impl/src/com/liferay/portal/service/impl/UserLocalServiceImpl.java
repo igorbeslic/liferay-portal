@@ -66,6 +66,7 @@ import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -815,8 +816,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Group
 
 		groupLocalService.addGroup(
-			user.getUserId(), User.class.getName(), user.getUserId(), null,
-			null, 0, StringPool.SLASH + screenName, false, true, null);
+			user.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
+			User.class.getName(), user.getUserId(), null, null, 0,
+			StringPool.SLASH + screenName, false, true, null);
 
 		// Groups
 
@@ -1519,8 +1521,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			User user, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		boolean autoPassword = GetterUtil.getBoolean(
-			serviceContext.getAttribute("autoPassword"));
+		boolean autoPassword = ParamUtil.getBoolean(
+			serviceContext, "autoPassword");
 
 		String password = null;
 
@@ -1552,8 +1554,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				user.getEmailAddress());
 		}
 
-		boolean sendEmail = GetterUtil.getBoolean(
-			serviceContext.getAttribute("sendEmail"));
+		boolean sendEmail = ParamUtil.getBoolean(serviceContext, "sendEmail");
 
 		if (sendEmail) {
 			sendEmail(user, password, serviceContext);
