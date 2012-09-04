@@ -104,6 +104,11 @@
 		<put name="content" value="/portal/verify_email_address.jsp" />
 	</definition>
 
+    <definition name="portal.oauth_authorize" extends="portal">
+        <put name="title" value="oauth-authorization" />
+        <put name="content" value="/portal/oauth_authorize.jsp" />
+    </definition>
+
 	<!-- Activities -->
 
 	<definition name="portlet.activities" extends="portlet" />
