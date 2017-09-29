@@ -279,11 +279,7 @@
 	</command>
 
 	<command name="addInlineImageViaEdit">
-		<execute function="Click" locator1="AlloyEditor#CONTENT_FIELD" />
-
-		<execute function="Click" locator1="AlloyEditor#CONTENT_ADD_BUTTON" />
-
-		<execute function="Click" locator1="AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE" />
+		<execute macro="ItemSelector#gotoItemSelectorViaAlloyEditor" />
 
 		<execute macro="ItemSelector#uploadFile">
 			<var name="navTab" value="${navTab}" />
@@ -764,6 +760,10 @@
 			<var name="key_menuItem" value="Edit" />
 		</execute>
 
+		<execute function="Click" locator1="AlloyEditor#CONTENT_FIELD" />
+
+		<execute function="AssertElementPresent" locator1="AlloyEditor#CONTENT_ADD_BUTTON" />
+
 		<execute macro="AlloyEditor#addContent">
 			<var name="content" value="${wikiPageContentEdit}" />
 		</execute>
@@ -916,7 +916,7 @@
 
 		<execute function="AssertClick" locator1="Link#EDIT" value1="Edit" />
 
-		<execute function="Click" locator1="AlloyEditor#CONTENT_FIELD" />
+		<execute macro="AlloyEditor#clickContentField" />
 
 		<execute macro="Panel#expandPanel">
 			<var name="panelHeading" value="Configuration" />

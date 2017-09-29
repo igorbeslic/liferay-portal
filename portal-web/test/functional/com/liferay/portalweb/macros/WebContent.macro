@@ -363,11 +363,7 @@
 			<var name="webContentTitle" value="${webContentTitle}" />
 		</execute>
 
-		<execute function="Click" locator1="AlloyEditor#CONTENT_FIELD" />
-
-		<execute function="Click" locator1="AlloyEditor#CONTENT_ADD_BUTTON" />
-
-		<execute function="Click" locator1="AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE" />
+		<execute macro="ItemSelector#gotoItemSelectorViaAlloyEditor" />
 
 		<execute function="SelectFrame" locator1="IFrame#METADATA_SETS_IFRAME" />
 
@@ -491,6 +487,19 @@
 			<isset var="webContentBoolean" />
 			<then>
 				<execute function="Check" locator1="DDMField#BOOLEAN" />
+			</then>
+		</if>
+
+		<if>
+			<isset var="webContentColor" />
+			<then>
+				<execute function="Click" locator1="DDMField#TEXT">
+					<var name="key_fieldName" value="Color" />
+				</execute>
+
+				<execute function="Click" locator1="DDMField#COLOR_PICKER_COLOR">
+					<var name="key_colorCode" value="${webContentColor}" />
+				</execute>
 			</then>
 		</if>
 
@@ -625,6 +634,15 @@
 						</execute>
 					</else>
 				</if>
+			</then>
+		</if>
+
+		<if>
+			<isset var="webContentTextBox2" />
+			<then>
+				<execute function="Type" locator1="DDMField#TEXT_BOX" value1="${webContentTextBox2}" >
+					<var name="key_fieldName" value="${fieldName2}" />
+				</execute>
 			</then>
 		</if>
 
@@ -1680,7 +1698,9 @@
 			<var name="displayStyle" value="List" />
 		</execute>
 
-		<execute function="AssertElementPresent" locator1="WC#ENTRY_LIST_TITLE" />
+		<execute function="AssertElementPresent" locator1="WC#ENTRY_LIST_TITLE">
+			<var name="key_webContentTitle" value="${webContentTitle}" />
+		</execute>
 	</command>
 
 	<command name="viewEditWCViaWCD">
@@ -2058,6 +2078,24 @@
 		<execute function="AssertTextEquals" locator1="TextInput#TITLE" value1="${webContentTitle}" />
 
 		<if>
+			<isset var="abstractSummary" />
+			<then>
+				<execute function="AssertTextEquals" locator1="TextArea#SUMMARY" value1="${abstractSummary}" />
+			</then>
+		</if>
+
+		<if>
+			<isset var="webContentImage" />
+			<then>
+				<execute function="Click" locator1="Button#PREVIEW" />
+
+				<execute function="SelectFrameTop" value1="relative=top" />
+
+				<execute function="SikuliAssertElementPresent" locator1="DDMField#IMAGE_PREVIEW_PNG" />
+			</then>
+		</if>
+
+		<if>
 			<isset var="webContentText" />
 			<then>
 				<execute function="AssertTextEquals" locator1="DDMField#TEXT" value1="${webContentText}">
@@ -2082,6 +2120,15 @@
 						</execute>
 					</else>
 				</if>
+			</then>
+		</if>
+
+		<if>
+			<isset var="webContentTextBox2" />
+			<then>
+				<var name="key_fieldName" value="${fieldName2}" />
+
+				<execute function="AssertTextEquals" locator1="DDMField#TEXT_BOX" value1="${webContentTextBox2}" />
 			</then>
 		</if>
 
