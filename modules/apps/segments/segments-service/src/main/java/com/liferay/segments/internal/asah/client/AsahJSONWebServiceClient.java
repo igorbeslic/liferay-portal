@@ -34,8 +34,8 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author David Arques
  */
-@Component(immediate = true, service = AsahClient.class)
-public class AsahClient {
+@Component(immediate = true, service = AsahJSONWebServiceClient.class)
+public class AsahJSONWebServiceClient {
 
 	@Activate
 	@Modified
@@ -43,6 +43,8 @@ public class AsahClient {
 		_initializeJSONWebServiceClient();
 
 		String json = _getRoot();
+
+		System.out.println("AsahJSONWebServiceClient: " + json);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(json);
@@ -87,7 +89,8 @@ public class AsahClient {
 			(JSONWebServiceClient)componentInstance.getInstance();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(AsahClient.class);
+	private static final Log _log = LogFactoryUtil.getLog(
+		AsahJSONWebServiceClient.class);
 
 	private ComponentFactory _componentFactory;
 	private JSONWebServiceClient _jsonWebServiceClient;
