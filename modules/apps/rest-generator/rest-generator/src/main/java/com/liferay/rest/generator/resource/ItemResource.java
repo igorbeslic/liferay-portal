@@ -30,7 +30,7 @@ import javax.ws.rs.core.Context;
 /**
  * @author Igor Beslic
  */
-@Generated(value = "OSGiRESTModuleGenerator")
+@Generated("OSGiRESTModuleGenerator")
 @Path("/1.0.0/item")
 public interface ItemResource {
 

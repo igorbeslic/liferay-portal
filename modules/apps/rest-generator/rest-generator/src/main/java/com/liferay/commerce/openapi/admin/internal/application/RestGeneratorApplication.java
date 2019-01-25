@@ -37,6 +37,6 @@ import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 	},
 	service = Application.class
 )
-@Generated(value = "OSGiRESTModuleGenerator")
+@Generated("OSGiRESTModuleGenerator")
 public class RestGeneratorApplication extends Application {
 }

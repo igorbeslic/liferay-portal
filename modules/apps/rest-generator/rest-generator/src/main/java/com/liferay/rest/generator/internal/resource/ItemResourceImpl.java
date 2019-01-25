@@ -37,7 +37,7 @@ import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 	},
 	scope = ServiceScope.PROTOTYPE, service = ItemResource.class
 )
-@Generated(value = "OSGiRESTModuleGenerator")
+@Generated("OSGiRESTModuleGenerator")
 public class ItemResourceImpl implements ItemResource {
 
 	@Override

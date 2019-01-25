@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @author Igor Beslic
  */
-@Generated(value = "OSGiRESTModuleGenerator")
+@Generated("OSGiRESTModuleGenerator")
 @XmlRootElement(name = "Item")
 public class ItemDTO {
 
