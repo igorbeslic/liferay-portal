@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.rest.generator.model;
+package com.liferay.rest.model;
 
 import java.util.Collection;
 import java.util.Collections;

@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Rest API
+Bundle-SymbolicName: com.liferay.rest.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.rest.model,\
+	com.liferay.rest.resource

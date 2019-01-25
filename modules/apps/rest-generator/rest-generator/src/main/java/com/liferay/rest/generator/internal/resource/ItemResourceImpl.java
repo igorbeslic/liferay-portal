@@ -15,9 +15,9 @@
 package com.liferay.rest.generator.internal.resource;
 
 import com.liferay.commerce.openapi.core.context.Pagination;
-import com.liferay.rest.generator.model.CollectionDTO;
-import com.liferay.rest.generator.model.ItemDTO;
-import com.liferay.rest.generator.resource.ItemResource;
+import com.liferay.rest.model.CollectionDTO;
+import com.liferay.rest.model.ItemDTO;
+import com.liferay.rest.resource.ItemResource;
 
 import java.util.Collections;
 

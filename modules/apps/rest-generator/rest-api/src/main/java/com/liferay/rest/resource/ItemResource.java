@@ -12,45 +12,33 @@
  * details.
  */
 
-package com.liferay.rest.generator.model;
+package com.liferay.rest.resource;
+
+import com.liferay.commerce.openapi.core.context.Pagination;
+import com.liferay.oauth2.provider.scope.RequiresScope;
+import com.liferay.rest.model.CollectionDTO;
+import com.liferay.rest.model.ItemDTO;
 
 import javax.annotation.Generated;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 /**
  * @author Igor Beslic
  */
 @Generated("OSGiRESTModuleGenerator")
-@XmlRootElement(name = "Item")
-public class ItemDTO {
+@Path("/1.0.0/item")
+public interface ItemResource {
 
-	public long getId() {
-		return _id;
-	}
-
-	public String getName() {
-		return _name;
-	}
-
-	public String getSize() {
-		return _size;
-	}
-
-	public void setId(long id) {
-		_id = id;
-	}
-
-	public void setName(String name) {
-		_name = name;
-	}
-
-	public void setSize(String size) {
-		_size = size;
-	}
-
-	private long _id;
-	private String _name;
-	private String _size;
+	@GET
+	@Produces("application/json")
+	@RequiresScope("RestGenerator.read")
+	public CollectionDTO<ItemDTO> getItems(
+			@QueryParam("size") String size, @Context Pagination pagination)
+		throws Exception;
 
 }

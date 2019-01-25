@@ -1,3 +1,6 @@
 Bundle-Name: Liferay Rest Generator
 Bundle-SymbolicName: com.liferay.rest.generator
 Bundle-Version: 1.0.0
+Import-Package:\
+	com.liferay.rest.model,\
+	com.liferay.rest.resource
