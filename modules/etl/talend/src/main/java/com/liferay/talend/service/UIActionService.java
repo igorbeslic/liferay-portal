@@ -15,34 +15,28 @@
 package com.liferay.talend.service;
 
 import com.liferay.talend.data.store.GenericDataStore;
-
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.Paths;
-import io.swagger.v3.oas.models.media.ArraySchema;
-import io.swagger.v3.oas.models.media.Content;
-import io.swagger.v3.oas.models.media.MediaType;
-import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.responses.ApiResponses;
-import io.swagger.v3.parser.OpenAPIV3Parser;
+import com.liferay.talend.dataset.InputDataSet;
+import com.liferay.talend.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.talend.sdk.component.api.configuration.Option;
+import org.talend.sdk.component.api.record.Schema;
 import org.talend.sdk.component.api.service.Service;
+import org.talend.sdk.component.api.service.asyncvalidation.AsyncValidation;
+import org.talend.sdk.component.api.service.asyncvalidation.ValidationResult;
 import org.talend.sdk.component.api.service.completion.SuggestionValues;
 import org.talend.sdk.component.api.service.completion.Suggestions;
 import org.talend.sdk.component.api.service.healthcheck.HealthCheck;
 import org.talend.sdk.component.api.service.healthcheck.HealthCheckStatus;
+import org.talend.sdk.component.api.service.record.RecordBuilderFactory;
+import org.talend.sdk.component.api.service.schema.DiscoverSchema;
 
 /**
  * @author Igor Beslic
  * @author Zoltán Takács
+ * @author Matija Petanjek
  */
 @Service
 public class UIActionService {
@@ -58,72 +52,46 @@ public class UIActionService {
 	public SuggestionValues fetchEndpoints(
 		@Option("genericDataStore") final GenericDataStore genericDataStore) {
 
+		InputDataSet inputDataSet = new InputDataSet();
+
+		inputDataSet.setGenericDataStore(genericDataStore);
+
+		List<String> endpoints = _liferayService.getPageableEndpoints(
+			inputDataSet);
+
 		List<SuggestionValues.Item> items = new ArrayList<>();
 
-		Map<String, String> endpoints = _getEndpointsMap(
-			"com/liferay/talend/resource/rest-openapi.yaml");
-
 		endpoints.forEach(
-			(path, returnSchemaType) -> {
-				items.add(new SuggestionValues.Item(path, returnSchemaType));
+			path -> {
+				items.add(new SuggestionValues.Item(path, path));
 			});
 
 		return new SuggestionValues(true, items);
 	}
 
-	private Map<String, String> _getEndpointsMap(String location) {
-		OpenAPI openAPI = new OpenAPIV3Parser().read(location);
+	@DiscoverSchema(family = "Liferay", value = "guessInputSchema")
+	public Schema guessInputSchema(
+		final InputDataSet inputDataSet,
+		final RecordBuilderFactory recordBuilderFactory) {
 
-		Paths paths = openAPI.getPaths();
-
-		return paths.entrySet(
-		).stream(
-		).filter(
-			this::_isArrayTypePredicate
-		).collect(
-			Collectors.toMap(Map.Entry::getKey, this::_mapToArrayItemReferences)
-		);
+		return _liferayService.getEndpointTalendSchema(
+			inputDataSet, recordBuilderFactory);
 	}
 
-	private Schema _getSchema(Map.Entry<String, PathItem> pathItemEntry) {
-		PathItem pathItem = pathItemEntry.getValue();
-
-		Operation getOperation = pathItem.getGet();
-
-		ApiResponses apiResponses = getOperation.getResponses();
-
-		ApiResponse apiResponse200Ok = apiResponses.get("200");
-
-		Content content200OK = apiResponse200Ok.getContent();
-
-		MediaType mediaType = content200OK.get("application/json");
-
-		return mediaType.getSchema();
-	}
-
-	private boolean _isArrayTypePredicate(
-		Map.Entry<String, PathItem> pathItemEntry) {
-
-		Schema schema = _getSchema(pathItemEntry);
-
-		if ("array".equals(schema.getType())) {
-			return true;
+	@AsyncValidation("validateEndpoint")
+	public ValidationResult validateEndpoint(final String endpoint) {
+		if (StringUtils.isNull(endpoint)) {
+			return new ValidationResult(
+				ValidationResult.Status.KO, "Please select an endpoint.");
 		}
 
-		return false;
-	}
-
-	private String _mapToArrayItemReferences(
-		Map.Entry<String, PathItem> stringPathItemEntry) {
-
-		Schema schema = _getSchema(stringPathItemEntry);
-
-		Schema<?> items = ((ArraySchema)schema).getItems();
-
-		return items.get$ref();
+		return new ValidationResult(ValidationResult.Status.OK, null);
 	}
 
 	@Service
 	private DataStoreChecker _dataStoreChecker;
+
+	@Service
+	private LiferayService _liferayService;
 
 }

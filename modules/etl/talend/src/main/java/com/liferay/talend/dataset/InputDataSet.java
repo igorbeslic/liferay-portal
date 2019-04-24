@@ -18,23 +18,32 @@ import com.liferay.talend.data.store.GenericDataStore;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.configuration.action.Suggestable;
+import org.talend.sdk.component.api.configuration.action.Validable;
 import org.talend.sdk.component.api.configuration.constraint.Required;
 import org.talend.sdk.component.api.configuration.type.DataSet;
 import org.talend.sdk.component.api.configuration.ui.DefaultValue;
 import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
+import org.talend.sdk.component.api.configuration.ui.widget.Structure;
 
 /**
  * @author Zoltán Takács
  * @author Igor Beslic
+ * @author Matija Petanjek
  * @review
  */
 @DataSet("InputDataSet")
 @GridLayout(
 	{
 		@GridLayout.Row("_genericDataStore"), @GridLayout.Row("endpoint"),
-		@GridLayout.Row({"firstPathParam", "secondPathParam", "thirdPathParam"})
+		@GridLayout.Row(
+			{"firstPathParam", "secondPathParam", "thirdPathParam"}
+		),
+		@GridLayout.Row("_schemaFieldNames")
 	}
 )
 public class InputDataSet implements Serializable {
@@ -93,24 +102,30 @@ public class InputDataSet implements Serializable {
 	 * DataStore parameter now is not needed, just an example how we can use it
 	 * in UIActionService if needed.
 	 */
+	@DefaultValue("\"\"")
 	@Option
 	@Required
 	@Suggestable(parameters = "_genericDataStore", value = "fetchEndpoints")
+	@Validable("validateEndpoint")
 	protected String endpoint;
 
-	@DefaultValue("")
+	@DefaultValue("\"\"")
 	@Option
 	protected String firstPathParam;
 
-	@DefaultValue("")
+	@DefaultValue("\"\"")
 	@Option
 	protected String secondPathParam;
 
-	@DefaultValue("")
+	@DefaultValue("\"\"")
 	@Option
 	protected String thirdPathParam;
 
 	@Option
 	private GenericDataStore _genericDataStore;
+
+	@Option
+	@Structure(discoverSchema = "guessInputSchema", type = Structure.Type.IN)
+	private final List<String> _schemaFieldNames = new ArrayList<>();
 
 }
