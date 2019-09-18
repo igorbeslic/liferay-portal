@@ -16,18 +16,16 @@ package com.liferay.mule.internal.metadata;
 
 import com.liferay.mule.internal.oas.OASConstants;
 
-import java.util.Set;
-
+import org.mule.metadata.api.model.MetadataType;
 import org.mule.runtime.api.connection.ConnectionException;
 import org.mule.runtime.api.metadata.MetadataContext;
-import org.mule.runtime.api.metadata.MetadataKey;
 import org.mule.runtime.api.metadata.MetadataResolvingException;
-import org.mule.runtime.api.metadata.resolving.TypeKeysResolver;
+import org.mule.runtime.api.metadata.resolving.OutputTypeResolver;
 
 /**
  * @author Matija Petanjek
  */
-public class GETEndpointTypeKeysResolver implements TypeKeysResolver {
+public class GETEndpointTypeResolver implements OutputTypeResolver<String> {
 
 	@Override
 	public String getCategoryName() {
@@ -35,14 +33,15 @@ public class GETEndpointTypeKeysResolver implements TypeKeysResolver {
 	}
 
 	@Override
-	public Set<MetadataKey> getKeys(MetadataContext metadataContext)
+	public MetadataType getOutputType(
+			MetadataContext metadataContext, String endpoint)
 		throws ConnectionException, MetadataResolvingException {
 
-		return _metadataKeysBuilder.buildMetadataKeys(
-			metadataContext, OASConstants.OPERATION_GET);
+		return _metadataTypeBuilder.buildMetadataType(
+			metadataContext, endpoint, OASConstants.OPERATION_GET);
 	}
 
-	private static final MetadataKeysBuilder _metadataKeysBuilder =
-		new MetadataKeysBuilder();
+	private static final MetadataTypeBuilder _metadataTypeBuilder =
+		new MetadataTypeBuilder();
 
 }
