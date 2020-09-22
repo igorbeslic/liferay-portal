@@ -16,8 +16,8 @@ package com.liferay.dispatch.talend.internal.frontend.taglib.servlet.taglib.ui;
 
 import com.liferay.dispatch.constants.DispatchConstants;
 import com.liferay.dispatch.model.DispatchTrigger;
-import com.liferay.dispatch.talend.internal.executor.DispatchTalendScheduledTaskExecutor;
-import com.liferay.dispatch.talend.internal.helper.DispatchTalendScheduledTaskExecutorHelper;
+import com.liferay.dispatch.talend.internal.helper.DispatchTalendScheduledJobHelper;
+import com.liferay.dispatch.talend.internal.job.DispatchTalendScheduledJob;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationCategory;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
@@ -53,8 +53,7 @@ public class DispatchTalendScreenNavigationCategory
 
 	@Override
 	public String getCategoryKey() {
-		return DispatchTalendScheduledTaskExecutor.
-			SCHEDULED_TASK_EXECUTOR_TYPE_TALEND;
+		return DispatchTalendScheduledJob.SCHEDULED_JOB_TYPE_TALEND;
 	}
 
 	@Override
@@ -81,11 +80,10 @@ public class DispatchTalendScreenNavigationCategory
 			return false;
 		}
 
-		String scheduledTaskExecutorType = dispatchTrigger.getJobType();
+		String jobType = dispatchTrigger.getJobType();
 
-		if (scheduledTaskExecutorType.equals(
-				DispatchTalendScheduledTaskExecutor.
-					SCHEDULED_TASK_EXECUTOR_TYPE_TALEND) &&
+		if (jobType.equals(
+				DispatchTalendScheduledJob.SCHEDULED_JOB_TYPE_TALEND) &&
 			!dispatchTrigger.isSystem()) {
 
 			return true;
@@ -101,8 +99,8 @@ public class DispatchTalendScreenNavigationCategory
 		throws IOException {
 
 		httpServletRequest.setAttribute(
-			"dispatchTalendScheduledTaskExecutorHelper",
-			_dispatchTalendScheduledTaskExecutorHelper);
+			"dispatchTalendScheduledJobHelper",
+			_dispatchTalendScheduledJobHelper);
 
 		_jspRenderer.renderJSP(
 			_servletContext, httpServletRequest, httpServletResponse,
@@ -110,8 +108,7 @@ public class DispatchTalendScreenNavigationCategory
 	}
 
 	@Reference
-	private DispatchTalendScheduledTaskExecutorHelper
-		_dispatchTalendScheduledTaskExecutorHelper;
+	private DispatchTalendScheduledJobHelper _dispatchTalendScheduledJobHelper;
 
 	@Reference
 	private JSPRenderer _jspRenderer;

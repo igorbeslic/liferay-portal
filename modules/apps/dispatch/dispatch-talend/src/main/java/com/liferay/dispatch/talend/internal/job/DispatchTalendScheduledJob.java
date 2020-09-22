@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.dispatch.talend.internal.executor;
+package com.liferay.dispatch.talend.internal.job;
 
-import com.liferay.dispatch.executor.ScheduledTaskExecutor;
+import com.liferay.dispatch.job.ScheduledJob;
 import com.liferay.dispatch.model.DispatchLog;
 import com.liferay.dispatch.model.DispatchTrigger;
 import com.liferay.dispatch.service.DispatchLogLocalService;
 import com.liferay.dispatch.service.DispatchTriggerLocalService;
-import com.liferay.dispatch.talend.internal.helper.DispatchTalendScheduledTaskExecutorHelper;
+import com.liferay.dispatch.talend.internal.helper.DispatchTalendScheduledJobHelper;
 import com.liferay.petra.process.CollectorOutputProcessor;
 import com.liferay.petra.process.ConsumerOutputProcessor;
 import com.liferay.petra.process.ProcessException;
@@ -55,13 +55,12 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "scheduled.task.executor.type=" + DispatchTalendScheduledTaskExecutor.SCHEDULED_TASK_EXECUTOR_TYPE_TALEND,
-	service = ScheduledTaskExecutor.class
+	property = "scheduled.job.type=" + DispatchTalendScheduledJob.SCHEDULED_JOB_TYPE_TALEND,
+	service = ScheduledJob.class
 )
-public class DispatchTalendScheduledTaskExecutor
-	implements ScheduledTaskExecutor {
+public class DispatchTalendScheduledJob implements ScheduledJob {
 
-	public static final String SCHEDULED_TASK_EXECUTOR_TYPE_TALEND = "talend";
+	public static final String SCHEDULED_JOB_TYPE_TALEND = "talend";
 
 	@Override
 	public void execute(long dispatchTriggerId) throws PortalException {
@@ -76,7 +75,7 @@ public class DispatchTalendScheduledTaskExecutor
 
 		try {
 			FileEntry fileEntry =
-				_dispatchTalendScheduledTaskExecutorHelper.getFileEntry(
+				_dispatchTalendScheduledJobHelper.getFileEntry(
 					dispatchTriggerId);
 
 			InputStream inputStream = fileEntry.getContentStream();
@@ -132,7 +131,7 @@ public class DispatchTalendScheduledTaskExecutor
 
 	@Override
 	public String getName() {
-		return SCHEDULED_TASK_EXECUTOR_TYPE_TALEND;
+		return SCHEDULED_JOB_TYPE_TALEND;
 	}
 
 	private void _addExecutePermission(String shFileName)
@@ -196,14 +195,13 @@ public class DispatchTalendScheduledTaskExecutor
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DispatchTalendScheduledTaskExecutor.class);
+		DispatchTalendScheduledJob.class);
 
 	@Reference
 	private DispatchLogLocalService _dispatchLogLocalService;
 
 	@Reference
-	private DispatchTalendScheduledTaskExecutorHelper
-		_dispatchTalendScheduledTaskExecutorHelper;
+	private DispatchTalendScheduledJobHelper _dispatchTalendScheduledJobHelper;
 
 	@Reference
 	private DispatchTriggerLocalService _dispatchTriggerLocalService;
