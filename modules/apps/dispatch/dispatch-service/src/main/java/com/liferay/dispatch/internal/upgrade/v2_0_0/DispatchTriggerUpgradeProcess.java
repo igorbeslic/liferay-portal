@@ -25,13 +25,13 @@ public class DispatchTriggerUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		_alterColumnName("type_", "taskType");
-
-		_alterColumnName("typeSettings", "taskProperties");
-
 		_alterTableAddColumn("endDate", "DATE");
 
 		_alterTableAddColumn("startDate", "DATE");
+
+		_alterColumnName("type_", "taskType");
+
+		_alterColumnName("typeSettings", "taskProperties");
 	}
 
 	private void _alterColumnName(String oldColumnName, String newColumnName)
