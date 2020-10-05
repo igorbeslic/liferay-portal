@@ -14,6 +14,7 @@
 
 package com.liferay.dispatch.service;
 
+import com.liferay.dispatch.exception.NoSuchLogException;
 import com.liferay.dispatch.model.DispatchLog;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -204,6 +205,10 @@ public interface DispatchLogLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public DispatchLog fetchDispatchLog(long dispatchLogId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public DispatchLog fetchLatestDispatchLog(long dispatchTriggerId)
+		throws NoSuchLogException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();

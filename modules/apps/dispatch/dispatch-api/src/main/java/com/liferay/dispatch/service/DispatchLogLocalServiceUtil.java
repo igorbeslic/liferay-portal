@@ -232,6 +232,13 @@ public class DispatchLogLocalServiceUtil {
 		return getService().fetchDispatchLog(dispatchLogId);
 	}
 
+	public static com.liferay.dispatch.model.DispatchLog fetchLatestDispatchLog(
+			long dispatchTriggerId)
+		throws com.liferay.dispatch.exception.NoSuchLogException {
+
+		return getService().fetchLatestDispatchLog(dispatchTriggerId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
 		getActionableDynamicQuery() {
 
