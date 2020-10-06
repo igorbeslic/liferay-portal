@@ -247,11 +247,9 @@ public class DispatchTriggerLocalServiceTest {
 		Assert.assertEquals(
 			expectedDispatchTrigger.isActive(),
 			actualDispatchTrigger.isActive());
-
 		Assert.assertEquals(
 			expectedDispatchTrigger.getCronExpression(),
 			actualDispatchTrigger.getCronExpression());
-
 		Assert.assertNotNull(actualDispatchTrigger.getStartDate());
 	}
 
