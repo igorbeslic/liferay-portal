@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Dispatch trigger values holder
- *
  * @author Igor Beslic
  */
 public class RandomDispatchUtil {
