@@ -34,19 +34,6 @@ import java.util.Objects;
  */
 public class RandomDispatchUtil {
 
-	/**
-	 * Returns DispatchTrigger instance with <code>active</code> and
-	 * <code>cronExpression</code> updated with new random values.
-	 *
-	 * If <code>nameSalt</code> less then <code>0</code> {@link
-	 * DispatchTrigger#getName()}
-	 * method
-	 * returns <code>null</code>.
-	 *
-	 * @param  dispatchTrigger the original dispatch trigger
-	 * @param  nameSalt the dispatch trigger name suffix
-	 * @return updated random RandomDispatchUtil
-	 */
 	public static DispatchTrigger randomDispatchTrigger(
 		DispatchTrigger dispatchTrigger, int nameSalt) {
 
@@ -60,18 +47,6 @@ public class RandomDispatchUtil {
 			dispatchTrigger.isSystem(), dispatchTrigger.getUserId());
 	}
 
-	/**
-	 * Returns DispatchTrigger object initialized with random values.
-	 *
-	 * If <code>nameSalt</code> less then <code>0</code> {@link
-	 * DispatchTrigger#getName()}
-	 * method
-	 * returns <code>null</code>.
-	 *
-	 * @param  user the owner user of dispatch trigger
-	 * @param  nameSalt the dispatch trigger name suffix
-	 * @return random dispatch trigger
-	 */
 	public static DispatchTrigger randomDispatchTrigger(
 		User user, int nameSalt) {
 
