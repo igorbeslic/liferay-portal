@@ -67,13 +67,13 @@ public class DispatchTriggerLocalServiceTest {
 
 		User user = UserTestUtil.addUser(company);
 
-		_addDispatchTrigger(RandomDispatchUtil.randomDispatchTrigger(user, 1));
+		_addDispatchTrigger(RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
 
 		Class<?> exceptionClass = Exception.class;
 
 		try {
 			_addDispatchTrigger(
-				RandomDispatchUtil.randomDispatchTrigger(user, 1));
+				RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -85,7 +85,7 @@ public class DispatchTriggerLocalServiceTest {
 
 		try {
 			_addDispatchTrigger(
-				RandomDispatchUtil.randomDispatchTrigger(user, -1));
+				RandomDispatchTriggerUtil.randomDispatchTrigger(user, -1));
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -113,7 +113,7 @@ public class DispatchTriggerLocalServiceTest {
 
 			while (dispatchTriggersCount-- > 0) {
 				_addDispatchTrigger(
-					RandomDispatchUtil.randomDispatchTrigger(
+					RandomDispatchTriggerUtil.randomDispatchTrigger(
 						user, dispatchTriggersCount));
 			}
 		}
@@ -147,14 +147,14 @@ public class DispatchTriggerLocalServiceTest {
 		User user = UserTestUtil.addUser(company);
 
 		DispatchTrigger expectedDispatchTrigger =
-			RandomDispatchUtil.randomDispatchTrigger(user, 1);
+			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1);
 
 		DispatchTrigger dispatchTrigger = _addDispatchTrigger(
 			expectedDispatchTrigger);
 
 		_basicAssertEquals(expectedDispatchTrigger, dispatchTrigger);
 
-		expectedDispatchTrigger = RandomDispatchUtil.randomDispatchTrigger(
+		expectedDispatchTrigger = RandomDispatchTriggerUtil.randomDispatchTrigger(
 			expectedDispatchTrigger, 1);
 
 		try {
@@ -194,9 +194,9 @@ public class DispatchTriggerLocalServiceTest {
 		User user = UserTestUtil.addUser(company);
 
 		DispatchTrigger dispatchTrigger1 = _addDispatchTrigger(
-			RandomDispatchUtil.randomDispatchTrigger(user, 1));
+			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
 		DispatchTrigger dispatchTrigger2 = _addDispatchTrigger(
-			RandomDispatchUtil.randomDispatchTrigger(user, 2));
+			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 2));
 
 		Class<?> exceptionClass = Exception.class;
 

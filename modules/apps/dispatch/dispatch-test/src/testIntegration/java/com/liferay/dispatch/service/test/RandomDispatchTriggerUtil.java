@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * @author Igor Beslic
  */
-public class RandomDispatchUtil {
+public class RandomDispatchTriggerUtil {
 
 	public static DispatchTrigger randomDispatchTrigger(
 		DispatchTrigger dispatchTrigger, int nameSalt) {
