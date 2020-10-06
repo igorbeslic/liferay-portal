@@ -412,9 +412,7 @@ public class DispatchTriggerTestUtil {
 			return null;
 		}
 
-		return String.format(_NAME_PATTERN, userId, nameSalt);
+		return String.format("TEST-TRIGGER-%06d-%06d", userId, nameSalt);
 	}
-
-	private static final String _NAME_PATTERN = "TEST-TRIGGER-%06d-%06d";
 
 }
