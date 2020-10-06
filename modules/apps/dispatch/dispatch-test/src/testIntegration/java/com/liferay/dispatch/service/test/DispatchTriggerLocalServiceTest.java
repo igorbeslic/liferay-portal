@@ -20,6 +20,7 @@ import com.liferay.dispatch.exception.DispatchTriggerSchedulerException;
 import com.liferay.dispatch.exception.DuplicateDispatchTriggerException;
 import com.liferay.dispatch.model.DispatchTrigger;
 import com.liferay.dispatch.service.DispatchTriggerLocalService;
+import com.liferay.dispatch.service.test.util.DispatchTriggerTestUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
@@ -67,13 +68,14 @@ public class DispatchTriggerLocalServiceTest {
 
 		User user = UserTestUtil.addUser(company);
 
-		_addDispatchTrigger(RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
+		_addDispatchTrigger(
+			DispatchTriggerTestUtil.randomDispatchTrigger(user, 1));
 
 		Class<?> exceptionClass = Exception.class;
 
 		try {
 			_addDispatchTrigger(
-				RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
+				DispatchTriggerTestUtil.randomDispatchTrigger(user, 1));
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -85,7 +87,7 @@ public class DispatchTriggerLocalServiceTest {
 
 		try {
 			_addDispatchTrigger(
-				RandomDispatchTriggerUtil.randomDispatchTrigger(user, -1));
+				DispatchTriggerTestUtil.randomDispatchTrigger(user, -1));
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -113,7 +115,7 @@ public class DispatchTriggerLocalServiceTest {
 
 			while (dispatchTriggersCount-- > 0) {
 				_addDispatchTrigger(
-					RandomDispatchTriggerUtil.randomDispatchTrigger(
+					DispatchTriggerTestUtil.randomDispatchTrigger(
 						user, dispatchTriggersCount));
 			}
 		}
@@ -147,14 +149,14 @@ public class DispatchTriggerLocalServiceTest {
 		User user = UserTestUtil.addUser(company);
 
 		DispatchTrigger expectedDispatchTrigger =
-			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1);
+			DispatchTriggerTestUtil.randomDispatchTrigger(user, 1);
 
 		DispatchTrigger dispatchTrigger = _addDispatchTrigger(
 			expectedDispatchTrigger);
 
 		_basicAssertEquals(expectedDispatchTrigger, dispatchTrigger);
 
-		expectedDispatchTrigger = RandomDispatchTriggerUtil.randomDispatchTrigger(
+		expectedDispatchTrigger = DispatchTriggerTestUtil.randomDispatchTrigger(
 			expectedDispatchTrigger, 1);
 
 		try {
@@ -194,9 +196,9 @@ public class DispatchTriggerLocalServiceTest {
 		User user = UserTestUtil.addUser(company);
 
 		DispatchTrigger dispatchTrigger1 = _addDispatchTrigger(
-			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 1));
+			DispatchTriggerTestUtil.randomDispatchTrigger(user, 1));
 		DispatchTrigger dispatchTrigger2 = _addDispatchTrigger(
-			RandomDispatchTriggerUtil.randomDispatchTrigger(user, 2));
+			DispatchTriggerTestUtil.randomDispatchTrigger(user, 2));
 
 		Class<?> exceptionClass = Exception.class;
 

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dispatch.service.test;
+package com.liferay.dispatch.service.test.util;
 
 import com.liferay.dispatch.model.DispatchTrigger;
 import com.liferay.expando.kernel.model.ExpandoBridge;
@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * @author Igor Beslic
  */
-public class RandomDispatchTriggerUtil {
+public class DispatchTriggerTestUtil {
 
 	public static DispatchTrigger randomDispatchTrigger(
 		DispatchTrigger dispatchTrigger, int nameSalt) {
