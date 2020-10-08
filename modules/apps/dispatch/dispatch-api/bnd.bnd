@@ -5,6 +5,7 @@ Export-Package:\
 	com.liferay.dispatch.constants,\
 	com.liferay.dispatch.exception,\
 	com.liferay.dispatch.executor,\
+	com.liferay.dispatch.executor.log,\
 	com.liferay.dispatch.model,\
 	com.liferay.dispatch.security.permission,\
 	com.liferay.dispatch.service,\
