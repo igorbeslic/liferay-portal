@@ -44,14 +44,14 @@ public abstract class BaseScheduledTaskExecutor
 	public void execute(long dispatchTriggerId)
 		throws IOException, PortalException {
 
+		DispatchLogLocalService dispatchLogLocalService =
+			_dispatchLogLocalServiceTracker.getService();
+
 		DispatchTriggerLocalService dispatchTriggerLocalService =
 			_dispatchTriggerLocalServiceTracker.getService();
 
 		DispatchTrigger dispatchTrigger =
 			dispatchTriggerLocalService.getDispatchTrigger(dispatchTriggerId);
-
-		DispatchLogLocalService dispatchLogLocalService =
-			_dispatchLogLocalServiceTracker.getService();
 
 		DispatchLog dispatchLog = dispatchLogLocalService.addDispatchLog(
 			dispatchTrigger.getUserId(), dispatchTrigger.getDispatchTriggerId(),
