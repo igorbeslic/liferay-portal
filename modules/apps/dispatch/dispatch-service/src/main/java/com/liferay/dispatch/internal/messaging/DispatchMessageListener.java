@@ -15,7 +15,7 @@
 package com.liferay.dispatch.internal.messaging;
 
 import com.liferay.dispatch.constants.DispatchConstants;
-import com.liferay.dispatch.internal.executor.ScheduledTaskExecutorDispatcher;
+import com.liferay.dispatch.internal.ScheduledTaskExecutorDispatcher;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
