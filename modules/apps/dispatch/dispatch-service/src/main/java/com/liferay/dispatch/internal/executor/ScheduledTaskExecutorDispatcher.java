@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dispatch.internal;
+package com.liferay.dispatch.internal.executor;
 
 import com.liferay.dispatch.exception.NoSuchLogException;
 import com.liferay.dispatch.executor.ScheduledTaskExecutor;
