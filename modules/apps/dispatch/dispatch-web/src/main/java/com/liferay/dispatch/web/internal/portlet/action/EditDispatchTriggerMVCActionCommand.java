@@ -207,7 +207,6 @@ public class EditDispatchTriggerMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, "dispatchTriggerId");
 
 		String name = ParamUtil.getString(actionRequest, "name");
-
 		String taskExecutorType = ParamUtil.getString(
 			actionRequest, "taskExecutorType");
 
