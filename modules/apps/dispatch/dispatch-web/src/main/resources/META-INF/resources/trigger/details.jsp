@@ -24,7 +24,6 @@ long dispatchTriggerId = 0;
 DispatchTrigger dispatchTrigger = dispatchTriggerDisplayContext.getDispatchTrigger();
 
 String taskExecutorType = ParamUtil.getString(request, "taskExecutorType");
-
 String taskSettings = StringPool.BLANK;
 
 if (dispatchTrigger != null) {
