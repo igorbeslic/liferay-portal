@@ -42,7 +42,11 @@ String formattedStartDate = dispatchLogDisplayContext.getDateString(dispatchLog.
 			<aui:fieldset>
 				<aui:input disabled="<%= true %>" label="start-date" name="startDate" value="<%= formattedStartDate %>" />
 
-				<aui:input disabled="<%= true %>" name="status" value="<%= LanguageUtil.get(request, BackgroundTaskConstants.getStatusLabel(dispatchLog.getStatus())) %>" />
+				<%
+				DispatchTaskStatus dispatchTaskStatus = DispatchTaskStatus.valueOf(dispatchLog.getStatus());
+				%>
+
+				<aui:input disabled="<%= true %>" name="status" value="<%= LanguageUtil.get(request, dispatchTaskStatus.getLabel()) %>" />
 
 				<aui:input disabled="<%= true %>" label="runtime" name="runTime" value='<%= timeMillis + " ms" %>' />
 
