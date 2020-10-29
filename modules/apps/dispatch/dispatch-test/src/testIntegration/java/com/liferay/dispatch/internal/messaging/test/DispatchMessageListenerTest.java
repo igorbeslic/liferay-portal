@@ -68,7 +68,7 @@ public class DispatchMessageListenerTest {
 	public void testDoReceiveOverlapAllowed() throws Exception {
 		int executeCount = RandomTestUtil.randomInt(4, 10);
 
-		DispatchTrigger dispatchTrigger = _executeDispatchTriggerTask(
+		DispatchTrigger dispatchTrigger = _executeDispatchTrigger(
 			executeCount, 1000, true);
 
 		Assert.assertEquals(
@@ -86,7 +86,7 @@ public class DispatchMessageListenerTest {
 
 	@Test
 	public void testDoReceiveOverlapNotAllowed() throws Exception {
-		DispatchTrigger dispatchTrigger = _executeDispatchTriggerTask(
+		DispatchTrigger dispatchTrigger = _executeDispatchTrigger(
 			4, 1000, false);
 
 		Assert.assertEquals(2, TestDispatchTaskExecutor.executionCounter.get());
@@ -131,7 +131,7 @@ public class DispatchMessageListenerTest {
 		Thread.sleep(dispatchTaskDuration);
 	}
 
-	private DispatchTrigger _executeDispatchTriggerTask(
+	private DispatchTrigger _executeDispatchTrigger(
 			int executeCount, long intervalMillis, boolean overlapAllowed)
 		throws Exception {
 
