@@ -44,7 +44,7 @@ public class DispatchTriggerDisplayContext {
 
 	public DispatchTriggerDisplayContext(
 		DispatchTriggerLocalService dispatchTriggerLocalService,
-		Set<String> taskExecutorTypes, RenderRequest renderRequest) {
+		RenderRequest renderRequest, Set<String> taskExecutorTypes) {
 
 		_dispatchTriggerLocalService = dispatchTriggerLocalService;
 		_taskExecutorTypes = taskExecutorTypes;

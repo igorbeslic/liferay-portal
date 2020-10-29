@@ -88,8 +88,8 @@ public class DispatchPortlet extends MVCPortlet {
 
 		DispatchTriggerDisplayContext dispatchTriggerDisplayContext =
 			new DispatchTriggerDisplayContext(
-				_dispatchTriggerLocalService,
-				_dispatchTaskExecutorServiceTrackerMap.keySet(), renderRequest);
+				_dispatchTriggerLocalService, renderRequest,
+				_dispatchTaskExecutorServiceTrackerMap.keySet());
 
 		renderRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, dispatchTriggerDisplayContext);
