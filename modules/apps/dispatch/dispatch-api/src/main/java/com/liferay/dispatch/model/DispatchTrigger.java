@@ -63,4 +63,11 @@ public interface DispatchTrigger extends DispatchTriggerModel, PersistedModel {
 		com.liferay.portal.kernel.util.UnicodeProperties
 			taskSettingsUnicodeProperties);
 
+	public void setDispatchTriggerExecutionMode(
+		com.liferay.dispatch.trigger.DispatchTriggerExecutionMode
+			dispatchTriggerExecutionMode);
+
+	public com.liferay.dispatch.trigger.DispatchTriggerExecutionMode
+		getDispatchTriggerExecutionMode();
+
 }

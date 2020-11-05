@@ -209,6 +209,13 @@ public class DispatchTriggerWrapper
 		return model.getCronExpression();
 	}
 
+	@Override
+	public com.liferay.dispatch.trigger.DispatchTriggerExecutionMode
+		getDispatchTriggerExecutionMode() {
+
+		return model.getDispatchTriggerExecutionMode();
+	}
+
 	/**
 	 * Returns the dispatch trigger ID of this dispatch trigger.
 	 *
@@ -449,6 +456,14 @@ public class DispatchTriggerWrapper
 	@Override
 	public void setCronExpression(String cronExpression) {
 		model.setCronExpression(cronExpression);
+	}
+
+	@Override
+	public void setDispatchTriggerExecutionMode(
+		com.liferay.dispatch.trigger.DispatchTriggerExecutionMode
+			dispatchTriggerExecutionMode) {
+
+		model.setDispatchTriggerExecutionMode(dispatchTriggerExecutionMode);
 	}
 
 	/**

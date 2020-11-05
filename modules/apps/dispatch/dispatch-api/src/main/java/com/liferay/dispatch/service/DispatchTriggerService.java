@@ -15,6 +15,7 @@
 package com.liferay.dispatch.service;
 
 import com.liferay.dispatch.model.DispatchTrigger;
+import com.liferay.dispatch.trigger.DispatchTriggerExecutionMode;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
@@ -79,7 +80,8 @@ public interface DispatchTriggerService extends BaseService {
 			int endDateMonth, int endDateDay, int endDateYear, int endDateHour,
 			int endDateMinute, boolean neverEnd, boolean overlapAllowed,
 			int startDateMonth, int startDateDay, int startDateYear,
-			int startDateHour, int startDateMinute)
+			int startDateHour, int startDateMinute,
+			DispatchTriggerExecutionMode dispatchTriggerExecutionMode)
 		throws PortalException;
 
 	public DispatchTrigger updateDispatchTrigger(

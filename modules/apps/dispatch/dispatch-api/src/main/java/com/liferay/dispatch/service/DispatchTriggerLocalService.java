@@ -15,6 +15,7 @@
 package com.liferay.dispatch.service;
 
 import com.liferay.dispatch.model.DispatchTrigger;
+import com.liferay.dispatch.trigger.DispatchTriggerExecutionMode;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -260,7 +261,7 @@ public interface DispatchTriggerLocalService
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Date getNextFireDate(long dispatchTriggerId);
+	public Date getNextFireDate(long dispatchTriggerId) throws PortalException;
 
 	/**
 	 * Returns the OSGi service identifier.
@@ -278,7 +279,8 @@ public interface DispatchTriggerLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Date getPreviousFireDate(long dispatchTriggerId);
+	public Date getPreviousFireDate(long dispatchTriggerId)
+		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<DispatchTrigger> getUserDispatchTriggers(
@@ -306,7 +308,8 @@ public interface DispatchTriggerLocalService
 			int endDateMonth, int endDateDay, int endDateYear, int endDateHour,
 			int endDateMinute, boolean neverEnd, boolean overlapAllowed,
 			int startDateMonth, int startDateDay, int startDateYear,
-			int startDateHour, int startDateMinute)
+			int startDateHour, int startDateMinute,
+			DispatchTriggerExecutionMode dispatchTriggerExecutionMode)
 		throws PortalException;
 
 	public DispatchTrigger updateDispatchTrigger(
