@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Alessio Antonio Rendina
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  */
 @Component(
 	property = {
@@ -37,6 +38,7 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = AopService.class
 )
+@Deprecated
 public class DispatchLogServiceImpl extends DispatchLogServiceBaseImpl {
 
 	@Override
