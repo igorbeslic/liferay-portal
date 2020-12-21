@@ -47,8 +47,10 @@ import com.liferay.portal.kernel.util.MethodKey;
  *
  * @author Matija Petanjek
  * @see DispatchLogServiceSoap
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  * @generated
  */
+@Deprecated
 public class DispatchLogServiceHttp {
 
 	public static void deleteDispatchLog(

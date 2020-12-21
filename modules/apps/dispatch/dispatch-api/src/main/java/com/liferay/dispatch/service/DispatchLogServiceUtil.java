@@ -28,8 +28,10 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * @author Matija Petanjek
  * @see DispatchLogService
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  * @generated
  */
+@Deprecated
 public class DispatchLogServiceUtil {
 
 	/*

@@ -35,9 +35,11 @@ import org.osgi.annotation.versioning.ProviderType;
  *
  * @author Matija Petanjek
  * @see DispatchLogServiceUtil
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  * @generated
  */
 @AccessControlled
+@Deprecated
 @JSONWebService
 @ProviderType
 @Transactional(

@@ -21,8 +21,10 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  *
  * @author Matija Petanjek
  * @see DispatchLogService
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  * @generated
  */
+@Deprecated
 public class DispatchLogServiceWrapper
 	implements DispatchLogService, ServiceWrapper<DispatchLogService> {
 

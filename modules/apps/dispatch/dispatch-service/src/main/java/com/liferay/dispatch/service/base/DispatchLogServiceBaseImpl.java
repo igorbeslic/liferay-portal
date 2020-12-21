@@ -41,8 +41,10 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Matija Petanjek
  * @see com.liferay.dispatch.service.impl.DispatchLogServiceImpl
+ * @deprecated As of Cavanaugh (7.4.x), with no direct replacement
  * @generated
  */
+@Deprecated
 public abstract class DispatchLogServiceBaseImpl
 	extends BaseServiceImpl
 	implements AopService, DispatchLogService, IdentifiableOSGiService {
