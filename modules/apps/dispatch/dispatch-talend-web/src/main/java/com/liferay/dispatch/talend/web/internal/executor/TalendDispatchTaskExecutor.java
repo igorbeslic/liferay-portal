@@ -25,6 +25,7 @@ import com.liferay.dispatch.talend.web.internal.archive.TalendArchive;
 import com.liferay.dispatch.talend.web.internal.archive.TalendArchiveParserUtil;
 import com.liferay.dispatch.talend.web.internal.process.TalendProcess;
 import com.liferay.dispatch.talend.web.internal.process.TalendProcessCallable;
+import com.liferay.dispatch.talend.web.internal.process.TalendProcessOutputParser;
 import com.liferay.petra.concurrent.NoticeableFuture;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessExecutor;
@@ -91,7 +92,15 @@ public class TalendDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			NoticeableFuture<Serializable> future =
 				processChannel.getProcessNoticeableFuture();
 
-			future.get();
+			String talendProcessOutput = (String)future.get();
+
+			TalendProcessOutputParser talendProcessOutputParser =
+				new TalendProcessOutputParser(talendProcessOutput);
+
+			dispatchTaskExecutorOutput.setError(
+				talendProcessOutputParser.getError());
+			dispatchTaskExecutorOutput.setOutput(
+				talendProcessOutputParser.getOutput());
 
 			if (_log.isInfoEnabled()) {
 				_log.info(
