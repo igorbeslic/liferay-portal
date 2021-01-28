@@ -99,6 +99,7 @@
 		<module>talend-common</module>
 		<module>talend-definition</module>
 		<module>talend-runtime</module>
+		<module>talend-upgrade-tool</module>
 	</modules>
 	<build>
 		<pluginManagement>

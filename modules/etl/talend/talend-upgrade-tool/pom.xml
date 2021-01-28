@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<parent>
+		<artifactId>com.liferay.talend</artifactId>
+		<groupId>com.liferay</groupId>
+		<version>0.5.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>talend-upgrade-tool</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>com.liferay</groupId>
+			<artifactId>com.liferay.talend.common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+	</dependencies>
+	<properties>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+	</properties>
+</project>
