@@ -39,7 +39,10 @@ public class ComponentUpgrade {
 		new PropertiesComponentUpgradeProcess();
 		new com.liferay.talend.upgrade.v0_5_0.
 			PropertiesComponentUpgradeProcess();
-		new com.liferay.talend.upgrade.v0_6_0.PropertiesComponentUpgradeProcess();
+		new com.liferay.talend.upgrade.v0_6_0.
+			PropertiesComponentUpgradeProcess();
+		new com.liferay.talend.upgrade.v0_6_1.
+			PropertiesComponentUpgradeProcess();
 	}
 
 }
