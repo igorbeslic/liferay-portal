@@ -16,12 +16,12 @@
 	<parent>
 		<groupId>com.liferay</groupId>
 		<artifactId>com.liferay.talend</artifactId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.5.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>com.liferay</groupId>
 	<artifactId>com.liferay.talend.runtime</artifactId>
-	<version>0.6.1-SNAPSHOT</version>
+	<version>0.6.1</version>
 	<name>Liferay Talend Runtime</name>
 	<packaging>jar</packaging>
 	<repositories>
@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>com.liferay</groupId>
 			<artifactId>com.liferay.talend.definition</artifactId>
-			<version>0.6.1-SNAPSHOT</version>
+			<version>0.6.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -190,12 +190,7 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<tasks>
-								<echo
-									append="true"
-									encoding="UTF-8"
-									file="target/classes/META-INF/maven/${project.groupId}/${project.artifactId}/dependencies.txt"
-									message="${project.groupId}:${project.artifactId}:jar:${project.version}:runtime"
-								/>
+								<echo append="true" encoding="UTF-8" file="target/classes/META-INF/maven/${project.groupId}/${project.artifactId}/dependencies.txt" message="${project.groupId}:${project.artifactId}:jar:${project.version}:runtime" />
 							</tasks>
 						</configuration>
 						<goals>

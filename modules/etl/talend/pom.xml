@@ -27,7 +27,7 @@
 	</dependencies>
 	<groupId>com.liferay</groupId>
 	<artifactId>com.liferay.talend</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.5.0</version>
 	<name>Liferay Talend</name>
 	<packaging>pom</packaging>
 	<repositories>
@@ -54,7 +54,8 @@
 	<scm>
 		<developerConnection>scm:git:ssh://git@github.com/igorbeslic/liferay-portal.git</developerConnection>
 		<url>https://github.com/liferay/liferay-portal.git</url>
-	</scm>
+	  <tag>com-liferay-etl-talend-components-0.6.1</tag>
+  </scm>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>liferay</id>
