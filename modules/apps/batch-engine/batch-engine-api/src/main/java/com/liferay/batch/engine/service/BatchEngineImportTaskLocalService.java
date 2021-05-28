@@ -274,6 +274,10 @@ public interface BatchEngineImportTaskLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<BatchEngineImportTask> getBatchEngineImportTasks(
+		long companyId, int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<BatchEngineImportTask> getBatchEngineImportTasks(
 		String executeStatus);
 
 	/**

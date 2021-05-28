@@ -302,6 +302,12 @@ public class BatchEngineExportTaskLocalServiceUtil {
 	}
 
 	public static List<BatchEngineExportTask> getBatchEngineExportTasks(
+		long companyId, int start, int end) {
+
+		return getService().getBatchEngineExportTasks(companyId, start, end);
+	}
+
+	public static List<BatchEngineExportTask> getBatchEngineExportTasks(
 		String executeStatus) {
 
 		return getService().getBatchEngineExportTasks(executeStatus);

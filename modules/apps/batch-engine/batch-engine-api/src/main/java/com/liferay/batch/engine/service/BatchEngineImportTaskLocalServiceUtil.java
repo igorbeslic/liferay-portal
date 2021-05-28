@@ -305,6 +305,12 @@ public class BatchEngineImportTaskLocalServiceUtil {
 	}
 
 	public static List<BatchEngineImportTask> getBatchEngineImportTasks(
+		long companyId, int start, int end) {
+
+		return getService().getBatchEngineImportTasks(companyId, start, end);
+	}
+
+	public static List<BatchEngineImportTask> getBatchEngineImportTasks(
 		String executeStatus) {
 
 		return getService().getBatchEngineImportTasks(executeStatus);
