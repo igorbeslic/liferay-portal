@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -51,18 +52,10 @@ public class BatchPlannerPlanServiceTest extends BaseBatchPlannerTestCase {
 
 	@Test
 	public void testAddBatchPlannerPlan() throws Exception {
-		User omniAdminUser = UserTestUtil.addOmniAdminUser();
-
-		UserTestUtil.setUser(omniAdminUser);
-
-		User user1 = UserTestUtil.addUser(CompanyTestUtil.addCompany());
-
-		UserTestUtil.setUser(user1);
-
 		Class<?> exceptionClass = Exception.class;
 
 		try {
-			addBatchPlannerPlan(user1, -1);
+			addBatchPlannerPlan(null);
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -75,7 +68,7 @@ public class BatchPlannerPlanServiceTest extends BaseBatchPlannerTestCase {
 		try {
 			exceptionClass = Exception.class;
 
-			addBatchPlannerPlan(user1, RandomTestUtil.randomString(80));
+			addBatchPlannerPlan(RandomTestUtil.randomString(80));
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -85,10 +78,13 @@ public class BatchPlannerPlanServiceTest extends BaseBatchPlannerTestCase {
 			"Add batch planner plan with too long name",
 			BatchPlannerPlanNameException.class, exceptionClass);
 
-		BatchPlannerPlan batchPlannerPlan1 = addBatchPlannerPlan(user1, 300);
+		BatchPlannerPlan batchPlannerPlan = addBatchPlannerPlan(300);
+
+		Assert.assertEquals(
+			TestPropsValues.getCompanyId(), batchPlannerPlan.getCompanyId());
 
 		try {
-			addBatchPlannerPlan(user1, batchPlannerPlan1.getName());
+			addBatchPlannerPlan(batchPlannerPlan.getName());
 		}
 		catch (Exception exception) {
 			exceptionClass = exception.getClass();
@@ -98,17 +94,23 @@ public class BatchPlannerPlanServiceTest extends BaseBatchPlannerTestCase {
 			"Add batch planner plan with existing name",
 			DuplicateBatchPlannerPlanException.class, exceptionClass);
 
+		User omniAdminUser = UserTestUtil.addOmniAdminUser();
+
 		UserTestUtil.setUser(omniAdminUser);
 
-		User user2 = UserTestUtil.addUser(CompanyTestUtil.addCompany());
+		User user2 = UserTestUtil.addCompanyAdminUser(
+			CompanyTestUtil.addCompany());
 
 		UserTestUtil.setUser(user2);
 
 		BatchPlannerPlan batchPlannerPlan2 = addBatchPlannerPlan(
-			user2, batchPlannerPlan1.getName());
+			batchPlannerPlan.getName());
 
 		Assert.assertEquals(
-			batchPlannerPlan1.getName(), batchPlannerPlan2.getName());
+			user2.getCompanyId(), batchPlannerPlan2.getCompanyId());
+
+		Assert.assertEquals(
+			batchPlannerPlan.getName(), batchPlannerPlan2.getName());
 	}
 
 }
