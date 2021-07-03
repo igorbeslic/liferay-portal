@@ -320,6 +320,10 @@ public interface BatchEngineImportTaskLocalService
 	@Transactional(readOnly = true)
 	public InputStream openContentInputStream(long batchEngineImportTaskId);
 
+	public InputStream openUncompressedContentInputStream(
+			long batchEngineImportTaskId)
+		throws PortalException;
+
 	/**
 	 * Updates the batch engine import task in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

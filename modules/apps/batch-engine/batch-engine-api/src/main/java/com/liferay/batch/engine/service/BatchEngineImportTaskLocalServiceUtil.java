@@ -375,6 +375,14 @@ public class BatchEngineImportTaskLocalServiceUtil {
 		return getService().openContentInputStream(batchEngineImportTaskId);
 	}
 
+	public static InputStream openUncompressedContentInputStream(
+			long batchEngineImportTaskId)
+		throws PortalException {
+
+		return getService().openUncompressedContentInputStream(
+			batchEngineImportTaskId);
+	}
+
 	/**
 	 * Updates the batch engine import task in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
