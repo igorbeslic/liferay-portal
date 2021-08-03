@@ -15,11 +15,30 @@
 package com.liferay.batch.planner.web.internal.portlet;
 
 import com.liferay.batch.planner.constants.BatchPlannerPortletKeys;
+import com.liferay.batch.planner.web.internal.display.context.SelectHeadlessEndpointDisplayContext;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.WebKeys;
+
+import java.io.IOException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.jaxrs.runtime.JaxrsServiceRuntime;
+import org.osgi.service.jaxrs.runtime.dto.ApplicationDTO;
+import org.osgi.service.jaxrs.runtime.dto.ResourceDTO;
+import org.osgi.service.jaxrs.runtime.dto.ResourceMethodInfoDTO;
+import org.osgi.service.jaxrs.runtime.dto.RuntimeDTO;
 
 /**
  * @author Igor Beslic
@@ -44,4 +63,41 @@ import org.osgi.service.component.annotations.Component;
 	service = Portlet.class
 )
 public class BatchPlannerPortlet extends MVCPortlet {
+
+	@Override
+	public void render(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		RuntimeDTO runtimeDTO = _jaxrsServiceRuntime.getRuntimeDTO();
+
+		Map<String, String> headlessEndpoints = new HashMap<>();
+
+		for (ApplicationDTO applicationDTO : runtimeDTO.applicationDTOs) {
+			for (ResourceDTO resourceDTO : applicationDTO.resourceDTOs) {
+				for (ResourceMethodInfoDTO resourceMethodInfoDTO :
+						resourceDTO.resourceMethods) {
+
+					String openApi = StringBundler.concat(
+						"/o", applicationDTO.base, resourceMethodInfoDTO.path);
+
+					if (!openApi.contains("openapi")) {
+						continue;
+					}
+
+					headlessEndpoints.put(applicationDTO.base, openApi.replaceAll("\\{.+\\}","json"));
+				}
+			}
+		}
+
+		renderRequest.setAttribute(
+			WebKeys.PORTLET_DISPLAY_CONTEXT,
+			new SelectHeadlessEndpointDisplayContext(headlessEndpoints));
+
+		super.render(renderRequest, renderResponse);
+	}
+
+	@Reference
+	private JaxrsServiceRuntime _jaxrsServiceRuntime;
+
 }

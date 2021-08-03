@@ -51,6 +51,17 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 		<aui:input bean="<%= batchPlannerPlan %>" model="<%= BatchPlannerPlan.class %>" name="internalClassName" />
 
+		<aui:select id="headlessEndpoint" name="headlessEndpoint">
+
+			<%
+			SelectHeadlessEndpointDisplayContext selectHeadlessEndpointDisplayContext = (SelectHeadlessEndpointDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+			%>
+
+			<c:forEach items="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpoints() %>" var="headlessEndpoint">
+				<aui:option label="${headlessEndpoint.key}" value="${headlessEndpoint.value}" />
+			</c:forEach>
+		</aui:select>
+
 		<div class="form-group-autofit">
 			<c:if test="<%= batchPlannerPlanId > 0 %>">
 				<c:forEach items="<%= BatchPlannerPolicyServiceUtil.getBatchPlannerPolicies(batchPlannerPlanId) %>" var="batchPlannerPolicy">
@@ -80,3 +91,37 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 		<aui:button href="<%= backURL %>" type="cancel" />
 	</liferay-frontend:edit-form-footer>
 </liferay-frontend:edit-form>
+
+<aui:script use="aui-io-request,aui-parse-content">
+	A.one('#<portlet:namespace />headlessEndpoint').on('change', function (event) {
+		this.attr('disabled', true);
+
+		var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
+
+		debugger;
+
+		A.io.request(openapiURL, {
+			on: {
+				success: function (event, id, obj) {
+					var response = JSON.parse(obj.response);
+
+					if (response.success) {
+						alert('Yes!');
+					}
+					else {
+						alert('No :(');
+					}
+				},
+				failure: function (event, id, obj) {
+					alert(JSON.parse(obj.responseText).title);
+				},
+				end: function () {
+					A.one('#<portlet:namespace />headlessEndpoint').attr(
+						'disabled',
+						false
+					);
+				},
+			},
+		});
+	});
+</aui:script>
