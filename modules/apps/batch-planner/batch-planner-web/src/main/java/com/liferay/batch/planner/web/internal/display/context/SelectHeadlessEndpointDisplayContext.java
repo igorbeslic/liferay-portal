@@ -14,9 +14,15 @@
 
 package com.liferay.batch.planner.web.internal.display.context;
 
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.SelectOption;
+
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Igor Beslic
@@ -33,6 +39,19 @@ public class SelectHeadlessEndpointDisplayContext {
 
 	public Map<String, String> getHeadlessEndpoints() {
 		return _headlessEndpoints;
+	}
+
+	public List<SelectOption> getHeadlessEndpointSelectOptions() {
+		Set<Map.Entry<String, String>> entries = _headlessEndpoints.entrySet();
+
+		Stream<Map.Entry<String, String>> stream = entries.stream();
+
+		return stream.map(
+			stringStringEntry -> new SelectOption(
+				stringStringEntry.getKey(), stringStringEntry.getValue())
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	private final Map<String, String> _headlessEndpoints;

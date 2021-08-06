@@ -17,8 +17,6 @@ package com.liferay.batch.planner.web.internal.portlet;
 import com.liferay.batch.planner.constants.BatchPlannerPortletKeys;
 import com.liferay.batch.planner.web.internal.display.context.SelectHeadlessEndpointDisplayContext;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
-import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -85,7 +83,9 @@ public class BatchPlannerPortlet extends MVCPortlet {
 						continue;
 					}
 
-					headlessEndpoints.put(applicationDTO.base, openApi.replaceAll("\\{.+\\}","json"));
+					headlessEndpoints.put(
+						applicationDTO.base,
+						openApi.replaceAll("\\{.+\\}", "json"));
 				}
 			}
 		}

@@ -51,16 +51,34 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 		<aui:input bean="<%= batchPlannerPlan %>" model="<%= BatchPlannerPlan.class %>" name="internalClassName" />
 
-		<aui:select id="headlessEndpoint" name="headlessEndpoint">
+		<%
+		SelectHeadlessEndpointDisplayContext selectHeadlessEndpointDisplayContext = (SelectHeadlessEndpointDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+		%>
 
-			<%
-			SelectHeadlessEndpointDisplayContext selectHeadlessEndpointDisplayContext = (SelectHeadlessEndpointDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
-			%>
+		<clay:row>
+			<clay:col
+				md="6"
+			>
+				<clay:select
+					containerCssClass="custom-container-css-class"
+					cssClass="custom-css-class"
+					id='<%= liferayPortletResponse.getNamespace() + "headlessEndpoint" %>'
+					label="headless-endpoint"
+					name='<%= liferayPortletResponse.getNamespace() + "headlessEndpoint" %>'
+					options="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpointSelectOptions() %>"
+				/>
 
-			<c:forEach items="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpoints() %>" var="headlessEndpoint">
-				<aui:option label="${headlessEndpoint.key}" value="${headlessEndpoint.value}" />
-			</c:forEach>
-		</aui:select>
+				<clay:select
+					containerCssClass="custom-container-css-class"
+					cssClass="custom-css-class"
+					disabled="<%= true %>"
+					id='<%= liferayPortletResponse.getNamespace() + "headlessEndpointSchema" %>'
+					label="headless-endpoint-schema"
+					name='<%= liferayPortletResponse.getNamespace() + "headlessEndpointSchema" %>'
+					options="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpointSelectOptions() %>"
+				/>
+			</clay:col>
+		</clay:row>
 
 		<div class="form-group-autofit">
 			<c:if test="<%= batchPlannerPlanId > 0 %>">
@@ -98,30 +116,32 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 		var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
 
-		debugger;
+		Liferay.Util.fetch(openapiURL, {
+			method: 'GET',
+			credentials: 'include',
+			headers: [
+				['content-type', 'application/json'],
+				['x-csrf-token', window.Liferay.authToken],
+			],
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Failed to fetch: '${openapiURL}'`);
+				}
 
-		A.io.request(openapiURL, {
-			on: {
-				success: function (event, id, obj) {
-					var response = JSON.parse(obj.response);
-
-					if (response.success) {
-						alert('Yes!');
-					}
-					else {
-						alert('No :(');
-					}
-				},
-				failure: function (event, id, obj) {
-					alert(JSON.parse(obj.responseText).title);
-				},
-				end: function () {
-					A.one('#<portlet:namespace />headlessEndpoint').attr(
-						'disabled',
-						false
-					);
-				},
-			},
-		});
+				return response.json();
+			})
+			.then((jsonResponse) => {
+				alert('I see dead objects: ' + jsonResponse.components);
+			})
+			.catch((response) => {
+				alert('FETCH failed ' + response);
+			})
+			.then(() => {
+				A.one('#<portlet:namespace />headlessEndpoint').attr(
+					'disabled',
+					false
+				);
+			});
 	});
 </aui:script>
