@@ -133,6 +133,12 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 			})
 			.then((jsonResponse) => {
 				alert('I see dead objects: ' + jsonResponse.components);
+
+				let schemas = jsonResponse.components.schemas;
+
+				for (key in schemas) {
+					alert('I see ' + key + ' and value: ' + schemas[key].properties['x-class-name']);
+				}
 			})
 			.catch((response) => {
 				alert('FETCH failed ' + response);
