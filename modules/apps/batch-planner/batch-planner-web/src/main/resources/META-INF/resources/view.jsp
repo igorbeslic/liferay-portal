@@ -49,8 +49,6 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 		<aui:input bean="<%= batchPlannerPlan %>" model="<%= BatchPlannerPlan.class %>" name="externalURL" />
 
-		<aui:input bean="<%= batchPlannerPlan %>" model="<%= BatchPlannerPlan.class %>" name="internalClassName" />
-
 		<%
 		SelectHeadlessEndpointDisplayContext selectHeadlessEndpointDisplayContext = (SelectHeadlessEndpointDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 		%>
@@ -67,14 +65,18 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 					name='<%= liferayPortletResponse.getNamespace() + "headlessEndpoint" %>'
 					options="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpointSelectOptions() %>"
 				/>
+			</clay:col>
 
+			<clay:col
+				md="6"
+			>
 				<clay:select
 					containerCssClass="custom-container-css-class"
 					cssClass="custom-css-class"
 					disabled="<%= true %>"
-					id='<%= liferayPortletResponse.getNamespace() + "headlessEndpointSchema" %>'
-					label="headless-endpoint-schema"
-					name='<%= liferayPortletResponse.getNamespace() + "headlessEndpointSchema" %>'
+					id='<%= liferayPortletResponse.getNamespace() + "internalClassName" %>'
+					label="internal-class-name"
+					name='<%= liferayPortletResponse.getNamespace() + "internalClassName" %>'
 					options="<%= selectHeadlessEndpointDisplayContext.getHeadlessEndpointSelectOptions() %>"
 				/>
 			</clay:col>
@@ -101,6 +103,22 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 				<aui:input name="valueDefaultId" placeholder="policy value" value="" />
 			</div>
 		</div>
+
+		<clay:row
+			cssClass="plan-mappings"
+		>
+			<clay:col
+				md="6"
+			>
+				<aui:input name="externalFieldName-ID_TEMPLATE" placeholder="external field name" value="" />
+			</clay:col>
+
+			<clay:col
+				md="6"
+			>
+				<aui:input name="internalFieldName-ID_TEMPLATE" placeholder="open API field name" value="VALUE_TEMPLATE" />
+			</clay:col>
+		</clay:row>
 	</liferay-frontend:edit-form-body>
 
 	<liferay-frontend:edit-form-footer>
@@ -132,13 +150,29 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 				return response.json();
 			})
 			.then((jsonResponse) => {
-				alert('I see dead objects: ' + jsonResponse.components);
+
+				var internalClassName = A.one('#<portlet:namespace />internalClassName');
+
+				internalClassName.empty();
 
 				let schemas = jsonResponse.components.schemas;
 
 				for (key in schemas) {
-					alert('I see ' + key + ' and value: ' + schemas[key].properties['x-class-name']);
+					let properties = schemas[key].properties;
+
+					if (!properties || !properties["x-class-name"]) {
+						continue;
+					}
+
+					let xClassName = properties["x-class-name"];
+
+					internalClassName.appendChild('<option value="'+ xClassName.default +'">' + key + '</option>');
 				}
+
+				internalClassName.attr(
+					'disabled',
+					false
+				);
 			})
 			.catch((response) => {
 				alert('FETCH failed ' + response);
@@ -150,4 +184,55 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 				);
 			});
 	});
+	A.one('#<portlet:namespace />internalClassName').on('change', function (event) {
+	this.attr('disabled', true);
+
+	var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
+
+	var internalClassName = A.one('#<portlet:namespace />internalClassName').val();
+
+	internalClassName = internalClassName.substr(internalClassName.lastIndexOf("\.") + 1);
+
+	Liferay.Util.fetch(openapiURL, {
+	method: 'GET',
+	credentials: 'include',
+	headers: [
+	['content-type', 'application/json'],
+	['x-csrf-token', window.Liferay.authToken],
+	],
+	}).then((response) => {
+	if (!response.ok) {
+	throw new Error(`Failed to fetch: '${openapiURL}'`);
+	}
+
+	return response.json();
+	}).then((jsonResponse) => {
+
+	let schemas = jsonResponse.components.schemas;
+
+	let schemaEntry = schemas[internalClassName];
+
+	var mappingArea = A.one('#<portlet:namespace />externalFieldName-ID_TEMPLATE').ancestor(".plan-mappings");
+	var mappingRowTemplate = mappingArea.getContent();
+
+	debugger;
+
+	mappingArea.empty();
+
+	let curId = 1;
+
+	for (key in schemaEntry.properties) {
+		let mappingRow = mappingRowTemplate.replaceAll("ID_TEMPLATE", curId).replace("VALUE_TEMPLATE", key);
+
+		mappingArea.append(mappingRow);
+
+		curId++;
+	}
+
+	})
+	.catch((response) => {
+	alert('FETCH failed ' + response);
+	});
+	});
+
 </aui:script>
