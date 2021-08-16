@@ -104,21 +104,31 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 			</div>
 		</div>
 
-		<clay:row
-			cssClass="plan-mappings"
-		>
-			<clay:col
-				md="6"
+		<clay:content-section>
+			<clay:row
+				cssClass="plan-mappings"
 			>
-				<aui:input name="externalFieldName-ID_TEMPLATE" placeholder="external field name" value="" />
-			</clay:col>
 
-			<clay:col
-				md="6"
-			>
-				<aui:input name="internalFieldName-ID_TEMPLATE" placeholder="open API field name" value="VALUE_TEMPLATE" />
-			</clay:col>
-		</clay:row>
+			</clay:row>
+
+            <clay:row
+                    cssClass="plan-mappings-template hide"
+            >
+
+                <clay:col
+                        md="6"
+                >
+                    <aui:input name="externalFieldName-ID_TEMPLATE" placeholder="external field name" value="" />
+                </clay:col>
+
+                <clay:col
+                        md="6"
+                >
+                    <aui:input name="internalFieldName-ID_TEMPLATE" placeholder="open API field name" value="VALUE_TEMPLATE" />
+                </clay:col>
+
+            </clay:row>
+		</clay:content-section>
 	</liferay-frontend:edit-form-body>
 
 	<liferay-frontend:edit-form-footer>
@@ -132,9 +142,11 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 	A.one('#<portlet:namespace />headlessEndpoint').on('change', function (event) {
 		this.attr('disabled', true);
 
-		var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
+		var openapiDiscoveryURL = A.one(
+			'#<portlet:namespace />headlessEndpoint'
+		).val();
 
-		Liferay.Util.fetch(openapiURL, {
+		Liferay.Util.fetch(openapiDiscoveryURL, {
 			method: 'GET',
 			credentials: 'include',
 			headers: [
@@ -144,7 +156,7 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 		})
 			.then((response) => {
 				if (!response.ok) {
-					throw new Error(`Failed to fetch: '${openapiURL}'`);
+					throw new Error(`Failed to fetch: '${openapiDiscoveryURL}'`);
 				}
 
 				return response.json();
@@ -176,6 +188,8 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 					);
 				}
 
+				renderMappings();
+
 				internalClassName.attr('disabled', false);
 			})
 			.catch((response) => {
@@ -191,6 +205,12 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 	A.one('#<portlet:namespace />internalClassName').on('change', function (event) {
 		this.attr('disabled', true);
 
+		renderMappings();
+
+		this.attr('disabled', false);
+	});
+
+	function renderMappings() {
 		var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
 
 		var internalClassName = A.one(
@@ -221,10 +241,14 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 				let schemaEntry = schemas[internalClassName];
 
+				debugger;
+
 				var mappingArea = A.one(
-					'#<portlet:namespace />externalFieldName-ID_TEMPLATE'
-				).ancestor('.plan-mappings');
-				var mappingRowTemplate = mappingArea.getContent();
+					'.plan-mappings'
+				);
+				var mappingRowTemplate = A.one(
+                    '.plan-mappings-template'
+                ).getContent();
 
 				mappingArea.empty();
 
@@ -243,5 +267,5 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 			.catch((response) => {
 				alert('FETCH failed ' + response);
 			});
-	});
+	}
 </aui:script>
