@@ -150,8 +150,9 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 				return response.json();
 			})
 			.then((jsonResponse) => {
-
-				var internalClassName = A.one('#<portlet:namespace />internalClassName');
+				var internalClassName = A.one(
+					'#<portlet:namespace />internalClassName'
+				);
 
 				internalClassName.empty();
 
@@ -160,19 +161,22 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 				for (key in schemas) {
 					let properties = schemas[key].properties;
 
-					if (!properties || !properties["x-class-name"]) {
+					if (!properties || !properties['x-class-name']) {
 						continue;
 					}
 
-					let xClassName = properties["x-class-name"];
+					let xClassName = properties['x-class-name'];
 
-					internalClassName.appendChild('<option value="'+ xClassName.default +'">' + key + '</option>');
+					internalClassName.appendChild(
+						'<option value="' +
+							xClassName.default +
+							'">' +
+							key +
+							'</option>'
+					);
 				}
 
-				internalClassName.attr(
-					'disabled',
-					false
-				);
+				internalClassName.attr('disabled', false);
 			})
 			.catch((response) => {
 				alert('FETCH failed ' + response);
@@ -185,54 +189,59 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 			});
 	});
 	A.one('#<portlet:namespace />internalClassName').on('change', function (event) {
-	this.attr('disabled', true);
+		this.attr('disabled', true);
 
-	var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
+		var openapiURL = A.one('#<portlet:namespace />headlessEndpoint').val();
 
-	var internalClassName = A.one('#<portlet:namespace />internalClassName').val();
+		var internalClassName = A.one(
+			'#<portlet:namespace />internalClassName'
+		).val();
 
-	internalClassName = internalClassName.substr(internalClassName.lastIndexOf("\.") + 1);
+		internalClassName = internalClassName.substr(
+			internalClassName.lastIndexOf('.') + 1
+		);
 
-	Liferay.Util.fetch(openapiURL, {
-	method: 'GET',
-	credentials: 'include',
-	headers: [
-	['content-type', 'application/json'],
-	['x-csrf-token', window.Liferay.authToken],
-	],
-	}).then((response) => {
-	if (!response.ok) {
-	throw new Error(`Failed to fetch: '${openapiURL}'`);
-	}
+		Liferay.Util.fetch(openapiURL, {
+			method: 'GET',
+			credentials: 'include',
+			headers: [
+				['content-type', 'application/json'],
+				['x-csrf-token', window.Liferay.authToken],
+			],
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Failed to fetch: '${openapiURL}'`);
+				}
 
-	return response.json();
-	}).then((jsonResponse) => {
+				return response.json();
+			})
+			.then((jsonResponse) => {
+				let schemas = jsonResponse.components.schemas;
 
-	let schemas = jsonResponse.components.schemas;
+				let schemaEntry = schemas[internalClassName];
 
-	let schemaEntry = schemas[internalClassName];
+				var mappingArea = A.one(
+					'#<portlet:namespace />externalFieldName-ID_TEMPLATE'
+				).ancestor('.plan-mappings');
+				var mappingRowTemplate = mappingArea.getContent();
 
-	var mappingArea = A.one('#<portlet:namespace />externalFieldName-ID_TEMPLATE').ancestor(".plan-mappings");
-	var mappingRowTemplate = mappingArea.getContent();
+				mappingArea.empty();
 
-	debugger;
+				let curId = 1;
 
-	mappingArea.empty();
+				for (key in schemaEntry.properties) {
+					let mappingRow = mappingRowTemplate
+						.replaceAll('ID_TEMPLATE', curId)
+						.replace('VALUE_TEMPLATE', key);
 
-	let curId = 1;
+					mappingArea.append(mappingRow);
 
-	for (key in schemaEntry.properties) {
-		let mappingRow = mappingRowTemplate.replaceAll("ID_TEMPLATE", curId).replace("VALUE_TEMPLATE", key);
-
-		mappingArea.append(mappingRow);
-
-		curId++;
-	}
-
-	})
-	.catch((response) => {
-	alert('FETCH failed ' + response);
+					curId++;
+				}
+			})
+			.catch((response) => {
+				alert('FETCH failed ' + response);
+			});
 	});
-	});
-
 </aui:script>
