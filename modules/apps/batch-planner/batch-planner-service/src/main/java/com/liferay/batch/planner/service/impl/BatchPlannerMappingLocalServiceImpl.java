@@ -87,12 +87,12 @@ public class BatchPlannerMappingLocalServiceImpl
 	@Override
 	public BatchPlannerMapping deleteBatchPlannerMapping(
 			long batchPlannerPlanId, String externalFieldName,
-			String internalName)
+			String internalFieldName)
 		throws PortalException {
 
 		BatchPlannerMapping batchPlannerMapping =
 			batchPlannerMappingPersistence.findByBPPI_EFN_IFN(
-				batchPlannerPlanId, externalFieldName, internalName);
+				batchPlannerPlanId, externalFieldName, internalFieldName);
 
 		return batchPlannerMappingPersistence.remove(batchPlannerMapping);
 	}
