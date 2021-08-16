@@ -54,9 +54,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -96,19 +94,11 @@ public abstract class BasePlanResourceImpl implements PlanResource {
 	 */
 	@Consumes({"application/json", "application/xml"})
 	@Override
-	@Parameters(
-		value = {@Parameter(in = ParameterIn.QUERY, name = "fieldNameMapping")}
-	)
 	@Path("/plans")
 	@POST
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "Plan")})
-	public Plan postPlan(
-			@Parameter(hidden = true) @QueryParam("fieldNameMapping") String
-				fieldNameMapping,
-			Plan plan)
-		throws Exception {
-
+	public Plan postPlan(Plan plan) throws Exception {
 		return new Plan();
 	}
 
@@ -121,14 +111,11 @@ public abstract class BasePlanResourceImpl implements PlanResource {
 	@Override
 	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
 	@Path("/plans/{planId}")
+	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "Plan")})
-	public Response deletePlan(
+	public void deletePlan(
 			@NotNull @Parameter(hidden = true) @PathParam("id") Long id)
 		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
 	}
 
 	/**
@@ -159,15 +146,14 @@ public abstract class BasePlanResourceImpl implements PlanResource {
 	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
 	@PATCH
 	@Path("/plans/{planId}")
+	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "Plan")})
-	public Response patchPlan(
+	public Plan patchPlan(
 			@NotNull @Parameter(hidden = true) @PathParam("id") Long id,
 			Plan plan)
 		throws Exception {
 
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
+		return new Plan();
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
