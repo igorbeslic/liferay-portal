@@ -14,9 +14,15 @@
 
 package com.liferay.headless.admin.batch.planner.internal.resource.v1_0;
 
+import com.liferay.batch.planner.service.BatchPlannerLogService;
+import com.liferay.headless.admin.batch.planner.dto.v1_0.Log;
+import com.liferay.headless.admin.batch.planner.internal.dto.v1_0.converter.LogDTOConverter;
 import com.liferay.headless.admin.batch.planner.resource.v1_0.LogResource;
+import com.liferay.portal.vulcan.pagination.Page;
+import com.liferay.portal.vulcan.pagination.Pagination;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 /**
@@ -27,4 +33,22 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = LogResource.class
 )
 public class LogResourceImpl extends BaseLogResourceImpl {
+
+	public Page<Log> getPlanLogsPage(Long id, Pagination pagination)
+		throws Exception {
+
+		return Page.of(
+			_logDTOConverter.toDTOs(
+				_batchPlannerLogService.getBatchPlannerLogs(
+					id, pagination.getStartPosition(),
+					pagination.getEndPosition())),
+			pagination, _batchPlannerLogService.getBatchPlannerLogsCount(id));
+	}
+
+	@Reference
+	private BatchPlannerLogService _batchPlannerLogService;
+
+	@Reference
+	private LogDTOConverter _logDTOConverter;
+
 }
