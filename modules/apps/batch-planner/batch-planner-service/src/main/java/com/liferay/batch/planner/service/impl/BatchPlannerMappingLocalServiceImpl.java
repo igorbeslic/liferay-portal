@@ -105,6 +105,23 @@ public class BatchPlannerMappingLocalServiceImpl
 			batchPlannerPlanId);
 	}
 
+	@Override
+	public BatchPlannerMapping updateBatchPlannerMapping(
+			long batchPlannerMappingId, String externalFieldName,
+			String externalFieldType, String script)
+		throws PortalException {
+
+		BatchPlannerMapping batchPlannerMapping =
+			batchPlannerMappingPersistence.findByPrimaryKey(
+				batchPlannerMappingId);
+
+		batchPlannerMapping.setExternalFieldName(externalFieldName);
+		batchPlannerMapping.setExternalFieldType(externalFieldType);
+		batchPlannerMapping.setScript(script);
+
+		return batchPlannerMappingPersistence.update(batchPlannerMapping);
+	}
+
 	private void _validateExternalFieldName(String externalFieldName)
 		throws PortalException {
 
