@@ -22,12 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
-import com.liferay.headless.admin.batch.planner.client.dto.v1_0.Log;
+import com.liferay.headless.admin.batch.planner.client.dto.v1_0.LogEntry;
 import com.liferay.headless.admin.batch.planner.client.http.HttpInvoker;
 import com.liferay.headless.admin.batch.planner.client.pagination.Page;
 import com.liferay.headless.admin.batch.planner.client.pagination.Pagination;
-import com.liferay.headless.admin.batch.planner.client.resource.v1_0.LogResource;
-import com.liferay.headless.admin.batch.planner.client.serdes.v1_0.LogSerDes;
+import com.liferay.headless.admin.batch.planner.client.resource.v1_0.LogEntryResource;
+import com.liferay.headless.admin.batch.planner.client.serdes.v1_0.LogEntrySerDes;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -83,7 +83,7 @@ import org.junit.Test;
  * @generated
  */
 @Generated("")
-public abstract class BaseLogResourceTestCase {
+public abstract class BaseLogEntryResourceTestCase {
 
 	@ClassRule
 	@Rule
@@ -104,11 +104,11 @@ public abstract class BaseLogResourceTestCase {
 		testCompany = CompanyLocalServiceUtil.getCompany(
 			testGroup.getCompanyId());
 
-		_logResource.setContextCompany(testCompany);
+		_logEntryResource.setContextCompany(testCompany);
 
-		LogResource.Builder builder = LogResource.builder();
+		LogEntryResource.Builder builder = LogEntryResource.builder();
 
-		logResource = builder.authentication(
+		logEntryResource = builder.authentication(
 			"test@liferay.com", "test"
 		).locale(
 			LocaleUtil.getDefault()
@@ -139,13 +139,13 @@ public abstract class BaseLogResourceTestCase {
 			}
 		};
 
-		Log log1 = randomLog();
+		LogEntry logEntry1 = randomLogEntry();
 
-		String json = objectMapper.writeValueAsString(log1);
+		String json = objectMapper.writeValueAsString(logEntry1);
 
-		Log log2 = LogSerDes.toDTO(json);
+		LogEntry logEntry2 = LogEntrySerDes.toDTO(json);
 
-		Assert.assertTrue(equals(log1, log2));
+		Assert.assertTrue(equals(logEntry1, logEntry2));
 	}
 
 	@Test
@@ -165,10 +165,10 @@ public abstract class BaseLogResourceTestCase {
 			}
 		};
 
-		Log log = randomLog();
+		LogEntry logEntry = randomLogEntry();
 
-		String json1 = objectMapper.writeValueAsString(log);
-		String json2 = LogSerDes.toJSON(log);
+		String json1 = objectMapper.writeValueAsString(logEntry);
+		String json2 = LogEntrySerDes.toJSON(logEntry);
 
 		Assert.assertEquals(
 			objectMapper.readTree(json1), objectMapper.readTree(json2));
@@ -178,108 +178,124 @@ public abstract class BaseLogResourceTestCase {
 	public void testEscapeRegexInStringFields() throws Exception {
 		String regex = "^[0-9]+(\\.[0-9]{1,2})\"?";
 
-		Log log = randomLog();
+		LogEntry logEntry = randomLogEntry();
 
-		log.setDispatchTriggerExternalReferenceCode(regex);
-		log.setExportTaskExternalReferenceCode(regex);
-		log.setImportTaskExternalReferenceCode(regex);
+		logEntry.setDispatchTriggerExternalReferenceCode(regex);
+		logEntry.setExportTaskExternalReferenceCode(regex);
+		logEntry.setImportTaskExternalReferenceCode(regex);
 
-		String json = LogSerDes.toJSON(log);
+		String json = LogEntrySerDes.toJSON(logEntry);
 
 		Assert.assertFalse(json.contains(regex));
 
-		log = LogSerDes.toDTO(json);
+		logEntry = LogEntrySerDes.toDTO(json);
 
 		Assert.assertEquals(
-			regex, log.getDispatchTriggerExternalReferenceCode());
-		Assert.assertEquals(regex, log.getExportTaskExternalReferenceCode());
-		Assert.assertEquals(regex, log.getImportTaskExternalReferenceCode());
+			regex, logEntry.getDispatchTriggerExternalReferenceCode());
+		Assert.assertEquals(
+			regex, logEntry.getExportTaskExternalReferenceCode());
+		Assert.assertEquals(
+			regex, logEntry.getImportTaskExternalReferenceCode());
 	}
 
 	@Test
-	public void testGetPlanLogsPage() throws Exception {
-		Page<Log> page = logResource.getPlanLogsPage(
-			testGetPlanLogsPage_getId(), Pagination.of(1, 2));
+	public void testGetPlanLogEntriesPage() throws Exception {
+		Page<LogEntry> page = logEntryResource.getPlanLogEntriesPage(
+			testGetPlanLogEntriesPage_getId(), Pagination.of(1, 2));
 
 		Assert.assertEquals(0, page.getTotalCount());
 
-		Long id = testGetPlanLogsPage_getId();
-		Long irrelevantId = testGetPlanLogsPage_getIrrelevantId();
+		Long id = testGetPlanLogEntriesPage_getId();
+		Long irrelevantId = testGetPlanLogEntriesPage_getIrrelevantId();
 
 		if (irrelevantId != null) {
-			Log irrelevantLog = testGetPlanLogsPage_addLog(
-				irrelevantId, randomIrrelevantLog());
+			LogEntry irrelevantLogEntry = testGetPlanLogEntriesPage_addLogEntry(
+				irrelevantId, randomIrrelevantLogEntry());
 
-			page = logResource.getPlanLogsPage(
+			page = logEntryResource.getPlanLogEntriesPage(
 				irrelevantId, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
 
 			assertEquals(
-				Arrays.asList(irrelevantLog), (List<Log>)page.getItems());
+				Arrays.asList(irrelevantLogEntry),
+				(List<LogEntry>)page.getItems());
 			assertValid(page);
 		}
 
-		Log log1 = testGetPlanLogsPage_addLog(id, randomLog());
+		LogEntry logEntry1 = testGetPlanLogEntriesPage_addLogEntry(
+			id, randomLogEntry());
 
-		Log log2 = testGetPlanLogsPage_addLog(id, randomLog());
+		LogEntry logEntry2 = testGetPlanLogEntriesPage_addLogEntry(
+			id, randomLogEntry());
 
-		page = logResource.getPlanLogsPage(id, Pagination.of(1, 2));
+		page = logEntryResource.getPlanLogEntriesPage(id, Pagination.of(1, 2));
 
 		Assert.assertEquals(2, page.getTotalCount());
 
 		assertEqualsIgnoringOrder(
-			Arrays.asList(log1, log2), (List<Log>)page.getItems());
+			Arrays.asList(logEntry1, logEntry2),
+			(List<LogEntry>)page.getItems());
 		assertValid(page);
 	}
 
 	@Test
-	public void testGetPlanLogsPageWithPagination() throws Exception {
-		Long id = testGetPlanLogsPage_getId();
+	public void testGetPlanLogEntriesPageWithPagination() throws Exception {
+		Long id = testGetPlanLogEntriesPage_getId();
 
-		Log log1 = testGetPlanLogsPage_addLog(id, randomLog());
+		LogEntry logEntry1 = testGetPlanLogEntriesPage_addLogEntry(
+			id, randomLogEntry());
 
-		Log log2 = testGetPlanLogsPage_addLog(id, randomLog());
+		LogEntry logEntry2 = testGetPlanLogEntriesPage_addLogEntry(
+			id, randomLogEntry());
 
-		Log log3 = testGetPlanLogsPage_addLog(id, randomLog());
+		LogEntry logEntry3 = testGetPlanLogEntriesPage_addLogEntry(
+			id, randomLogEntry());
 
-		Page<Log> page1 = logResource.getPlanLogsPage(id, Pagination.of(1, 2));
+		Page<LogEntry> page1 = logEntryResource.getPlanLogEntriesPage(
+			id, Pagination.of(1, 2));
 
-		List<Log> logs1 = (List<Log>)page1.getItems();
+		List<LogEntry> logEntries1 = (List<LogEntry>)page1.getItems();
 
-		Assert.assertEquals(logs1.toString(), 2, logs1.size());
+		Assert.assertEquals(logEntries1.toString(), 2, logEntries1.size());
 
-		Page<Log> page2 = logResource.getPlanLogsPage(id, Pagination.of(2, 2));
+		Page<LogEntry> page2 = logEntryResource.getPlanLogEntriesPage(
+			id, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
-		List<Log> logs2 = (List<Log>)page2.getItems();
+		List<LogEntry> logEntries2 = (List<LogEntry>)page2.getItems();
 
-		Assert.assertEquals(logs2.toString(), 1, logs2.size());
+		Assert.assertEquals(logEntries2.toString(), 1, logEntries2.size());
 
-		Page<Log> page3 = logResource.getPlanLogsPage(id, Pagination.of(1, 3));
+		Page<LogEntry> page3 = logEntryResource.getPlanLogEntriesPage(
+			id, Pagination.of(1, 3));
 
 		assertEqualsIgnoringOrder(
-			Arrays.asList(log1, log2, log3), (List<Log>)page3.getItems());
+			Arrays.asList(logEntry1, logEntry2, logEntry3),
+			(List<LogEntry>)page3.getItems());
 	}
 
-	protected Log testGetPlanLogsPage_addLog(Long id, Log log)
+	protected LogEntry testGetPlanLogEntriesPage_addLogEntry(
+			Long id, LogEntry logEntry)
 		throws Exception {
 
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetPlanLogsPage_getId() throws Exception {
+	protected Long testGetPlanLogEntriesPage_getId() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
 
-	protected Long testGetPlanLogsPage_getIrrelevantId() throws Exception {
+	protected Long testGetPlanLogEntriesPage_getIrrelevantId()
+		throws Exception {
+
 		return null;
 	}
 
-	protected Log testGraphQLLog_addLog() throws Exception {
+	protected LogEntry testGraphQLLogEntry_addLogEntry() throws Exception {
 		throw new UnsupportedOperationException(
 			"This method needs to be implemented");
 	}
@@ -292,43 +308,50 @@ public abstract class BaseLogResourceTestCase {
 			expectedHttpResponseStatusCode, actualHttpResponse.getStatusCode());
 	}
 
-	protected void assertEquals(Log log1, Log log2) {
-		Assert.assertTrue(log1 + " does not equal " + log2, equals(log1, log2));
+	protected void assertEquals(LogEntry logEntry1, LogEntry logEntry2) {
+		Assert.assertTrue(
+			logEntry1 + " does not equal " + logEntry2,
+			equals(logEntry1, logEntry2));
 	}
 
-	protected void assertEquals(List<Log> logs1, List<Log> logs2) {
-		Assert.assertEquals(logs1.size(), logs2.size());
+	protected void assertEquals(
+		List<LogEntry> logEntries1, List<LogEntry> logEntries2) {
 
-		for (int i = 0; i < logs1.size(); i++) {
-			Log log1 = logs1.get(i);
-			Log log2 = logs2.get(i);
+		Assert.assertEquals(logEntries1.size(), logEntries2.size());
 
-			assertEquals(log1, log2);
+		for (int i = 0; i < logEntries1.size(); i++) {
+			LogEntry logEntry1 = logEntries1.get(i);
+			LogEntry logEntry2 = logEntries2.get(i);
+
+			assertEquals(logEntry1, logEntry2);
 		}
 	}
 
-	protected void assertEqualsIgnoringOrder(List<Log> logs1, List<Log> logs2) {
-		Assert.assertEquals(logs1.size(), logs2.size());
+	protected void assertEqualsIgnoringOrder(
+		List<LogEntry> logEntries1, List<LogEntry> logEntries2) {
 
-		for (Log log1 : logs1) {
+		Assert.assertEquals(logEntries1.size(), logEntries2.size());
+
+		for (LogEntry logEntry1 : logEntries1) {
 			boolean contains = false;
 
-			for (Log log2 : logs2) {
-				if (equals(log1, log2)) {
+			for (LogEntry logEntry2 : logEntries2) {
+				if (equals(logEntry1, logEntry2)) {
 					contains = true;
 
 					break;
 				}
 			}
 
-			Assert.assertTrue(logs2 + " does not contain " + log1, contains);
+			Assert.assertTrue(
+				logEntries2 + " does not contain " + logEntry1, contains);
 		}
 	}
 
-	protected void assertValid(Log log) throws Exception {
+	protected void assertValid(LogEntry logEntry) throws Exception {
 		boolean valid = true;
 
-		if (log.getId() == null) {
+		if (logEntry.getId() == null) {
 			valid = false;
 		}
 
@@ -339,7 +362,9 @@ public abstract class BaseLogResourceTestCase {
 					"dispatchTriggerExternalReferenceCode",
 					additionalAssertFieldName)) {
 
-				if (log.getDispatchTriggerExternalReferenceCode() == null) {
+				if (logEntry.getDispatchTriggerExternalReferenceCode() ==
+						null) {
+
 					valid = false;
 				}
 
@@ -350,7 +375,7 @@ public abstract class BaseLogResourceTestCase {
 					"exportTaskExternalReferenceCode",
 					additionalAssertFieldName)) {
 
-				if (log.getExportTaskExternalReferenceCode() == null) {
+				if (logEntry.getExportTaskExternalReferenceCode() == null) {
 					valid = false;
 				}
 
@@ -361,7 +386,7 @@ public abstract class BaseLogResourceTestCase {
 					"importTaskExternalReferenceCode",
 					additionalAssertFieldName)) {
 
-				if (log.getImportTaskExternalReferenceCode() == null) {
+				if (logEntry.getImportTaskExternalReferenceCode() == null) {
 					valid = false;
 				}
 
@@ -369,7 +394,7 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("planId", additionalAssertFieldName)) {
-				if (log.getPlanId() == null) {
+				if (logEntry.getPlanId() == null) {
 					valid = false;
 				}
 
@@ -377,7 +402,7 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("size", additionalAssertFieldName)) {
-				if (log.getSize() == null) {
+				if (logEntry.getSize() == null) {
 					valid = false;
 				}
 
@@ -385,7 +410,7 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("status", additionalAssertFieldName)) {
-				if (log.getStatus() == null) {
+				if (logEntry.getStatus() == null) {
 					valid = false;
 				}
 
@@ -393,7 +418,7 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("total", additionalAssertFieldName)) {
-				if (log.getTotal() == null) {
+				if (logEntry.getTotal() == null) {
 					valid = false;
 				}
 
@@ -408,12 +433,12 @@ public abstract class BaseLogResourceTestCase {
 		Assert.assertTrue(valid);
 	}
 
-	protected void assertValid(Page<Log> page) {
+	protected void assertValid(Page<LogEntry> page) {
 		boolean valid = false;
 
-		java.util.Collection<Log> logs = page.getItems();
+		java.util.Collection<LogEntry> logEntries = page.getItems();
 
-		int size = logs.size();
+		int size = logEntries.size();
 
 		if ((page.getLastPage() > 0) && (page.getPage() > 0) &&
 			(page.getPageSize() > 0) && (page.getTotalCount() > 0) &&
@@ -434,7 +459,7 @@ public abstract class BaseLogResourceTestCase {
 
 		for (Field field :
 				getDeclaredFields(
-					com.liferay.headless.admin.batch.planner.dto.v1_0.Log.
+					com.liferay.headless.admin.batch.planner.dto.v1_0.LogEntry.
 						class)) {
 
 			if (!ArrayUtil.contains(
@@ -482,8 +507,8 @@ public abstract class BaseLogResourceTestCase {
 		return new String[0];
 	}
 
-	protected boolean equals(Log log1, Log log2) {
-		if (log1 == log2) {
+	protected boolean equals(LogEntry logEntry1, LogEntry logEntry2) {
+		if (logEntry1 == logEntry2) {
 			return true;
 		}
 
@@ -495,8 +520,8 @@ public abstract class BaseLogResourceTestCase {
 					additionalAssertFieldName)) {
 
 				if (!Objects.deepEquals(
-						log1.getDispatchTriggerExternalReferenceCode(),
-						log2.getDispatchTriggerExternalReferenceCode())) {
+						logEntry1.getDispatchTriggerExternalReferenceCode(),
+						logEntry2.getDispatchTriggerExternalReferenceCode())) {
 
 					return false;
 				}
@@ -509,8 +534,8 @@ public abstract class BaseLogResourceTestCase {
 					additionalAssertFieldName)) {
 
 				if (!Objects.deepEquals(
-						log1.getExportTaskExternalReferenceCode(),
-						log2.getExportTaskExternalReferenceCode())) {
+						logEntry1.getExportTaskExternalReferenceCode(),
+						logEntry2.getExportTaskExternalReferenceCode())) {
 
 					return false;
 				}
@@ -519,7 +544,7 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("id", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(log1.getId(), log2.getId())) {
+				if (!Objects.deepEquals(logEntry1.getId(), logEntry2.getId())) {
 					return false;
 				}
 
@@ -531,8 +556,8 @@ public abstract class BaseLogResourceTestCase {
 					additionalAssertFieldName)) {
 
 				if (!Objects.deepEquals(
-						log1.getImportTaskExternalReferenceCode(),
-						log2.getImportTaskExternalReferenceCode())) {
+						logEntry1.getImportTaskExternalReferenceCode(),
+						logEntry2.getImportTaskExternalReferenceCode())) {
 
 					return false;
 				}
@@ -541,7 +566,9 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("planId", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(log1.getPlanId(), log2.getPlanId())) {
+				if (!Objects.deepEquals(
+						logEntry1.getPlanId(), logEntry2.getPlanId())) {
+
 					return false;
 				}
 
@@ -549,7 +576,9 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("size", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(log1.getSize(), log2.getSize())) {
+				if (!Objects.deepEquals(
+						logEntry1.getSize(), logEntry2.getSize())) {
+
 					return false;
 				}
 
@@ -557,7 +586,9 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("status", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(log1.getStatus(), log2.getStatus())) {
+				if (!Objects.deepEquals(
+						logEntry1.getStatus(), logEntry2.getStatus())) {
+
 					return false;
 				}
 
@@ -565,7 +596,9 @@ public abstract class BaseLogResourceTestCase {
 			}
 
 			if (Objects.equals("total", additionalAssertFieldName)) {
-				if (!Objects.deepEquals(log1.getTotal(), log2.getTotal())) {
+				if (!Objects.deepEquals(
+						logEntry1.getTotal(), logEntry2.getTotal())) {
+
 					return false;
 				}
 
@@ -620,13 +653,13 @@ public abstract class BaseLogResourceTestCase {
 	protected java.util.Collection<EntityField> getEntityFields()
 		throws Exception {
 
-		if (!(_logResource instanceof EntityModelResource)) {
+		if (!(_logEntryResource instanceof EntityModelResource)) {
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
 		}
 
 		EntityModelResource entityModelResource =
-			(EntityModelResource)_logResource;
+			(EntityModelResource)_logEntryResource;
 
 		EntityModel entityModel = entityModelResource.getEntityModel(
 			new MultivaluedHashMap());
@@ -655,7 +688,7 @@ public abstract class BaseLogResourceTestCase {
 	}
 
 	protected String getFilterString(
-		EntityField entityField, String operator, Log log) {
+		EntityField entityField, String operator, LogEntry logEntry) {
 
 		StringBundler sb = new StringBundler();
 
@@ -670,7 +703,8 @@ public abstract class BaseLogResourceTestCase {
 		if (entityFieldName.equals("dispatchTriggerExternalReferenceCode")) {
 			sb.append("'");
 			sb.append(
-				String.valueOf(log.getDispatchTriggerExternalReferenceCode()));
+				String.valueOf(
+					logEntry.getDispatchTriggerExternalReferenceCode()));
 			sb.append("'");
 
 			return sb.toString();
@@ -678,7 +712,8 @@ public abstract class BaseLogResourceTestCase {
 
 		if (entityFieldName.equals("exportTaskExternalReferenceCode")) {
 			sb.append("'");
-			sb.append(String.valueOf(log.getExportTaskExternalReferenceCode()));
+			sb.append(
+				String.valueOf(logEntry.getExportTaskExternalReferenceCode()));
 			sb.append("'");
 
 			return sb.toString();
@@ -691,7 +726,8 @@ public abstract class BaseLogResourceTestCase {
 
 		if (entityFieldName.equals("importTaskExternalReferenceCode")) {
 			sb.append("'");
-			sb.append(String.valueOf(log.getImportTaskExternalReferenceCode()));
+			sb.append(
+				String.valueOf(logEntry.getImportTaskExternalReferenceCode()));
 			sb.append("'");
 
 			return sb.toString();
@@ -758,8 +794,8 @@ public abstract class BaseLogResourceTestCase {
 			invoke(queryGraphQLField.toString()));
 	}
 
-	protected Log randomLog() throws Exception {
-		return new Log() {
+	protected LogEntry randomLogEntry() throws Exception {
+		return new LogEntry() {
 			{
 				dispatchTriggerExternalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
@@ -776,17 +812,17 @@ public abstract class BaseLogResourceTestCase {
 		};
 	}
 
-	protected Log randomIrrelevantLog() throws Exception {
-		Log randomIrrelevantLog = randomLog();
+	protected LogEntry randomIrrelevantLogEntry() throws Exception {
+		LogEntry randomIrrelevantLogEntry = randomLogEntry();
 
-		return randomIrrelevantLog;
+		return randomIrrelevantLogEntry;
 	}
 
-	protected Log randomPatchLog() throws Exception {
-		return randomLog();
+	protected LogEntry randomPatchLogEntry() throws Exception {
+		return randomLogEntry();
 	}
 
-	protected LogResource logResource;
+	protected LogEntryResource logEntryResource;
 	protected Group irrelevantGroup;
 	protected Company testCompany;
 	protected Group testGroup;
@@ -863,7 +899,7 @@ public abstract class BaseLogResourceTestCase {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		BaseLogResourceTestCase.class);
+		BaseLogEntryResourceTestCase.class);
 
 	private static BeanUtilsBean _beanUtilsBean = new BeanUtilsBean() {
 
@@ -880,7 +916,8 @@ public abstract class BaseLogResourceTestCase {
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private com.liferay.headless.admin.batch.planner.resource.v1_0.LogResource
-		_logResource;
+	private
+		com.liferay.headless.admin.batch.planner.resource.v1_0.LogEntryResource
+			_logEntryResource;
 
 }

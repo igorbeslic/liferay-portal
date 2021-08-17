@@ -14,8 +14,8 @@
 
 package com.liferay.headless.admin.batch.planner.internal.resource.v1_0;
 
-import com.liferay.headless.admin.batch.planner.dto.v1_0.Log;
-import com.liferay.headless.admin.batch.planner.resource.v1_0.LogResource;
+import com.liferay.headless.admin.batch.planner.dto.v1_0.LogEntry;
+import com.liferay.headless.admin.batch.planner.resource.v1_0.LogEntryResource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.GroupedModel;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -59,12 +59,12 @@ import javax.ws.rs.core.UriInfo;
  */
 @Generated("")
 @Path("/v1.0")
-public abstract class BaseLogResourceImpl implements LogResource {
+public abstract class BaseLogEntryResourceImpl implements LogEntryResource {
 
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'GET' 'http://localhost:8080/o/headless-admin-batch-planner/v1.0/plans/{planId}/logs'  -u 'test@liferay.com:test'
+	 * curl -X 'GET' 'http://localhost:8080/o/headless-admin-batch-planner/v1.0/plans/{planId}/log-entries'  -u 'test@liferay.com:test'
 	 */
 	@GET
 	@Override
@@ -75,10 +75,10 @@ public abstract class BaseLogResourceImpl implements LogResource {
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
 		}
 	)
-	@Path("/plans/{planId}/logs")
+	@Path("/plans/{planId}/log-entries")
 	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "Log")})
-	public Page<Log> getPlanLogsPage(
+	@Tags(value = {@Tag(name = "LogEntry")})
+	public Page<LogEntry> getPlanLogEntriesPage(
 			@NotNull @Parameter(hidden = true) @PathParam("id") Long id,
 			@Context Pagination pagination)
 		throws Exception {

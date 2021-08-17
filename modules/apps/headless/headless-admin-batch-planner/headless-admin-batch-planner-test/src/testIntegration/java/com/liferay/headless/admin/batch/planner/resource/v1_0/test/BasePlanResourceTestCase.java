@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
-import com.liferay.headless.admin.batch.planner.client.dto.v1_0.Log;
 import com.liferay.headless.admin.batch.planner.client.dto.v1_0.Plan;
 import com.liferay.headless.admin.batch.planner.client.http.HttpInvoker;
 import com.liferay.headless.admin.batch.planner.client.pagination.Page;
@@ -361,7 +360,27 @@ public abstract class BasePlanResourceTestCase {
 
 	@Test
 	public void testPatchPlan() throws Exception {
-		Assert.assertTrue(false);
+		Plan postPlan = testPatchPlan_addPlan();
+
+		Plan randomPatchPlan = randomPatchPlan();
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		Plan patchPlan = planResource.patchPlan(
+			postPlan.getId(), randomPatchPlan);
+
+		Plan expectedPatchPlan = postPlan.clone();
+
+		_beanUtilsBean.copyProperties(expectedPatchPlan, randomPatchPlan);
+
+		Plan getPlan = planResource.getPlan(patchPlan.getId());
+
+		assertEquals(expectedPatchPlan, getPlan);
+		assertValid(getPlan);
+	}
+
+	protected Plan testPatchPlan_addPlan() throws Exception {
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	protected Plan testGraphQLPlan_addPlan() throws Exception {

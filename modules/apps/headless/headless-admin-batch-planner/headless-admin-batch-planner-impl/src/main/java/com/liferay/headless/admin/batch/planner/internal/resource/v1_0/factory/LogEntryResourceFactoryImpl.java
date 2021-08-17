@@ -14,7 +14,7 @@
 
 package com.liferay.headless.admin.batch.planner.internal.resource.v1_0.factory;
 
-import com.liferay.headless.admin.batch.planner.resource.v1_0.LogResource;
+import com.liferay.headless.admin.batch.planner.resource.v1_0.LogEntryResource;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
@@ -50,30 +50,30 @@ import org.osgi.service.component.annotations.ReferenceScope;
  * @author Matija Petanjek
  * @generated
  */
-@Component(immediate = true, service = LogResource.Factory.class)
+@Component(immediate = true, service = LogEntryResource.Factory.class)
 @Generated("")
-public class LogResourceFactoryImpl implements LogResource.Factory {
+public class LogEntryResourceFactoryImpl implements LogEntryResource.Factory {
 
 	@Override
-	public LogResource.Builder create() {
-		return new LogResource.Builder() {
+	public LogEntryResource.Builder create() {
+		return new LogEntryResource.Builder() {
 
 			@Override
-			public LogResource build() {
+			public LogEntryResource build() {
 				if (_user == null) {
 					throw new IllegalArgumentException("User is not set");
 				}
 
-				return (LogResource)ProxyUtil.newProxyInstance(
-					LogResource.class.getClassLoader(),
-					new Class<?>[] {LogResource.class},
+				return (LogEntryResource)ProxyUtil.newProxyInstance(
+					LogEntryResource.class.getClassLoader(),
+					new Class<?>[] {LogEntryResource.class},
 					(proxy, method, arguments) -> _invoke(
 						method, arguments, _checkPermissions,
 						_httpServletRequest, _preferredLocale, _user));
 			}
 
 			@Override
-			public LogResource.Builder checkPermissions(
+			public LogEntryResource.Builder checkPermissions(
 				boolean checkPermissions) {
 
 				_checkPermissions = checkPermissions;
@@ -82,7 +82,7 @@ public class LogResourceFactoryImpl implements LogResource.Factory {
 			}
 
 			@Override
-			public LogResource.Builder httpServletRequest(
+			public LogEntryResource.Builder httpServletRequest(
 				HttpServletRequest httpServletRequest) {
 
 				_httpServletRequest = httpServletRequest;
@@ -91,14 +91,16 @@ public class LogResourceFactoryImpl implements LogResource.Factory {
 			}
 
 			@Override
-			public LogResource.Builder preferredLocale(Locale preferredLocale) {
+			public LogEntryResource.Builder preferredLocale(
+				Locale preferredLocale) {
+
 				_preferredLocale = preferredLocale;
 
 				return this;
 			}
 
 			@Override
-			public LogResource.Builder user(User user) {
+			public LogEntryResource.Builder user(User user) {
 				_user = user;
 
 				return this;
@@ -114,12 +116,12 @@ public class LogResourceFactoryImpl implements LogResource.Factory {
 
 	@Activate
 	protected void activate() {
-		LogResource.FactoryHolder.factory = this;
+		LogEntryResource.FactoryHolder.factory = this;
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		LogResource.FactoryHolder.factory = null;
+		LogEntryResource.FactoryHolder.factory = null;
 	}
 
 	private Object _invoke(
@@ -144,26 +146,27 @@ public class LogResourceFactoryImpl implements LogResource.Factory {
 				_liberalPermissionCheckerFactory.create(user));
 		}
 
-		LogResource logResource = _componentServiceObjects.getService();
+		LogEntryResource logEntryResource =
+			_componentServiceObjects.getService();
 
-		logResource.setContextAcceptLanguage(
+		logEntryResource.setContextAcceptLanguage(
 			new AcceptLanguageImpl(httpServletRequest, preferredLocale, user));
 
 		Company company = _companyLocalService.getCompany(user.getCompanyId());
 
-		logResource.setContextCompany(company);
+		logEntryResource.setContextCompany(company);
 
-		logResource.setContextHttpServletRequest(httpServletRequest);
-		logResource.setContextUser(user);
+		logEntryResource.setContextHttpServletRequest(httpServletRequest);
+		logEntryResource.setContextUser(user);
 
 		try {
-			return method.invoke(logResource, arguments);
+			return method.invoke(logEntryResource, arguments);
 		}
 		catch (InvocationTargetException invocationTargetException) {
 			throw invocationTargetException.getTargetException();
 		}
 		finally {
-			_componentServiceObjects.ungetService(logResource);
+			_componentServiceObjects.ungetService(logEntryResource);
 
 			PrincipalThreadLocal.setName(name);
 
@@ -175,7 +178,7 @@ public class LogResourceFactoryImpl implements LogResource.Factory {
 	private CompanyLocalService _companyLocalService;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<LogResource> _componentServiceObjects;
+	private ComponentServiceObjects<LogEntryResource> _componentServiceObjects;
 
 	@Reference
 	private PermissionCheckerFactory _defaultPermissionCheckerFactory;

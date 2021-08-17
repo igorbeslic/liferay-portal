@@ -42,13 +42,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @generated
  */
 @Generated("")
-@GraphQLName("Log")
+@GraphQLName("LogEntry")
 @JsonFilter("Liferay.Vulcan")
-@XmlRootElement(name = "Log")
-public class Log implements Serializable {
+@XmlRootElement(name = "LogEntry")
+public class LogEntry implements Serializable {
 
-	public static Log toDTO(String json) {
-		return ObjectMapperUtil.readValue(Log.class, json);
+	public static LogEntry toDTO(String json) {
+		return ObjectMapperUtil.readValue(LogEntry.class, json);
 	}
 
 	@Schema
@@ -290,13 +290,13 @@ public class Log implements Serializable {
 			return true;
 		}
 
-		if (!(object instanceof Log)) {
+		if (!(object instanceof LogEntry)) {
 			return false;
 		}
 
-		Log log = (Log)object;
+		LogEntry logEntry = (LogEntry)object;
 
-		return Objects.equals(toString(), log.toString());
+		return Objects.equals(toString(), logEntry.toString());
 	}
 
 	@Override
@@ -410,7 +410,7 @@ public class Log implements Serializable {
 
 	@Schema(
 		accessMode = Schema.AccessMode.READ_ONLY,
-		defaultValue = "com.liferay.headless.admin.batch.planner.dto.v1_0.Log",
+		defaultValue = "com.liferay.headless.admin.batch.planner.dto.v1_0.LogEntry",
 		name = "x-class-name"
 	)
 	public String xClassName;
