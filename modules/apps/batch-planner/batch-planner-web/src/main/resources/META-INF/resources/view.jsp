@@ -86,21 +86,21 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 			<c:if test="<%= batchPlannerPlanId > 0 %>">
 				<c:forEach items="<%= BatchPlannerPolicyServiceUtil.getBatchPlannerPolicies(batchPlannerPlanId) %>" var="batchPlannerPolicy">
 					<div class="form-group-item">
-						<aui:input name="name${batchPlannerPolicy.batchPlannerPolicyId}" value="${batchPlannerPolicy.name}" />
+						<aui:input name="policyName_${batchPlannerPolicy.batchPlannerPolicyId}" value="${batchPlannerPolicy.name}" />
 					</div>
 
 					<div class="form-group-item">
-						<aui:input name="value${batchPlannerPolicy.batchPlannerPolicyId}" value="${batchPlannerPolicy.value}" />
+						<aui:input name="policyValue_${batchPlannerPolicy.batchPlannerPolicyId}" value="${batchPlannerPolicy.value}" />
 					</div>
 				</c:forEach>
 			</c:if>
 
 			<div class="form-group-item">
-				<aui:input name="nameDefaultId" placeholder="name policy" value="" />
+				<aui:input name="policyName_0" placeholder="name policy" value="" />
 			</div>
 
 			<div class="form-group-item">
-				<aui:input name="valueDefaultId" placeholder="policy value" value="" />
+				<aui:input name="policyValue_0" placeholder="policy value" value="" />
 			</div>
 		</div>
 
@@ -111,23 +111,21 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 
 			</clay:row>
 
-            <clay:row
-                    cssClass="plan-mappings-template hide"
-            >
+			<clay:row
+				cssClass="hide plan-mappings-template"
+			>
+				<clay:col
+					md="6"
+				>
+					<aui:input name="externalFieldName_ID_TEMPLATE" placeholder="external field name" value="" />
+				</clay:col>
 
-                <clay:col
-                        md="6"
-                >
-                    <aui:input name="externalFieldName-ID_TEMPLATE" placeholder="external field name" value="" />
-                </clay:col>
-
-                <clay:col
-                        md="6"
-                >
-                    <aui:input name="internalFieldName-ID_TEMPLATE" placeholder="open API field name" value="VALUE_TEMPLATE" />
-                </clay:col>
-
-            </clay:row>
+				<clay:col
+					md="6"
+				>
+					<aui:input name="internalFieldName_ID_TEMPLATE" placeholder="open API field name" value="VALUE_TEMPLATE" />
+				</clay:col>
+			</clay:row>
 		</clay:content-section>
 	</liferay-frontend:edit-form-body>
 
@@ -247,8 +245,8 @@ renderResponse.setTitle((batchPlannerPlan == null) ? LanguageUtil.get(request, "
 					'.plan-mappings'
 				);
 				var mappingRowTemplate = A.one(
-                    '.plan-mappings-template'
-                ).getContent();
+					'.plan-mappings-template'
+				).getContent();
 
 				mappingArea.empty();
 
