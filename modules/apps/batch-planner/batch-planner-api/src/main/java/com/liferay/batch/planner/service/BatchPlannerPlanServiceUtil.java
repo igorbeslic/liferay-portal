@@ -16,6 +16,7 @@ package com.liferay.batch.planner.service;
 
 import com.liferay.batch.planner.model.BatchPlannerPlan;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.List;
 
@@ -68,13 +69,35 @@ public class BatchPlannerPlanServiceUtil {
 	}
 
 	public static List<BatchPlannerPlan> getBatchPlannerPlans(
+		long companyId, boolean execute, int start, int end,
+		OrderByComparator<BatchPlannerPlan> orderByComparator) {
+
+		return getService().getBatchPlannerPlans(
+			companyId, execute, start, end, orderByComparator);
+	}
+
+	public static List<BatchPlannerPlan> getBatchPlannerPlans(
 		long companyId, int start, int end) {
 
 		return getService().getBatchPlannerPlans(companyId, start, end);
 	}
 
+	public static List<BatchPlannerPlan> getBatchPlannerPlans(
+		long companyId, int start, int end,
+		OrderByComparator<BatchPlannerPlan> orderByComparator) {
+
+		return getService().getBatchPlannerPlans(
+			companyId, start, end, orderByComparator);
+	}
+
 	public static int getBatchPlannerPlansCount(long companyId) {
 		return getService().getBatchPlannerPlansCount(companyId);
+	}
+
+	public static int getBatchPlannerPlansCount(
+		long companyId, boolean export) {
+
+		return getService().getBatchPlannerPlansCount(companyId, export);
 	}
 
 	/**

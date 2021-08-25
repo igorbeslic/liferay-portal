@@ -209,6 +209,14 @@ public class BatchPlannerPlanPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_E() throws Exception {
+		_persistence.countByC_E(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_E(0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
 	public void testCountByC_N() throws Exception {
 		_persistence.countByC_N(RandomTestUtil.nextLong(), "");
 

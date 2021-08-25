@@ -71,6 +71,18 @@ public class BatchPlannerPlanServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerPlan>
+		getBatchPlannerPlans(
+			long companyId, boolean execute, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerPlan>
+					orderByComparator) {
+
+		return _batchPlannerPlanService.getBatchPlannerPlans(
+			companyId, execute, start, end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.batch.planner.model.BatchPlannerPlan>
 		getBatchPlannerPlans(long companyId, int start, int end) {
 
 		return _batchPlannerPlanService.getBatchPlannerPlans(
@@ -78,8 +90,26 @@ public class BatchPlannerPlanServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.liferay.batch.planner.model.BatchPlannerPlan>
+		getBatchPlannerPlans(
+			long companyId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerPlan>
+					orderByComparator) {
+
+		return _batchPlannerPlanService.getBatchPlannerPlans(
+			companyId, start, end, orderByComparator);
+	}
+
+	@Override
 	public int getBatchPlannerPlansCount(long companyId) {
 		return _batchPlannerPlanService.getBatchPlannerPlansCount(companyId);
+	}
+
+	@Override
+	public int getBatchPlannerPlansCount(long companyId, boolean export) {
+		return _batchPlannerPlanService.getBatchPlannerPlansCount(
+			companyId, export);
 	}
 
 	/**
