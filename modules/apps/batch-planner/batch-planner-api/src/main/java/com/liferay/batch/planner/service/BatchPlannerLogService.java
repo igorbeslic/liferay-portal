@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.service.BaseService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.List;
 
@@ -51,27 +52,23 @@ public interface BatchPlannerLogService extends BaseService {
 	 *
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.batch.planner.service.impl.BatchPlannerLogServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the batch planner log remote service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link BatchPlannerLogServiceUtil} if injection and service tracking are not available.
 	 */
-	public BatchPlannerLog addBatchPlannerLog(
-			long batchPlannerPlanId, String batchEngineExportERC,
-			String batchEngineImportERC, String dispatchTriggerERC, int size,
-			int status)
-		throws PortalException;
-
-	public BatchPlannerLog deleteBatchPlannerLog(long batchPlannerLogId)
-		throws PortalException;
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<BatchPlannerLog> getBatchPlannerLogs(long batchPlannerPlanId)
-		throws PortalException;
+	public List<BatchPlannerLog> getBatchPlannerLogs(long batchPlannerPlanId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<BatchPlannerLog> getBatchPlannerLogs(
-			long batchPlannerPlanId, int start, int end)
-		throws PortalException;
+		long batchPlannerPlanId, int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getBatchPlannerLogsCount(long batchPlannerPlanId)
-		throws PortalException;
+	public int getBatchPlannerLogsCount(long batchPlannerPlanId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+		long companyId, int start, int end,
+		OrderByComparator<BatchPlannerLog> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCompanyBatchPlannerLogsCount(long companyId);
 
 	/**
 	 * Returns the OSGi service identifier.

@@ -15,7 +15,7 @@
 package com.liferay.batch.planner.service;
 
 import com.liferay.batch.planner.model.BatchPlannerLog;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.util.List;
 
@@ -38,41 +38,32 @@ public class BatchPlannerLogServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.batch.planner.service.impl.BatchPlannerLogServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static BatchPlannerLog addBatchPlannerLog(
-			long batchPlannerPlanId, String batchEngineExportERC,
-			String batchEngineImportERC, String dispatchTriggerERC, int size,
-			int status)
-		throws PortalException {
-
-		return getService().addBatchPlannerLog(
-			batchPlannerPlanId, batchEngineExportERC, batchEngineImportERC,
-			dispatchTriggerERC, size, status);
-	}
-
-	public static BatchPlannerLog deleteBatchPlannerLog(long batchPlannerLogId)
-		throws PortalException {
-
-		return getService().deleteBatchPlannerLog(batchPlannerLogId);
-	}
-
 	public static List<BatchPlannerLog> getBatchPlannerLogs(
-			long batchPlannerPlanId)
-		throws PortalException {
+		long batchPlannerPlanId) {
 
 		return getService().getBatchPlannerLogs(batchPlannerPlanId);
 	}
 
 	public static List<BatchPlannerLog> getBatchPlannerLogs(
-			long batchPlannerPlanId, int start, int end)
-		throws PortalException {
+		long batchPlannerPlanId, int start, int end) {
 
 		return getService().getBatchPlannerLogs(batchPlannerPlanId, start, end);
 	}
 
-	public static int getBatchPlannerLogsCount(long batchPlannerPlanId)
-		throws PortalException {
-
+	public static int getBatchPlannerLogsCount(long batchPlannerPlanId) {
 		return getService().getBatchPlannerLogsCount(batchPlannerPlanId);
+	}
+
+	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+		long companyId, int start, int end,
+		OrderByComparator<BatchPlannerLog> orderByComparator) {
+
+		return getService().getCompanyBatchPlannerLogs(
+			companyId, start, end, orderByComparator);
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(long companyId) {
+		return getService().getCompanyBatchPlannerLogsCount(companyId);
 	}
 
 	/**

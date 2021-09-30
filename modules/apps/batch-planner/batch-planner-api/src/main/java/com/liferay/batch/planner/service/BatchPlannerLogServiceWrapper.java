@@ -33,48 +33,42 @@ public class BatchPlannerLogServiceWrapper
 	}
 
 	@Override
-	public com.liferay.batch.planner.model.BatchPlannerLog addBatchPlannerLog(
-			long batchPlannerPlanId, String batchEngineExportERC,
-			String batchEngineImportERC, String dispatchTriggerERC, int size,
-			int status)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _batchPlannerLogService.addBatchPlannerLog(
-			batchPlannerPlanId, batchEngineExportERC, batchEngineImportERC,
-			dispatchTriggerERC, size, status);
-	}
-
-	@Override
-	public com.liferay.batch.planner.model.BatchPlannerLog
-			deleteBatchPlannerLog(long batchPlannerLogId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
-		return _batchPlannerLogService.deleteBatchPlannerLog(batchPlannerLogId);
-	}
-
-	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerLog>
-			getBatchPlannerLogs(long batchPlannerPlanId)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		getBatchPlannerLogs(long batchPlannerPlanId) {
 
 		return _batchPlannerLogService.getBatchPlannerLogs(batchPlannerPlanId);
 	}
 
 	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerLog>
-			getBatchPlannerLogs(long batchPlannerPlanId, int start, int end)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		getBatchPlannerLogs(long batchPlannerPlanId, int start, int end) {
 
 		return _batchPlannerLogService.getBatchPlannerLogs(
 			batchPlannerPlanId, start, end);
 	}
 
 	@Override
-	public int getBatchPlannerLogsCount(long batchPlannerPlanId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-
+	public int getBatchPlannerLogsCount(long batchPlannerPlanId) {
 		return _batchPlannerLogService.getBatchPlannerLogsCount(
 			batchPlannerPlanId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.batch.planner.model.BatchPlannerLog>
+		getCompanyBatchPlannerLogs(
+			long companyId, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerLog>
+					orderByComparator) {
+
+		return _batchPlannerLogService.getCompanyBatchPlannerLogs(
+			companyId, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId) {
+		return _batchPlannerLogService.getCompanyBatchPlannerLogsCount(
+			companyId);
 	}
 
 	/**
