@@ -21,6 +21,7 @@ import com.liferay.batch.planner.model.BatchPlannerPlan;
 import com.liferay.batch.planner.service.base.BatchPlannerLogLocalServiceBaseImpl;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -110,7 +111,14 @@ public class BatchPlannerLogLocalServiceImpl
 		batchPlannerLog.setSize(size);
 		batchPlannerLog.setStatus(status);
 
-		return batchPlannerLogPersistence.update(batchPlannerLog);
+		batchPlannerLog = batchPlannerLogPersistence.update(batchPlannerLog);
+
+		resourceLocalService.addResources(
+			user.getCompanyId(), GroupConstants.DEFAULT_LIVE_GROUP_ID,
+			user.getUserId(), BatchPlannerLog.class.getName(),
+			batchPlannerLog.getBatchPlannerLogId(), false, true, false);
+
+		return batchPlannerLog;
 	}
 
 	@Override

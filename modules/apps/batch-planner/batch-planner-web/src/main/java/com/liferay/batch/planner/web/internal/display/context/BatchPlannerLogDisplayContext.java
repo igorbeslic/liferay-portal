@@ -20,8 +20,8 @@ import com.liferay.batch.engine.service.BatchEngineExportTaskLocalServiceUtil;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalServiceUtil;
 import com.liferay.batch.planner.model.BatchPlannerLog;
 import com.liferay.batch.planner.model.BatchPlannerPlan;
-import com.liferay.batch.planner.service.BatchPlannerLogLocalServiceUtil;
-import com.liferay.batch.planner.service.BatchPlannerPlanServiceUtil;
+import com.liferay.batch.planner.service.BatchPlannerLogServiceUtil;
+import com.liferay.batch.planner.service.BatchPlannerPlanLocalServiceUtil;
 import com.liferay.batch.planner.web.internal.display.BatchPlannerLogDisplay;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -80,7 +80,7 @@ public class BatchPlannerLogDisplayContext extends BaseDisplayContext {
 
 		_searchContainer.setResults(
 			TransformUtil.transform(
-				BatchPlannerLogLocalServiceUtil.getBatchPlannerLogs(
+				BatchPlannerLogServiceUtil.getCompanyBatchPlannerLogs(
 					companyId, _searchContainer.getStart(),
 					_searchContainer.getEnd(),
 					OrderByComparatorFactoryUtil.create(
@@ -88,7 +88,7 @@ public class BatchPlannerLogDisplayContext extends BaseDisplayContext {
 						orderByType.equals("asc"))),
 				this::_toBatchPlannerLogDisplay));
 		_searchContainer.setTotal(
-			BatchPlannerLogLocalServiceUtil.getBatchPlannerLogsCount(
+			BatchPlannerLogServiceUtil.getCompanyBatchPlannerLogsCount(
 				companyId));
 
 		return _searchContainer;
@@ -99,7 +99,7 @@ public class BatchPlannerLogDisplayContext extends BaseDisplayContext {
 		throws PortalException {
 
 		BatchPlannerPlan batchPlannerPlan =
-			BatchPlannerPlanServiceUtil.getBatchPlannerPlan(
+			BatchPlannerPlanLocalServiceUtil.getBatchPlannerPlan(
 				batchPlannerLog.getBatchPlannerPlanId());
 
 		BatchPlannerLogDisplay.Builder builder =
