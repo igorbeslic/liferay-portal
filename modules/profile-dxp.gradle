@@ -10,8 +10,8 @@ task removeDXPScript
 
 String gitCommitId = System.getProperty("profile.dxp.commit.id", "")
 
-String gitBranchName = "master-private"
-String gitRepositoryURL = "git@github.com:liferay/liferay-portal-ee.git"
+String gitBranchName = "mp-100601"
+String gitRepositoryURL = "git@github.com:petershin/liferay-portal-ee.git"
 
 Boolean upstreamStableSuite = Boolean.valueOf(System.getProperty("upstream.stable.suite", "false"));
 
