@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.batch.planner.service.persistence.BatchPlannerLogFinder.countByC_E">
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+				BatchPlannerLog
+			JOIN
+				BatchPlannerPlan ON
+					BatchPlannerLog.batchPlannerPlanId = BatchPlannerPlan.batchPlannerPlanId
+			WHERE
+				(BatchPlannerLog.companyId = ?) AND
+				(BatchPlannerPlan.export = ?)
+		]]>
+	</sql>
+	<sql id="com.liferay.batch.planner.service.persistence.BatchPlannerLogFinder.findByC_E">
+		<![CDATA[
+			SELECT
+				BatchPlannerLog.*
+			FROM
+				BatchPlannerLog
+			JOIN
+				BatchPlannerPlan ON
+					BatchPlannerLog.batchPlannerPlanId = BatchPlannerPlan.batchPlannerPlanId
+			WHERE
+				(BatchPlannerLog.companyId = ?) AND
+				(BatchPlannerPlan.export = ?)
+		]]>
+	</sql>
+</custom-sql>
