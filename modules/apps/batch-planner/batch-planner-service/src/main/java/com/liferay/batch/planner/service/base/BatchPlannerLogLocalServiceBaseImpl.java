@@ -17,6 +17,7 @@ package com.liferay.batch.planner.service.base;
 import com.liferay.batch.planner.model.BatchPlannerLog;
 import com.liferay.batch.planner.service.BatchPlannerLogLocalService;
 import com.liferay.batch.planner.service.BatchPlannerLogLocalServiceUtil;
+import com.liferay.batch.planner.service.persistence.BatchPlannerLogFinder;
 import com.liferay.batch.planner.service.persistence.BatchPlannerLogPersistence;
 import com.liferay.batch.planner.service.persistence.BatchPlannerMappingPersistence;
 import com.liferay.batch.planner.service.persistence.BatchPlannerPlanPersistence;
@@ -470,6 +471,9 @@ public abstract class BatchPlannerLogLocalServiceBaseImpl
 
 	@Reference
 	protected BatchPlannerLogPersistence batchPlannerLogPersistence;
+
+	@Reference
+	protected BatchPlannerLogFinder batchPlannerLogFinder;
 
 	@Reference
 	protected BatchPlannerMappingPersistence batchPlannerMappingPersistence;

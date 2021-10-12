@@ -76,6 +76,11 @@ public interface BatchPlannerLogService extends BaseService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+		long companyId, boolean export, int start, int end,
+		OrderByComparator<BatchPlannerLog> orderByComparator);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
 			long companyId, int start, int end,
 			OrderByComparator<BatchPlannerLog> orderByComparator)
 		throws PortalException;
@@ -83,6 +88,9 @@ public interface BatchPlannerLogService extends BaseService {
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCompanyBatchPlannerLogsCount(long companyId)
 		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCompanyBatchPlannerLogsCount(long companyId, boolean export);
 
 	/**
 	 * Returns the OSGi service identifier.

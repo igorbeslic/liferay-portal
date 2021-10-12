@@ -77,6 +77,14 @@ public class BatchPlannerLogServiceUtil {
 	}
 
 	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+		long companyId, boolean export, int start, int end,
+		OrderByComparator<BatchPlannerLog> orderByComparator) {
+
+		return getService().getCompanyBatchPlannerLogs(
+			companyId, export, start, end, orderByComparator);
+	}
+
+	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
 			long companyId, int start, int end,
 			OrderByComparator<BatchPlannerLog> orderByComparator)
 		throws PortalException {
@@ -89,6 +97,12 @@ public class BatchPlannerLogServiceUtil {
 		throws PortalException {
 
 		return getService().getCompanyBatchPlannerLogsCount(companyId);
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(
+		long companyId, boolean export) {
+
+		return getService().getCompanyBatchPlannerLogsCount(companyId, export);
 	}
 
 	/**

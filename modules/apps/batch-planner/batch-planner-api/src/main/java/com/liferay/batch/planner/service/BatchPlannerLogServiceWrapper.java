@@ -79,6 +79,18 @@ public class BatchPlannerLogServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.batch.planner.model.BatchPlannerLog>
+		getCompanyBatchPlannerLogs(
+			long companyId, boolean export, int start, int end,
+			com.liferay.portal.kernel.util.OrderByComparator
+				<com.liferay.batch.planner.model.BatchPlannerLog>
+					orderByComparator) {
+
+		return _batchPlannerLogService.getCompanyBatchPlannerLogs(
+			companyId, export, start, end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.batch.planner.model.BatchPlannerLog>
 			getCompanyBatchPlannerLogs(
 				long companyId, int start, int end,
 				com.liferay.portal.kernel.util.OrderByComparator
@@ -96,6 +108,12 @@ public class BatchPlannerLogServiceWrapper
 
 		return _batchPlannerLogService.getCompanyBatchPlannerLogsCount(
 			companyId);
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId, boolean export) {
+		return _batchPlannerLogService.getCompanyBatchPlannerLogsCount(
+			companyId, export);
 	}
 
 	/**
