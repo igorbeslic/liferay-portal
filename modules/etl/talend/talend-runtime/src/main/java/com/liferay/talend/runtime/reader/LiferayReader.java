@@ -34,6 +34,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
+import com.liferay.talend.runtime.client.exception.ResponseContentClientException;
 import org.apache.avro.generic.IndexedRecord;
 
 import org.joda.time.Instant;
@@ -88,7 +89,15 @@ public class LiferayReader implements Reader<IndexedRecord> {
 
 		_currentPage++;
 
-		_readEndpointJsonObject();
+		try{
+			_readEndpointJsonObject();
+		}catch (ResponseContentClientException responseContentClientException){
+			if(responseContentClientException.getHttpStatus() == 404){
+				return false;
+			}else{
+				throw responseContentClientException;
+			}
+		}
 
 		if (_itemsJsonArray.size() <= 0) {
 			_hasMore = false;
