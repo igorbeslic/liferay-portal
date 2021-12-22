@@ -184,7 +184,7 @@ public abstract class BaseObjectDefinitionResourceImpl
 
 		return responseBuilder.entity(
 			vulcanBatchEngineImportTaskResource.postImportTask(
-				ObjectDefinition.class.getName(), callbackURL, null, object)
+				ObjectDefinition.class.getName(),  callbackURL, null, object)
 		).build();
 	}
 
