@@ -32,7 +32,8 @@ public interface VulcanBatchEngineImportTaskResource {
 		throws Exception;
 
 	public Object postImportTask(
-			String name, String callbackURL, String fields, Object object)
+			String name, String callbackURL, String fields,
+			Object object)
 		throws Exception;
 
 	public Object putImportTask(String name, String callbackURL, Object object)
