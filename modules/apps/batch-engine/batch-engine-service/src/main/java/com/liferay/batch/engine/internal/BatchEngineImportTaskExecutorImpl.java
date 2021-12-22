@@ -150,7 +150,7 @@ public class BatchEngineImportTaskExecutorImpl
 		throws Throwable {
 
 		try (BatchEngineImportTaskItemReader batchEngineImportTaskItemReader =
-				_batchEngineImportTaskItemReaderFactory.create(
+				_batchEngineImportTaskItemReaderFactory.create(batchEngineImportTask,
 					BatchEngineTaskContentType.valueOf(
 						batchEngineImportTask.getContentType()),
 					_batchEngineImportTaskLocalService.openContentInputStream(
