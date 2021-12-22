@@ -44,6 +44,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collections;
@@ -98,7 +99,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			HttpHeaders.CONTENT_TYPE);
 
 		return _importFile(
-			BatchEngineTaskOperation.DELETE, _getBytes(object, contentType),
+			BatchEngineTaskOperation.DELETE,  _getBytes(object, contentType),
 			callbackURL, className, _getBatchEngineTaskContentType(contentType),
 			taskItemDelegateName, null);
 	}
@@ -112,7 +113,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Override
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
+			String className, String delimiter, String callbackURL, String fieldNameMapping,
 			String taskItemDelegateName, MultipartBody multipartBody)
 		throws Exception {
 
@@ -124,7 +125,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Override
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
+			String className, String delimiter, String callbackURL, String fieldNameMapping,
 			String taskItemDelegateName, Object object)
 		throws Exception {
 
@@ -132,7 +133,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			HttpHeaders.CONTENT_TYPE);
 
 		return _importFile(
-			BatchEngineTaskOperation.CREATE, _getBytes(object, contentType),
+			BatchEngineTaskOperation.CREATE,  _getBytes(object, contentType),
 			callbackURL, className, _getBatchEngineTaskContentType(contentType),
 			fieldNameMapping, taskItemDelegateName);
 	}
@@ -277,9 +278,9 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 	}
 
 	private ImportTask _importFile(
-			BatchEngineTaskOperation batchEngineTaskOperation,
-			BinaryFile binaryFile, String callbackURL, String className,
-			String fieldNameMappingString, String taskItemDelegateName)
+		BatchEngineTaskOperation batchEngineTaskOperation,
+		BinaryFile binaryFile, String callbackURL, String className,
+		String fieldNameMappingString, String taskItemDelegateName)
 		throws Exception {
 
 		Map.Entry<byte[], String> entry = null;
@@ -302,6 +303,14 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		BatchEngineTaskOperation batchEngineTaskOperation, byte[] bytes,
 		String callbackURL, String className, String batchEngineTaskContentType,
 		String fieldNameMappingString, String taskItemDelegateName) {
+			return _importFile(batchEngineTaskOperation, null, bytes, callbackURL,
+				className, batchEngineTaskContentType, fieldNameMappingString,
+				taskItemDelegateName);
+	}
+	private ImportTask _importFile(
+		BatchEngineTaskOperation batchEngineTaskOperation, String delimiter, byte[] bytes,
+		String callbackURL, String className, String batchEngineTaskContentType,
+		String fieldNameMappingString, String taskItemDelegateName) {
 
 		Class<?> clazz = _itemClassRegistry.getItemClass(className);
 
@@ -314,6 +323,10 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			_portalExecutorManager.getPortalExecutor(
 				ImportTaskResourceImpl.class.getName());
 
+		Map<String, Serializable> parameters = ParametersUtil.toParameters(contextUriInfo, _ignoredParameters);
+
+		parameters.putIfAbsent("delimiter", (Serializable)delimiter);
+
 		BatchEngineImportTask batchEngineImportTask =
 			_batchEngineImportTaskLocalService.addBatchEngineImportTask(
 				contextCompany.getCompanyId(), contextUser.getUserId(),
@@ -322,7 +335,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 				StringUtil.upperCase(batchEngineTaskContentType),
 				BatchEngineTaskExecuteStatus.INITIAL.name(),
 				_toMap(fieldNameMappingString), batchEngineTaskOperation.name(),
-				ParametersUtil.toParameters(contextUriInfo, _ignoredParameters),
+				parameters,
 				taskItemDelegateName);
 
 		executorService.submit(
