@@ -15,7 +15,9 @@
 package com.liferay.batch.engine.internal.reader;
 
 import com.liferay.petra.io.unsync.UnsyncBufferedReader;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,13 +56,34 @@ public class CSVBatchEngineImportTaskItemReaderImpl
 	public Map<String, Object> read() throws Exception {
 		String line = _unsyncBufferedReader.readLine();
 
+		String escapedDelimiter = _delimiter;
 		if (line == null) {
 			return null;
 		}
+		switch (escapedDelimiter) {
+			case StringPool.OPEN_BRACKET:
+			case StringPool.CLOSE_BRACKET:
+			case StringPool.OPEN_PARENTHESIS:
+			case StringPool.CLOSE_PARENTHESIS:
+			case StringPool.OPEN_CURLY_BRACE:
+			case StringPool.CLOSE_CURLY_BRACE:
+			case StringPool.QUESTION:
+			case StringPool.PERIOD:
+			case StringPool.STAR:
+			case StringPool.CARET:
+			case StringPool.DOLLAR:
+			case StringPool.PLUS:
+			case StringPool.EXCLAMATION:
+			case StringPool.PIPE:
+					escapedDelimiter = StringPool.BACK_SLASH + _delimiter;
+					break;
+			default:
+		}
+		String regex = escapedDelimiter + "(?=(?:[^\"|']*[\"|'][^\"|']*[\"|'])*[^\"|']*$)";
 
 		Map<String, Object> fieldNameValueMap = new HashMap<>();
-
-		String[] values = StringUtil.split(line, _delimiter);
+		String[] values = Validator.isNull(line) ? _EMPTY_STRING_ARRAY :
+			line.split(regex);
 
 		for (int i = 0; i < values.length; i++) {
 			String fieldName = _fieldNames[i];
@@ -93,5 +116,7 @@ public class CSVBatchEngineImportTaskItemReaderImpl
 	private final String[] _fieldNames;
 	private final InputStream _inputStream;
 	private final UnsyncBufferedReader _unsyncBufferedReader;
+
+	private static final String[] _EMPTY_STRING_ARRAY = new String[0];
 
 }

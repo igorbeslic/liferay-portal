@@ -14,7 +14,9 @@
 
 package com.liferay.batch.engine.internal.item;
 
+import com.liferay.batch.engine.exception.QuoteInvalidDelimiterException;
 import com.liferay.batch.engine.internal.BatchEngineTaskMethodRegistry;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -46,7 +48,14 @@ public class BatchEngineTaskItemDelegateExecutorFactory {
 	public BatchEngineTaskItemDelegateExecutor create(
 			String taskItemDelegateName, String className, Company company,
 			Map<String, Serializable> parameters, User user)
-		throws ReflectiveOperationException {
+		throws ReflectiveOperationException, QuoteInvalidDelimiterException {
+
+		Serializable delimiterValue = parameters.get("delimiter");
+
+		if (delimiterValue != null) {
+			if (delimiterValue.equals(StringPool.APOSTROPHE) || delimiterValue.equals(StringPool.QUOTE))
+				throw new QuoteInvalidDelimiterException("Quote cannot be used as a delimiter!");
+		}
 
 		BatchEngineTaskItemDelegateExecutorCreator
 			batchEngineTaskItemDelegateExecutorCreator =

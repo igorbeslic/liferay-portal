@@ -15,8 +15,10 @@
 package com.liferay.batch.engine.internal.reader;
 
 import com.liferay.batch.engine.BatchEngineTaskContentType;
+import com.liferay.batch.engine.exception.QuoteInvalidDelimiterException;
 import com.liferay.batch.engine.internal.util.ZipInputStreamUtil;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
+import com.liferay.petra.string.StringPool;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -47,6 +49,10 @@ public class BatchEngineImportTaskItemReaderFactory {
 
 			String delimiter = (String)parameters.getOrDefault("delimiter",
 				(Serializable)_csvFileColumnDelimiter);
+
+			if (delimiter.equals(StringPool.APOSTROPHE) || delimiter.equals(StringPool.QUOTE)) {
+				throw new QuoteInvalidDelimiterException("Quote may be not be used as delimiter");
+			}
 
 			return new CSVBatchEngineImportTaskItemReaderImpl(
 				delimiter, inputStream);
