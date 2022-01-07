@@ -52,13 +52,14 @@ public class VulcanBatchEngineImportTaskResourceImpl
 
 	@Override
 	public Object postImportTask(
-			String name, String callbackURL, String fields, Object object)
+			String name,   String callbackURL, String fields, Object object)
 		throws Exception {
 
 		_initializeContext();
 
 		return _importTaskResource.postImportTask(
-			name, callbackURL, fields, _getTaskItemDelegateName(), object);
+			name, null,  callbackURL, fields, _getTaskItemDelegateName(),
+			object);
 	}
 
 	@Override
