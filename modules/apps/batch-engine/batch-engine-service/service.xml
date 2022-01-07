@@ -82,4 +82,7 @@
 			<finder-column name="executeStatus" />
 		</finder>
 	</entity>
+	<exceptions>
+		<exception>BatchEngineImportTaskParameterDelimiter</exception>
+	</exceptions>
 </service-builder>
