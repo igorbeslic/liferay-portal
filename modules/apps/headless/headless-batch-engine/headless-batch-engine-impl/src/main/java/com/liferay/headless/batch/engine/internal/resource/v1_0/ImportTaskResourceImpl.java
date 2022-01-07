@@ -22,6 +22,7 @@ import com.liferay.batch.engine.BatchEngineTaskExecuteStatus;
 import com.liferay.batch.engine.BatchEngineTaskOperation;
 import com.liferay.batch.engine.ItemClassRegistry;
 import com.liferay.batch.engine.configuration.BatchEngineTaskConfiguration;
+import com.liferay.batch.engine.exception.BatchEngineImportTaskParameterDelimiterException;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
 import com.liferay.headless.batch.engine.dto.v1_0.ImportTask;
@@ -43,6 +44,7 @@ import com.liferay.portal.vulcan.multipart.MultipartBody;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -92,7 +94,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 	public ImportTask deleteImportTask(
 			String className, String callbackURL, String taskItemDelegateName,
 			Object object)
-		throws IOException {
+		throws Exception {
 
 		String contentType = contextHttpServletRequest.getHeader(
 			HttpHeaders.CONTENT_TYPE);
@@ -112,8 +114,9 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Override
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
-			String taskItemDelegateName, MultipartBody multipartBody)
+			String className, String delimiter, String callbackURL,
+			String fieldNameMapping, String taskItemDelegateName,
+			MultipartBody multipartBody)
 		throws Exception {
 
 		return _importFile(
@@ -124,8 +127,8 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Override
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
-			String taskItemDelegateName, Object object)
+			String className, String delimiter, String callbackURL,
+			String fieldNameMapping, String taskItemDelegateName, Object object)
 		throws Exception {
 
 		String contentType = contextHttpServletRequest.getHeader(
@@ -201,7 +204,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 	}
 
 	private byte[] _getBytes(Object object, String contentType)
-		throws IOException {
+		throws Exception {
 
 		byte[] bytes = null;
 
@@ -258,7 +261,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	private UnsyncByteArrayOutputStream _getUnsyncByteArrayOutputStream(
 			String fileName, InputStream inputStream)
-		throws IOException {
+		throws Exception {
 
 		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
 			new UnsyncByteArrayOutputStream();
@@ -299,9 +302,24 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 	}
 
 	private ImportTask _importFile(
-		BatchEngineTaskOperation batchEngineTaskOperation, byte[] bytes,
-		String callbackURL, String className, String batchEngineTaskContentType,
-		String fieldNameMappingString, String taskItemDelegateName) {
+			BatchEngineTaskOperation batchEngineTaskOperation, byte[] bytes,
+			String callbackURL, String className,
+			String batchEngineTaskContentType, String fieldNameMappingString,
+			String taskItemDelegateName)
+		throws Exception {
+
+		return _importFile(
+			batchEngineTaskOperation, null, bytes, callbackURL, className,
+			batchEngineTaskContentType, fieldNameMappingString,
+			taskItemDelegateName);
+	}
+
+	private ImportTask _importFile(
+			BatchEngineTaskOperation batchEngineTaskOperation, String delimiter,
+			byte[] bytes, String callbackURL, String className,
+			String batchEngineTaskContentType, String fieldNameMappingString,
+			String taskItemDelegateName)
+		throws BatchEngineImportTaskParameterDelimiterException {
 
 		Class<?> clazz = _itemClassRegistry.getItemClass(className);
 
@@ -314,6 +332,11 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			_portalExecutorManager.getPortalExecutor(
 				ImportTaskResourceImpl.class.getName());
 
+		Map<String, Serializable> parameters = ParametersUtil.toParameters(
+			contextUriInfo, _ignoredParameters);
+
+		parameters.putIfAbsent("delimiter", (Serializable)delimiter);
+
 		BatchEngineImportTask batchEngineImportTask =
 			_batchEngineImportTaskLocalService.addBatchEngineImportTask(
 				contextCompany.getCompanyId(), contextUser.getUserId(),
@@ -322,8 +345,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 				StringUtil.upperCase(batchEngineTaskContentType),
 				BatchEngineTaskExecuteStatus.INITIAL.name(),
 				_toMap(fieldNameMappingString), batchEngineTaskOperation.name(),
-				ParametersUtil.toParameters(contextUriInfo, _ignoredParameters),
-				taskItemDelegateName);
+				parameters, taskItemDelegateName);
 
 		executorService.submit(
 			() -> _batchEngineImportTaskExecutor.execute(
