@@ -69,6 +69,11 @@ components:
                         The file content type.
                     example: JSON
                     type: string
+                delimiter:
+                    description:
+                        The field seperator delimiter.
+                    example: "%2F"
+                    type: string
                 endTime:
                     description:
                         The end time of import task operation.
@@ -276,6 +281,10 @@ paths:
                       type: string
                 - in: query
                   name: callbackURL
+                  schema:
+                      type: string
+                - in: query
+                  name: delimiter
                   schema:
                       type: string
                 - in: query
