@@ -445,7 +445,7 @@ public abstract class BaseObjectActionResourceImpl
 
 		return responseBuilder.entity(
 			vulcanBatchEngineImportTaskResource.postImportTask(
-				ObjectAction.class.getName(), callbackURL, null, object)
+				ObjectAction.class.getName(),  callbackURL, null, object)
 		).build();
 	}
 

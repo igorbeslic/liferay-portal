@@ -173,6 +173,10 @@ public abstract class BaseImportTaskResourceImpl implements ImportTaskResource {
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "delimiter"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "fieldNameMapping"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -202,6 +206,9 @@ public abstract class BaseImportTaskResourceImpl implements ImportTaskResource {
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("callbackURL")
 			String callbackURL,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("delimiter")
+			String delimiter,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("fieldNameMapping")
 			String fieldNameMapping,
@@ -234,6 +241,10 @@ public abstract class BaseImportTaskResourceImpl implements ImportTaskResource {
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "delimiter"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "fieldNameMapping"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -258,6 +269,9 @@ public abstract class BaseImportTaskResourceImpl implements ImportTaskResource {
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("callbackURL")
 			String callbackURL,
+			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
+			@javax.ws.rs.QueryParam("delimiter")
+			String delimiter,
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("fieldNameMapping")
 			String fieldNameMapping,

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liferay.batch.engine.BatchEngineImportTaskExecutor;
 import com.liferay.batch.engine.BatchEngineTaskExecuteStatus;
 import com.liferay.batch.engine.BatchEngineTaskOperation;
+import com.liferay.batch.engine.exception.BatchEngineImportTaskParameterDelimiterException;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
 import com.liferay.petra.executor.PortalExecutorManager;
@@ -118,7 +119,9 @@ public class BatchEngineAutoDeployListener implements AutoDeployListener {
 		return true;
 	}
 
-	private void _deploy(ZipFile zipFile) throws Exception {
+	private void _deploy(ZipFile zipFile)
+		throws BatchEngineImportTaskParameterDelimiterException, Exception {
+
 		if (_log.isInfoEnabled()) {
 			_log.info("Deploying batch engine file " + zipFile.getName());
 		}

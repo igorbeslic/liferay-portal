@@ -125,6 +125,34 @@ public class ImportTask implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String contentType;
 
+	@Schema(description = "The field seperator delimiter.")
+	public String getDelimiter() {
+		return delimiter;
+	}
+
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
+
+	@JsonIgnore
+	public void setDelimiter(
+		UnsafeSupplier<String, Exception> delimiterUnsafeSupplier) {
+
+		try {
+			delimiter = delimiterUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField(description = "The field seperator delimiter.")
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String delimiter;
+
 	@Schema(description = "The end time of import task operation.")
 	public Date getEndTime() {
 		return endTime;
@@ -434,6 +462,20 @@ public class ImportTask implements Serializable {
 			sb.append("\"");
 
 			sb.append(_escape(contentType));
+
+			sb.append("\"");
+		}
+
+		if (delimiter != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"delimiter\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(delimiter));
 
 			sb.append("\"");
 		}

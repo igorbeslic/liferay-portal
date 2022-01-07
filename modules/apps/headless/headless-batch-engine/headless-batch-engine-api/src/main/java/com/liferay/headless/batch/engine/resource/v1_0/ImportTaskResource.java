@@ -66,13 +66,14 @@ public interface ImportTaskResource {
 		throws Exception;
 
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
-			String taskItemDelegateName, Object object)
+			String className, String callbackURL, String delimiter,
+			String fieldNameMapping, String taskItemDelegateName, Object object)
 		throws Exception;
 
 	public ImportTask postImportTask(
-			String className, String callbackURL, String fieldNameMapping,
-			String taskItemDelegateName, MultipartBody multipartBody)
+			String className, String callbackURL, String delimiter,
+			String fieldNameMapping, String taskItemDelegateName,
+			MultipartBody multipartBody)
 		throws Exception;
 
 	public ImportTask putImportTask(
