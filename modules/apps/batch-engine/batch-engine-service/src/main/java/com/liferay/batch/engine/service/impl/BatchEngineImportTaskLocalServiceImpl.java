@@ -14,8 +14,10 @@
 
 package com.liferay.batch.engine.service.impl;
 
+import com.liferay.batch.engine.exception.BatchEngineImportTaskParameterDelimiterException;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.service.base.BatchEngineImportTaskLocalServiceBaseImpl;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.jdbc.OutputBlob;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
@@ -43,11 +45,12 @@ public class BatchEngineImportTaskLocalServiceImpl
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BatchEngineImportTask addBatchEngineImportTask(
-		long companyId, long userId, long batchSize, String callbackURL,
-		String className, byte[] content, String contentType,
-		String executeStatus, Map<String, String> fieldNameMappingMap,
-		String operation, Map<String, Serializable> parameters,
-		String taskItemDelegateName) {
+			long companyId, long userId, long batchSize, String callbackURL,
+			String className, byte[] content, String contentType,
+			String executeStatus, Map<String, String> fieldNameMappingMap,
+			String operation, Map<String, Serializable> parameters,
+			String taskItemDelegateName)
+		throws BatchEngineImportTaskParameterDelimiterException {
 
 		BatchEngineImportTask batchEngineImportTask =
 			batchEngineImportTaskPersistence.create(
@@ -72,6 +75,16 @@ public class BatchEngineImportTaskLocalServiceImpl
 		batchEngineImportTask.setOperation(operation);
 
 		if ((parameters != null) && !parameters.isEmpty()) {
+			String delimiter = (String)parameters.getOrDefault(
+				"delimiter", (Serializable)StringPool.COMMA);
+
+			if (delimiter.equals(StringPool.APOSTROPHE) ||
+				delimiter.equals(StringPool.QUOTE)) {
+
+				throw new BatchEngineImportTaskParameterDelimiterException(
+					"Quote may be not be used as delimiter");
+			}
+
 			batchEngineImportTask.setParameters(parameters);
 		}
 
