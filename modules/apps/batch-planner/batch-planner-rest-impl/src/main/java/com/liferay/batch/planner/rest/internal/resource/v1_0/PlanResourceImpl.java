@@ -67,7 +67,9 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 	@Override
 	public Plan patchPlan(Long id, Plan plan) throws Exception {
 		BatchPlannerPlan batchPlannerPlan =
-			_batchPlannerPlanService.updateBatchPlannerPlan(id, plan.getName());
+			_batchPlannerPlanService.updateBatchPlannerPlan(
+				id, plan.getExternalType(), plan.getInternalClassName(),
+				plan.getName());
 
 		Mapping[] mappings = plan.getMappings();
 
