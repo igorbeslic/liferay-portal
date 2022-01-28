@@ -25,7 +25,8 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.liferay.batch.planner.constants.BatchPlannerLogConstants" %><%@
 page import="com.liferay.batch.planner.model.BatchPlannerPlan" %><%@
-page import="com.liferay.batch.planner.web.internal.display.BatchPlannerLogDisplay" %><%@
+	page import="com.liferay.batch.planner.web.internal.portlet.BatchPlannerAdminPortlet" %><%@
+	page import="com.liferay.batch.planner.web.internal.display.BatchPlannerLogDisplay" %><%@
 page import="com.liferay.batch.planner.web.internal.display.context.BatchPlannerLogDisplayContext" %><%@
 page import="com.liferay.batch.planner.web.internal.display.context.BatchPlannerLogManagementToolbarDisplayContext" %><%@
 page import="com.liferay.batch.planner.web.internal.display.context.BatchPlannerPlanDisplayContext" %><%@
@@ -40,15 +41,17 @@ page import="com.liferay.petra.string.StringUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.ResultRow" %><%@
 page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
-page import="com.liferay.portal.kernel.util.Constants" %><%@
+<%@ page import="com.liferay.portal.kernel.model.Subscription" %><%@
+	page import="com.liferay.portal.kernel.service.SubscriptionLocalService" %><%@
+	page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.util.HashMapBuilder" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %>
-
 <%@ page import="java.text.Format" %>
+<%@ page import="javax.portlet.PortletPreferences" %>
 
 <%@ page import="java.util.Arrays" %>
 
@@ -58,6 +61,9 @@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 
 <portlet:defineObjects />
 
+<%
+	SubscriptionLocalService subscriptionLocalService = (SubscriptionLocalService) renderRequest.getAttribute("subscriptionLocalService");
+%>
 <%
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>

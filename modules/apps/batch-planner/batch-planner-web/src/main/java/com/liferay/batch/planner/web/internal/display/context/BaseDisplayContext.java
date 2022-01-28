@@ -69,6 +69,11 @@ public abstract class BaseDisplayContext {
 						PortalUtil.getHttpServletRequest(renderRequest),
 						"templates"));
 			}
+		).add(
+			navigationItem -> {
+				// need to create configuration menu item and code to enable it here
+
+			}
 		).build();
 	}
 

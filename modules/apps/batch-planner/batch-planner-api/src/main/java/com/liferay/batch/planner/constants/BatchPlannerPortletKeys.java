@@ -22,4 +22,7 @@ public class BatchPlannerPortletKeys {
 	public static final String BATCH_PLANNER =
 		"com_liferay_batch_planner_web_internal_portlet_BatchPlannerPortlet";
 
+	public static final String BATCH_PLANNER_ADMIN_IMPORT =
+		"com_liferay_batch_planner_web_internal_portlet_BatchPlannerAdminImportPortlet";
+
 }
