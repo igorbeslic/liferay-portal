@@ -53,6 +53,7 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true,
 	property = {
 		"dispatch.task.executor.name=" + TalendDispatchTaskExecutor.TALEND,
+		"dispatch.task.executor.restricted=false",
 		"dispatch.task.executor.type=" + TalendDispatchTaskExecutor.TALEND
 	},
 	service = DispatchTaskExecutor.class
