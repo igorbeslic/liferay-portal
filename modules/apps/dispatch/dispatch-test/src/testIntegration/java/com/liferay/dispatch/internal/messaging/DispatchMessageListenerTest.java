@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dispatch.internal.messaging.test;
+package com.liferay.dispatch.internal.messaging;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.dispatch.constants.DispatchConstants;
