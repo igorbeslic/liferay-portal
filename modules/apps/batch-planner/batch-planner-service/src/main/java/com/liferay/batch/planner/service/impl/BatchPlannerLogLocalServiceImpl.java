@@ -27,6 +27,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -186,6 +187,112 @@ public class BatchPlannerLogLocalServiceImpl
 	}
 
 	@Override
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, boolean export, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword){
+
+		if (!searchByKeyword.isEmpty()){
+			if (searchByField.equals("title")) {
+				return batchPlannerLogPersistence.dslQuery(
+					DSLQueryFactoryUtil.select(
+						BatchPlannerLogTable.INSTANCE
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.export.eq(export))
+						.and(BatchPlannerPlanTable.INSTANCE.name.like("%" + searchByKeyword + "%"))
+					).orderBy(
+						BatchPlannerLogTable.INSTANCE, orderByComparator
+					).limit(
+						start, end
+					));
+			}
+			else {
+				return batchPlannerLogPersistence.dslQuery(
+					DSLQueryFactoryUtil.select(
+						BatchPlannerLogTable.INSTANCE
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.export.eq(export))
+						.and(BatchPlannerPlanTable.INSTANCE.internalClassName.like("%" + searchByKeyword + "%"))
+					).orderBy(
+						BatchPlannerLogTable.INSTANCE, orderByComparator
+					).limit(
+						start, end
+					));
+			}
+		}
+		else{
+			return getCompanyBatchPlannerLogs(companyId, export, start, end, orderByComparator);
+		}
+	}
+
+	@Override
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword){
+
+		if (!searchByKeyword.isEmpty()){
+			if (searchByField.equals("title")) {
+				return batchPlannerLogPersistence.dslQuery(
+					DSLQueryFactoryUtil.select(
+						BatchPlannerLogTable.INSTANCE
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.name.like(
+								"%" + searchByKeyword + "%"))
+					).orderBy(
+						BatchPlannerLogTable.INSTANCE, orderByComparator
+					).limit(
+						start, end
+					));
+			}
+			else {
+				return batchPlannerLogPersistence.dslQuery(
+					DSLQueryFactoryUtil.select(
+						BatchPlannerLogTable.INSTANCE
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.internalClassName.like(
+								"%" + searchByKeyword + "%"))
+					).orderBy(
+						BatchPlannerLogTable.INSTANCE, orderByComparator
+					).limit(
+						start, end
+					));
+			}
+		}
+		else{
+			return getCompanyBatchPlannerLogs(companyId, start, end, orderByComparator);
+		}
+	}
+
+	@Override
 	public int getCompanyBatchPlannerLogsCount(long companyId) {
 		return batchPlannerLogPersistence.countByCompanyId(companyId);
 	}
@@ -203,6 +310,89 @@ public class BatchPlannerLogLocalServiceImpl
 			).where(
 				_getPredicate(companyId, export)
 			));
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId, String searchByField,
+		   String searchByKeyword) {
+
+		if (!searchByKeyword.isEmpty()){
+			if (searchByField.equals("title")) {
+				return dslQueryCount(
+					DSLQueryFactoryUtil.count(
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.name.like(
+								"%" + searchByKeyword + "%"))
+					));
+			}
+			else {
+				return dslQueryCount(
+					DSLQueryFactoryUtil.count(
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.internalClassName.like(
+								"%" + searchByKeyword + "%"))
+					));
+			}
+		}
+		else{
+			return batchPlannerLogPersistence.countByCompanyId(companyId);
+		}
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId, boolean export,
+    		String searchByField, String searchByKeyword) {
+		if (!searchByKeyword.isEmpty()){
+			if (searchByField.equals("title")) {
+				return dslQueryCount(
+					DSLQueryFactoryUtil.count(
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.export.eq(export))
+						.and(BatchPlannerPlanTable.INSTANCE.name.like(
+								"%" + searchByKeyword + "%"))
+					));
+			}
+			else {
+				return dslQueryCount(
+					DSLQueryFactoryUtil.count(
+					).from(
+						BatchPlannerLogTable.INSTANCE
+					).innerJoinON(
+						BatchPlannerPlanTable.INSTANCE,
+						BatchPlannerLogTable.INSTANCE.batchPlannerPlanId.eq(
+							BatchPlannerPlanTable.INSTANCE.batchPlannerPlanId)
+					).where(
+						BatchPlannerLogTable.INSTANCE.companyId.eq(companyId)
+						.and(BatchPlannerPlanTable.INSTANCE.export.eq(export))
+						.and(BatchPlannerPlanTable.INSTANCE.internalClassName.like(
+								"%" + searchByKeyword + "%"))
+					));
+			}
+		}
+		else{
+			return getCompanyBatchPlannerLogsCount(companyId, export);
+		}
 	}
 
 	@Override

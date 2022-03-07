@@ -14,18 +14,19 @@
 
 package com.liferay.batch.planner.web.internal.display.context;
 
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItem;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemListBuilder;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.*;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.util.List;
 import java.util.Objects;
 
+import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -43,6 +44,37 @@ public class BatchPlannerLogManagementToolbarDisplayContext
 		super(
 			httpServletRequest, liferayPortletRequest, liferayPortletResponse,
 			searchContainer);
+	}
+
+	@Override
+	public List<DropdownItem> getFilterDropdownItems() {
+		List<DropdownItem> searchByDropdownItems =
+				_getSearchByDropdownItems();
+
+		DropdownItemList filterDropdownItems = DropdownItemListBuilder
+				.addAll(super.getFilterDropdownItems())
+				.addGroup(
+				() -> searchByDropdownItems != null,
+				dropdownGroupItem -> {
+					dropdownGroupItem.setDropdownItems(
+							searchByDropdownItems);
+					dropdownGroupItem.setLabel(
+							_getSearchByDropdownItemsLabel());
+				}
+		).build();
+
+		if (filterDropdownItems.isEmpty()) {
+			return null;
+		}
+
+		return filterDropdownItems;
+	}
+
+	@Override
+	public String getSearchActionURL() {
+		PortletURL searchActionURL = getPortletURL();
+
+		return searchActionURL.toString();
 	}
 
 	@Override
@@ -98,6 +130,43 @@ public class BatchPlannerLogManagementToolbarDisplayContext
 	@Override
 	protected String[] getOrderByKeys() {
 		return new String[] {"createDate"};
+	}
+
+	private List<DropdownItem> _getSearchByDropdownItems() {
+		return DropdownItemListBuilder.add(
+				dropdownItem -> {
+					dropdownItem.setActive(
+							Objects.equals(_getSearchByField(), "title"));
+
+					dropdownItem.setLabel(
+							LanguageUtil.get(httpServletRequest, "title"));
+
+					dropdownItem.setHref(
+							PortletURLUtil.clone(currentURLObj, liferayPortletResponse),
+							"searchByField", "title");
+				}
+		).add(
+				dropdownItem -> {
+					dropdownItem.setActive(
+							Objects.equals(_getSearchByField(), "entity"));
+
+					dropdownItem.setLabel(
+							LanguageUtil.get(httpServletRequest, "entity"));
+
+					dropdownItem.setHref(
+							PortletURLUtil.clone(currentURLObj, liferayPortletResponse),
+							"searchByField", "entity");
+				}
+		).build();
+	}
+
+	private String _getSearchByDropdownItemsLabel() {
+		return LanguageUtil.get(httpServletRequest, "search-by");
+	}
+
+	private String _getSearchByField() {
+		return ParamUtil.getString(
+				liferayPortletRequest, "searchByField", "title");
 	}
 
 }

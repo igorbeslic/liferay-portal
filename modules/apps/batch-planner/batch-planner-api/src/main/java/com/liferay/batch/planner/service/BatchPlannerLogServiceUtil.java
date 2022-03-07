@@ -86,12 +86,34 @@ public class BatchPlannerLogServiceUtil {
 	}
 
 	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, boolean export, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword)
+		throws PortalException {
+
+		return getService().getCompanyBatchPlannerLogs(
+			companyId, export, start, end, orderByComparator, searchByField,
+			searchByKeyword);
+	}
+
+	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
 			long companyId, int start, int end,
 			OrderByComparator<BatchPlannerLog> orderByComparator)
 		throws PortalException {
 
 		return getService().getCompanyBatchPlannerLogs(
 			companyId, start, end, orderByComparator);
+	}
+
+	public static List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword)
+		throws PortalException {
+
+		return getService().getCompanyBatchPlannerLogs(
+			companyId, start, end, orderByComparator, searchByField,
+			searchByKeyword);
 	}
 
 	public static int getCompanyBatchPlannerLogsCount(long companyId)
@@ -105,6 +127,23 @@ public class BatchPlannerLogServiceUtil {
 		throws PortalException {
 
 		return getService().getCompanyBatchPlannerLogsCount(companyId, export);
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(
+			long companyId, boolean export, String searchByField,
+			String searchByKeyword)
+		throws PortalException {
+
+		return getService().getCompanyBatchPlannerLogsCount(
+			companyId, export, searchByField, searchByKeyword);
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(
+			long companyId, String searchByField, String searchByKeyword)
+		throws PortalException {
+
+		return getService().getCompanyBatchPlannerLogsCount(
+			companyId, searchByField, searchByKeyword);
 	}
 
 	/**

@@ -135,6 +135,32 @@ public class BatchPlannerLogServiceImpl extends BatchPlannerLogServiceBaseImpl {
 	}
 
 	@Override
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, boolean export, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword)
+			throws PortalException {
+
+		checkPermission(companyId, ActionKeys.VIEW);
+
+		return batchPlannerLogLocalService.getCompanyBatchPlannerLogs(
+				companyId, export, start, end, orderByComparator, searchByField, searchByKeyword);
+	}
+
+	@Override
+	public List<BatchPlannerLog> getCompanyBatchPlannerLogs(
+			long companyId, int start, int end,
+			OrderByComparator<BatchPlannerLog> orderByComparator,
+			String searchByField, String searchByKeyword)
+			throws PortalException {
+
+		checkPermission(companyId, ActionKeys.VIEW);
+
+		return batchPlannerLogLocalService.getCompanyBatchPlannerLogs(
+				companyId, start, end, orderByComparator, searchByField, searchByKeyword);
+	}
+
+	@Override
 	public int getCompanyBatchPlannerLogsCount(long companyId)
 		throws PortalException {
 
@@ -152,6 +178,26 @@ public class BatchPlannerLogServiceImpl extends BatchPlannerLogServiceBaseImpl {
 
 		return batchPlannerLogLocalService.getCompanyBatchPlannerLogsCount(
 			companyId, export);
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId, String searchByField,
+		String searchByKeyword) throws PortalException {
+
+		checkPermission(companyId, ActionKeys.VIEW);
+
+		return batchPlannerLogLocalService.getCompanyBatchPlannerLogsCount(
+			companyId, searchByField, searchByKeyword);
+	}
+
+	@Override
+	public int getCompanyBatchPlannerLogsCount(long companyId, boolean export,
+	   String searchByField, String searchByKeyword) throws PortalException {
+
+		checkPermission(companyId, ActionKeys.VIEW);
+
+		return batchPlannerLogLocalService.getCompanyBatchPlannerLogsCount(
+			companyId, export, searchByField, searchByKeyword);
 	}
 
 	protected void checkPermission(long companyId, String actionKey)

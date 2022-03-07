@@ -352,6 +352,104 @@ public class BatchPlannerLogServiceHttp {
 		}
 	}
 
+	public static java.util.List
+		<com.liferay.batch.planner.model.BatchPlannerLog>
+				getCompanyBatchPlannerLogs(
+					HttpPrincipal httpPrincipal, long companyId, boolean export,
+					int start, int end,
+					com.liferay.portal.kernel.util.OrderByComparator
+						<com.liferay.batch.planner.model.BatchPlannerLog>
+							orderByComparator,
+					String searchByField, String searchByKeyword)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				BatchPlannerLogServiceUtil.class, "getCompanyBatchPlannerLogs",
+				_getCompanyBatchPlannerLogsParameterTypes7);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, companyId, export, start, end, orderByComparator,
+				searchByField, searchByKeyword);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (java.util.List
+				<com.liferay.batch.planner.model.BatchPlannerLog>)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static java.util.List
+		<com.liferay.batch.planner.model.BatchPlannerLog>
+				getCompanyBatchPlannerLogs(
+					HttpPrincipal httpPrincipal, long companyId, int start,
+					int end,
+					com.liferay.portal.kernel.util.OrderByComparator
+						<com.liferay.batch.planner.model.BatchPlannerLog>
+							orderByComparator,
+					String searchByField, String searchByKeyword)
+			throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				BatchPlannerLogServiceUtil.class, "getCompanyBatchPlannerLogs",
+				_getCompanyBatchPlannerLogsParameterTypes8);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, companyId, start, end, orderByComparator,
+				searchByField, searchByKeyword);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (java.util.List
+				<com.liferay.batch.planner.model.BatchPlannerLog>)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static int getCompanyBatchPlannerLogsCount(
 			HttpPrincipal httpPrincipal, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -360,7 +458,7 @@ public class BatchPlannerLogServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				BatchPlannerLogServiceUtil.class,
 				"getCompanyBatchPlannerLogsCount",
-				_getCompanyBatchPlannerLogsCountParameterTypes7);
+				_getCompanyBatchPlannerLogsCountParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId);
@@ -401,10 +499,94 @@ public class BatchPlannerLogServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				BatchPlannerLogServiceUtil.class,
 				"getCompanyBatchPlannerLogsCount",
-				_getCompanyBatchPlannerLogsCountParameterTypes8);
+				_getCompanyBatchPlannerLogsCountParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId, export);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return ((Integer)returnObj).intValue();
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(
+			HttpPrincipal httpPrincipal, long companyId, String searchByField,
+			String searchByKeyword)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				BatchPlannerLogServiceUtil.class,
+				"getCompanyBatchPlannerLogsCount",
+				_getCompanyBatchPlannerLogsCountParameterTypes11);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, companyId, searchByField, searchByKeyword);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return ((Integer)returnObj).intValue();
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
+	public static int getCompanyBatchPlannerLogsCount(
+			HttpPrincipal httpPrincipal, long companyId, boolean export,
+			String searchByField, String searchByKeyword)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				BatchPlannerLogServiceUtil.class,
+				"getCompanyBatchPlannerLogsCount",
+				_getCompanyBatchPlannerLogsCountParameterTypes12);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, companyId, export, searchByField, searchByKeyword);
 
 			Object returnObj = null;
 
@@ -462,13 +644,33 @@ public class BatchPlannerLogServiceHttp {
 			long.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
+	private static final Class<?>[] _getCompanyBatchPlannerLogsParameterTypes7 =
+		new Class[] {
+			long.class, boolean.class, int.class, int.class,
+			com.liferay.portal.kernel.util.OrderByComparator.class,
+			String.class, String.class
+		};
+	private static final Class<?>[] _getCompanyBatchPlannerLogsParameterTypes8 =
+		new Class[] {
+			long.class, int.class, int.class,
+			com.liferay.portal.kernel.util.OrderByComparator.class,
+			String.class, String.class
+		};
 	private static final Class<?>[]
-		_getCompanyBatchPlannerLogsCountParameterTypes7 = new Class[] {
+		_getCompanyBatchPlannerLogsCountParameterTypes9 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]
-		_getCompanyBatchPlannerLogsCountParameterTypes8 = new Class[] {
+		_getCompanyBatchPlannerLogsCountParameterTypes10 = new Class[] {
 			long.class, boolean.class
+		};
+	private static final Class<?>[]
+		_getCompanyBatchPlannerLogsCountParameterTypes11 = new Class[] {
+			long.class, String.class, String.class
+		};
+	private static final Class<?>[]
+		_getCompanyBatchPlannerLogsCountParameterTypes12 = new Class[] {
+			long.class, boolean.class, String.class, String.class
 		};
 
 }
