@@ -46,20 +46,24 @@ BatchPlannerLogDisplay batchPlannerLogDisplay = (BatchPlannerLogDisplay)resultRo
 		/>
 	</c:if>
 
-	<c:if test="<%= batchPlannerLogDisplay.getStatus() == 3 && batchPlannerLogDisplay.getAction().equals("Import") %>">
+	<%
+	String batchPlannerLogDisplayAction = batchPlannerLogDisplay.getAction();
+	%>
+
+	<c:if test='<%= (batchPlannerLogDisplay.getStatus() == 3) && batchPlannerLogDisplayAction.equals("Import") %>'>
 		<liferay-ui:icon
-				id='<%= "downloadImportFile" + batchPlannerLogDisplay.getBatchEngineImportTaskERC() %>'
-				message="download-import-file"
-				url="#"
+			id='<%= "downloadImportFile" + batchPlannerLogDisplay.getBatchEngineImportTaskERC() %>'
+			message="download-import-file"
+			url="#"
 		/>
 
 		<liferay-frontend:component
-				context='<%=
+			context='<%=
 				HashMapBuilder.<String, Object>put(
 					"batchEngineImportTaskId", batchPlannerLogDisplay.getBatchEngineImportTaskERC()
 				).build()
 			%>'
-				module="js/DownloadImportFile"
+			module="js/DownloadImportFile"
 		/>
 	</c:if>
 </liferay-ui:icon-menu>
