@@ -22,4 +22,7 @@ public class BatchPlannerActionKeys {
 	public static final String ADD_BATCH_PLANNER_PLAN =
 		"ADD_BATCH_PLANNER_PLAN";
 
+	public static final String ADD_BATCH_PLANNER_LOG =
+			"ADD_BATCH_PLANNER_LOG";
+
 }
