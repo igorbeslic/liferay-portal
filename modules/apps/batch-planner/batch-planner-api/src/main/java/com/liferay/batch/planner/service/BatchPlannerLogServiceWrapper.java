@@ -37,6 +37,18 @@ public class BatchPlannerLogServiceWrapper
 	}
 
 	@Override
+	public com.liferay.batch.planner.model.BatchPlannerLog addBatchPlannerLog(
+			long userId, long batchPlannerPlanId, String batchEngineExportERC,
+			String batchEngineImportERC, String dispatchTriggerERC, int size,
+			int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _batchPlannerLogService.addBatchPlannerLog(
+			userId, batchPlannerPlanId, batchEngineExportERC,
+			batchEngineImportERC, dispatchTriggerERC, size, status);
+	}
+
+	@Override
 	public com.liferay.batch.planner.model.BatchPlannerLog getBatchPlannerLog(
 			long batchPlannerLogId)
 		throws com.liferay.portal.kernel.exception.PortalException {

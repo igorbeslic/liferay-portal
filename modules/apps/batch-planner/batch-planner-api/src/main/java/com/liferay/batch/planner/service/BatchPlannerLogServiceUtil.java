@@ -39,6 +39,17 @@ public class BatchPlannerLogServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.batch.planner.service.impl.BatchPlannerLogServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static BatchPlannerLog addBatchPlannerLog(
+			long userId, long batchPlannerPlanId, String batchEngineExportERC,
+			String batchEngineImportERC, String dispatchTriggerERC, int size,
+			int status)
+		throws PortalException {
+
+		return getService().addBatchPlannerLog(
+			userId, batchPlannerPlanId, batchEngineExportERC,
+			batchEngineImportERC, dispatchTriggerERC, size, status);
+	}
+
 	public static BatchPlannerLog getBatchPlannerLog(long batchPlannerLogId)
 		throws PortalException {
 
