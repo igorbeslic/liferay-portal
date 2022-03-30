@@ -20,8 +20,11 @@ import com.liferay.batch.planner.exception.BatchPlannerPlanExternalTypeException
 import com.liferay.batch.planner.exception.BatchPlannerPlanInternalClassNameException;
 import com.liferay.batch.planner.exception.BatchPlannerPlanNameException;
 import com.liferay.batch.planner.exception.DuplicateBatchPlannerPlanException;
+import com.liferay.batch.planner.exception.NoSuchLogException;
 import com.liferay.batch.planner.exception.RequiredBatchPlannerPlanException;
+import com.liferay.batch.planner.model.BatchPlannerLog;
 import com.liferay.batch.planner.model.BatchPlannerPlan;
+import com.liferay.batch.planner.service.BatchPlannerLogService;
 import com.liferay.batch.planner.service.BatchPlannerPlanService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -32,6 +35,8 @@ import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
+
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -157,6 +162,158 @@ public class BatchPlannerPlanServiceTest {
 	}
 
 	@Test
+	public void testSearchBatchPlannerExportlogs() throws Exception {
+		String name = RandomTestUtil.randomString();
+		String internalClassName = RandomTestUtil.randomString();
+
+		BatchPlannerPlan exportBatchPlannerPlan =
+			_batchPlannerPlanService.addBatchPlannerPlan(
+				true, BatchPlannerPlanConstants.EXTERNAL_TYPE_CSV,
+				"/" + RandomTestUtil.randomString(), internalClassName, name,
+				null, false);
+
+		BatchPlannerLog exportBatchPlannerLog =
+			_batchPlannerLogService.addBatchPlannerLog(
+				exportBatchPlannerPlan.getUserId(),
+				exportBatchPlannerPlan.getBatchPlannerPlanId(),
+				RandomTestUtil.randomString(), "", "", 1, 1);
+
+		Assert.assertEquals(name, exportBatchPlannerPlan.getName());
+		Assert.assertEquals(
+			internalClassName, exportBatchPlannerPlan.getInternalClassName());
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					exportBatchPlannerLog.getCompanyId(), true, "name", name, 0,
+					Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 1, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					exportBatchPlannerLog.getCompanyId(), true,
+					"internalClassName", internalClassName, 0,
+					Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 1, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					exportBatchPlannerLog.getCompanyId(), true, "name",
+					RandomTestUtil.randomString(), 0, Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 0, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					exportBatchPlannerLog.getCompanyId(), true,
+					"internalClassName", RandomTestUtil.randomString(), 0,
+					Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 0, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+	}
+
+	@Test
+	public void testSearchBatchPlannerImportlogs() throws Exception {
+		String name = RandomTestUtil.randomString();
+		String internalClassName = RandomTestUtil.randomString();
+
+		BatchPlannerPlan importBatchPlannerPlan =
+			_batchPlannerPlanService.addBatchPlannerPlan(
+				false, BatchPlannerPlanConstants.EXTERNAL_TYPE_CSV,
+				"/" + RandomTestUtil.randomString(), internalClassName, name,
+				null, false);
+
+		BatchPlannerLog importBatchPlannerLog =
+			_batchPlannerLogService.addBatchPlannerLog(
+				importBatchPlannerPlan.getUserId(),
+				importBatchPlannerPlan.getBatchPlannerPlanId(), "",
+				RandomTestUtil.randomString(), "", 1, 1);
+
+		Assert.assertEquals(name, importBatchPlannerPlan.getName());
+		Assert.assertEquals(
+			internalClassName, importBatchPlannerPlan.getInternalClassName());
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					importBatchPlannerLog.getCompanyId(), false, "name", name,
+					0, Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 1, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					importBatchPlannerLog.getCompanyId(), false,
+					"internalClassName", internalClassName, 0,
+					Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 1, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					importBatchPlannerLog.getCompanyId(), false, "name",
+					RandomTestUtil.randomString(), 0, Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 0, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+
+		try {
+			List<BatchPlannerLog> batchPlannerLogs =
+				_batchPlannerLogService.getCompanyBatchPlannerLogs(
+					importBatchPlannerLog.getCompanyId(), false,
+					"internalClassName", RandomTestUtil.randomString(), 0,
+					Integer.MAX_VALUE, null);
+
+			Assert.assertEquals(
+				batchPlannerLogs.toString(), 0, batchPlannerLogs.size());
+		}
+		catch (NoSuchLogException noSuchLogException) {
+			Assert.assertNotNull(noSuchLogException);
+		}
+	}
+
+	@Test
 	public void testUpdateBatchPlannerPlan() throws Exception {
 		BatchPlannerPlan batchPlannerPlan =
 			_batchPlannerPlanService.addBatchPlannerPlan(
@@ -182,6 +339,9 @@ public class BatchPlannerPlanServiceTest {
 				requiredBatchPlannerPlanException.getMessage());
 		}
 	}
+
+	@Inject
+	private BatchPlannerLogService _batchPlannerLogService;
 
 	@Inject
 	private BatchPlannerPlanService _batchPlannerPlanService;
