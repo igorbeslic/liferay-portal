@@ -291,6 +291,4 @@ public class BatchPlannerLogServiceImpl extends BatchPlannerLogServiceBaseImpl {
 	@Reference
 	private InlineSQLHelper _inlineSQLHelper;
 
-	private PortletResourcePermission _portletResourcePermission;
-
 }

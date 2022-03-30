@@ -23,6 +23,6 @@ public class BatchPlannerActionKeys {
 		"ADD_BATCH_PLANNER_PLAN";
 
 	public static final String ADD_BATCH_PLANNER_LOG =
-			"ADD_BATCH_PLANNER_LOG";
+		"ADD_BATCH_PLANNER_LOG";
 
 }
