@@ -14,6 +14,7 @@
 
 package com.liferay.batch.planner.service.impl;
 
+import com.liferay.batch.planner.constants.BatchPlannerActionKeys;
 import com.liferay.batch.planner.model.BatchPlannerLog;
 import com.liferay.batch.planner.model.BatchPlannerLogTable;
 import com.liferay.batch.planner.model.BatchPlannerPlanTable;
@@ -24,10 +25,13 @@ import com.liferay.petra.sql.dsl.query.JoinStep;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelper;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
+import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -47,6 +51,18 @@ import org.osgi.service.component.annotations.Reference;
 	service = AopService.class
 )
 public class BatchPlannerLogServiceImpl extends BatchPlannerLogServiceBaseImpl {
+
+	@Override
+	public BatchPlannerLog addBatchPlannerLog(
+			long userId, long batchPlannerPlanId, String batchEngineExportERC,
+			String batchEngineImportERC, String dispatchTriggerERC, int size,
+			int status)
+			throws PortalException {
+
+		return batchPlannerLogLocalService.addBatchPlannerLog(
+				userId, batchPlannerPlanId, batchEngineExportERC,
+				batchEngineImportERC, dispatchTriggerERC, size, status);
+	}
 
 	@Override
 	public BatchPlannerLog getBatchPlannerLog(long batchPlannerLogId)
@@ -274,5 +290,7 @@ public class BatchPlannerLogServiceImpl extends BatchPlannerLogServiceBaseImpl {
 
 	@Reference
 	private InlineSQLHelper _inlineSQLHelper;
+
+	private PortletResourcePermission _portletResourcePermission;
 
 }
