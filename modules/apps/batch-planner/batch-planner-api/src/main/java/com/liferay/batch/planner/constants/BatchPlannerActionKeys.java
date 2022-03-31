@@ -19,10 +19,9 @@ package com.liferay.batch.planner.constants;
  */
 public class BatchPlannerActionKeys {
 
+	public static final String ADD_BATCH_PLANNER_LOG = "ADD_BATCH_PLANNER_LOG";
+
 	public static final String ADD_BATCH_PLANNER_PLAN =
 		"ADD_BATCH_PLANNER_PLAN";
-
-	public static final String ADD_BATCH_PLANNER_LOG =
-		"ADD_BATCH_PLANNER_LOG";
 
 }
