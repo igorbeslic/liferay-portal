@@ -78,7 +78,7 @@ public class BatchPlannerPlanCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -108,8 +108,14 @@ public class BatchPlannerPlanCacheModel
 		sb.append(name);
 		sb.append(", taskItemDelegateName=");
 		sb.append(taskItemDelegateName);
+		sb.append(", size=");
+		sb.append(size);
+		sb.append(", total=");
+		sb.append(total);
 		sb.append(", template=");
 		sb.append(template);
+		sb.append(", status=");
+		sb.append(status);
 		sb.append("}");
 
 		return sb.toString();
@@ -183,7 +189,10 @@ public class BatchPlannerPlanCacheModel
 			batchPlannerPlanImpl.setTaskItemDelegateName(taskItemDelegateName);
 		}
 
+		batchPlannerPlanImpl.setSize(size);
+		batchPlannerPlanImpl.setTotal(total);
 		batchPlannerPlanImpl.setTemplate(template);
+		batchPlannerPlanImpl.setStatus(status);
 
 		batchPlannerPlanImpl.resetOriginalValues();
 
@@ -212,7 +221,13 @@ public class BatchPlannerPlanCacheModel
 		name = objectInput.readUTF();
 		taskItemDelegateName = objectInput.readUTF();
 
+		size = objectInput.readInt();
+
+		total = objectInput.readInt();
+
 		template = objectInput.readBoolean();
+
+		status = objectInput.readInt();
 	}
 
 	@Override
@@ -274,7 +289,13 @@ public class BatchPlannerPlanCacheModel
 			objectOutput.writeUTF(taskItemDelegateName);
 		}
 
+		objectOutput.writeInt(size);
+
+		objectOutput.writeInt(total);
+
 		objectOutput.writeBoolean(template);
+
+		objectOutput.writeInt(status);
 	}
 
 	public long mvccVersion;
@@ -291,6 +312,9 @@ public class BatchPlannerPlanCacheModel
 	public String internalClassName;
 	public String name;
 	public String taskItemDelegateName;
+	public int size;
+	public int total;
 	public boolean template;
+	public int status;
 
 }

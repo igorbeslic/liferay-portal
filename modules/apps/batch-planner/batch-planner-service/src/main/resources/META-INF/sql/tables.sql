@@ -29,7 +29,10 @@ create table BatchPlannerPlan (
 	internalClassName VARCHAR(75) null,
 	name VARCHAR(75) null,
 	taskItemDelegateName VARCHAR(75) null,
-	template BOOLEAN
+	size_ INTEGER,
+	total INTEGER,
+	template BOOLEAN,
+	status INTEGER
 );
 
 create table BatchPlannerPolicy (
