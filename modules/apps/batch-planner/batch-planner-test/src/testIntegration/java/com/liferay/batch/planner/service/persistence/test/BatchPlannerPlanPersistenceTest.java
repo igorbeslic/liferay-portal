@@ -151,7 +151,13 @@ public class BatchPlannerPlanPersistenceTest {
 		newBatchPlannerPlan.setTaskItemDelegateName(
 			RandomTestUtil.randomString());
 
+		newBatchPlannerPlan.setSize(RandomTestUtil.nextInt());
+
+		newBatchPlannerPlan.setTotal(RandomTestUtil.nextInt());
+
 		newBatchPlannerPlan.setTemplate(RandomTestUtil.randomBoolean());
+
+		newBatchPlannerPlan.setStatus(RandomTestUtil.nextInt());
 
 		_batchPlannerPlans.add(_persistence.update(newBatchPlannerPlan));
 
@@ -200,8 +206,16 @@ public class BatchPlannerPlanPersistenceTest {
 			existingBatchPlannerPlan.getTaskItemDelegateName(),
 			newBatchPlannerPlan.getTaskItemDelegateName());
 		Assert.assertEquals(
+			existingBatchPlannerPlan.getSize(), newBatchPlannerPlan.getSize());
+		Assert.assertEquals(
+			existingBatchPlannerPlan.getTotal(),
+			newBatchPlannerPlan.getTotal());
+		Assert.assertEquals(
 			existingBatchPlannerPlan.isTemplate(),
 			newBatchPlannerPlan.isTemplate());
+		Assert.assertEquals(
+			existingBatchPlannerPlan.getStatus(),
+			newBatchPlannerPlan.getStatus());
 	}
 
 	@Test
@@ -283,7 +297,8 @@ public class BatchPlannerPlanPersistenceTest {
 			"companyId", true, "userId", true, "userName", true, "createDate",
 			true, "modifiedDate", true, "active", true, "export", true,
 			"externalType", true, "externalURL", true, "internalClassName",
-			true, "name", true, "taskItemDelegateName", true, "template", true);
+			true, "name", true, "taskItemDelegateName", true, "size", true,
+			"total", true, "template", true, "status", true);
 	}
 
 	@Test
@@ -598,7 +613,13 @@ public class BatchPlannerPlanPersistenceTest {
 
 		batchPlannerPlan.setTaskItemDelegateName(RandomTestUtil.randomString());
 
+		batchPlannerPlan.setSize(RandomTestUtil.nextInt());
+
+		batchPlannerPlan.setTotal(RandomTestUtil.nextInt());
+
 		batchPlannerPlan.setTemplate(RandomTestUtil.randomBoolean());
+
+		batchPlannerPlan.setStatus(RandomTestUtil.nextInt());
 
 		_batchPlannerPlans.add(_persistence.update(batchPlannerPlan));
 

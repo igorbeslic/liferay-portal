@@ -70,8 +70,14 @@ public class BatchPlannerPlanTable extends BaseTable<BatchPlannerPlanTable> {
 		createColumn(
 			"taskItemDelegateName", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
+	public final Column<BatchPlannerPlanTable, Integer> size = createColumn(
+		"size_", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
+	public final Column<BatchPlannerPlanTable, Integer> total = createColumn(
+		"total", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 	public final Column<BatchPlannerPlanTable, Boolean> template = createColumn(
 		"template", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<BatchPlannerPlanTable, Integer> status = createColumn(
+		"status", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 
 	private BatchPlannerPlanTable() {
 		super("BatchPlannerPlan", BatchPlannerPlanTable::new);
