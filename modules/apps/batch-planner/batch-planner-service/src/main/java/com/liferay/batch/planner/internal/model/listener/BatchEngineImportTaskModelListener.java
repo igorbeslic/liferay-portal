@@ -112,7 +112,7 @@ public class BatchEngineImportTaskModelListener
 
 		BatchPlannerPlan batchPlannerPlan =
 			_batchPlannerPlanLocalService.fetchBatchPlannerPlan(
-				Long.getLong(batchEngineImportTask.getExternalReferenceCode()));
+				Long.parseLong(batchEngineImportTask.getExternalReferenceCode()));
 
 		if (batchPlannerPlan == null) {
 			if (_log.isDebugEnabled()) {
