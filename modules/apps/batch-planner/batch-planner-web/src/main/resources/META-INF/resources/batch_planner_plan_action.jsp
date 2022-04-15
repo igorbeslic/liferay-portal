@@ -70,4 +70,25 @@ BatchPlannerPlanDisplay batchPlannerPlanDisplay = (BatchPlannerPlanDisplay)resul
 			module="js/DownloadHelper"
 		/>
 	</c:if>
+
+	<c:if test="<%= batchPlannerPlanDisplay.isStatusFailed() && !batchPlannerPlanDisplay.isExport() %>">
+		<liferay-ui:icon
+				id='<%= "downloadOriginalFile" + batchPlannerPlanDisplay.getBatchPlannerPlanId() %>'
+				message="download-original-file"
+				url="#"
+		/>
+
+		<liferay-frontend:component
+				context='<%=
+				HashMapBuilder.<String, Object>put(
+					"externalReferenceCode", batchPlannerPlanDisplay.getBatchPlannerPlanId()
+				).put(
+					"HTMLElementId", liferayPortletResponse.getNamespace() + "downloadOriginalFile" + batchPlannerPlanDisplay.getBatchPlannerPlanId()
+				).put(
+					"type", "importFile"
+				).build()
+			%>'
+				module="js/DownloadHelper"
+		/>
+	</c:if>
 </liferay-ui:icon-menu>
