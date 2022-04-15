@@ -73,13 +73,13 @@ BatchPlannerPlanDisplay batchPlannerPlanDisplay = (BatchPlannerPlanDisplay)resul
 
 	<c:if test="<%= batchPlannerPlanDisplay.isStatusFailed() && !batchPlannerPlanDisplay.isExport() %>">
 		<liferay-ui:icon
-				id='<%= "downloadOriginalFile" + batchPlannerPlanDisplay.getBatchPlannerPlanId() %>'
-				message="download-original-file"
-				url="#"
+			id='<%= "downloadOriginalFile" + batchPlannerPlanDisplay.getBatchPlannerPlanId() %>'
+			message="download-original-file"
+			url="#"
 		/>
 
 		<liferay-frontend:component
-				context='<%=
+			context='<%=
 				HashMapBuilder.<String, Object>put(
 					"externalReferenceCode", batchPlannerPlanDisplay.getBatchPlannerPlanId()
 				).put(
@@ -88,7 +88,7 @@ BatchPlannerPlanDisplay batchPlannerPlanDisplay = (BatchPlannerPlanDisplay)resul
 					"type", "importFile"
 				).build()
 			%>'
-				module="js/DownloadHelper"
+			module="js/DownloadHelper"
 		/>
 	</c:if>
 </liferay-ui:icon-menu>
