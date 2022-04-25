@@ -27,6 +27,8 @@ import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.model.BatchEngineImportTaskError;
 import com.liferay.batch.engine.service.BatchEngineImportTaskErrorLocalService;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
+import com.liferay.batch.planner.model.BatchPlannerPlan;
+import com.liferay.batch.planner.service.BatchPlannerPlanLocalService;
 import com.liferay.headless.batch.engine.dto.v1_0.FailedItem;
 import com.liferay.headless.batch.engine.dto.v1_0.ImportTask;
 import com.liferay.headless.batch.engine.internal.resource.v1_0.util.ParametersUtil;
@@ -38,14 +40,18 @@ import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.util.File;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.File;
 import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.portal.vulcan.util.TransformUtil;
+import com.liferay.portal.kernel.sanitizer.Sanitizer;
+import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -339,16 +345,48 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		}
 
 		StreamingOutput streamingOutput = outputStream -> StreamUtil.transfer(
-			_batchEngineImportTaskLocalService.openContentInputStream(
-				batchEngineImportTask.getBatchEngineImportTaskId()),
-			outputStream);
+				_batchEngineImportTaskLocalService.openContentInputStream(
+						batchEngineImportTask.getBatchEngineImportTaskId()),
+				outputStream);
+
+		String sanitizedFileName = _sanitizeFileName(batchEngineImportTask.getExternalReferenceCode());
 
 		return Response.ok(
-			streamingOutput
+				streamingOutput
 		).header(
 			"content-disposition",
-			"attachment; filename=" + StringUtil.randomString() + ".zip"
+			"attachment; filename=" + sanitizedFileName + ".zip"
 		).build();
+	}
+
+	private String _sanitizeFileName(String externalReferenceCode){
+
+		String sanitizedFileName = null;
+
+		try {
+			_batchPlannerPlan = _batchPlannerPlanLocalService.getBatchPlannerPlan(
+					GetterUtil.getLong(externalReferenceCode));
+
+			long userId = _batchPlannerPlan.getUserId();
+
+			if (userId > 0) {
+				long companyId = _batchPlannerPlan.getCompanyId();
+
+				long groupId = 0;
+
+				long entryId = _batchPlannerPlan.getBatchPlannerPlanId();
+
+				sanitizedFileName = SanitizerUtil.sanitize(
+						companyId, groupId, userId, BatchPlannerPlan.class.getName(),
+						entryId, ContentTypes.TEXT_PLAIN, Sanitizer.MODE_ALL,
+						_batchPlannerPlan.getName(), null);
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		return sanitizedFileName;
 	}
 
 	private Response _getImportTaskFailedItemReport(long importTaskId) {
@@ -377,11 +415,22 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			}
 		};
 
+		BatchEngineImportTask batchEngineImportTask = null;
+		String sanitizedFileName = null;
+
+		try {
+			batchEngineImportTask =
+					_batchEngineImportTaskLocalService.getBatchEngineImportTask(importTaskId);
+			sanitizedFileName = _sanitizeFileName(batchEngineImportTask.getExternalReferenceCode());
+		} catch (PortalException e) {
+			throw new RuntimeException(e);
+		}
+
 		return Response.ok(
 			streamingOutput
 		).header(
 			"Content-Disposition",
-			"attachment; filename=" + StringUtil.randomString() + ".csv"
+			"attachment; filename=" + sanitizedFileName + "_Errors.csv"
 		).build();
 	}
 
@@ -412,6 +461,19 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			String importStrategy, String taskItemDelegateName)
 		throws Exception {
 
+		String sanitizedFileNameWithExtension = null;
+
+		try {
+			_batchPlannerPlan = _batchPlannerPlanLocalService.getBatchPlannerPlan(
+					GetterUtil.getLong(externalReferenceCode));
+
+			sanitizedFileNameWithExtension = _sanitizeFileName(externalReferenceCode) + "." +
+					_file.getExtension(binaryFile.getFileName());
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
 		Map.Entry<byte[], String> entry = null;
 
 		if (StringUtil.endsWith(binaryFile.getFileName(), "zip")) {
@@ -420,7 +482,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		}
 		else {
 			entry = _getContentAndExtensionFromUncompressedFile(
-				binaryFile.getFileName(), binaryFile.getInputStream());
+				sanitizedFileNameWithExtension, binaryFile.getInputStream());
 		}
 
 		return _importFile(
@@ -570,5 +632,10 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Reference
 	private PortalExecutorManager _portalExecutorManager;
+
+	@Reference
+	private BatchPlannerPlanLocalService _batchPlannerPlanLocalService;
+
+	private BatchPlannerPlan _batchPlannerPlan;
 
 }
