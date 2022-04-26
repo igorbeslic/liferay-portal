@@ -27,10 +27,13 @@ import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.model.BatchEngineImportTaskError;
 import com.liferay.batch.engine.service.BatchEngineImportTaskErrorLocalService;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
+import com.liferay.batch.planner.model.BatchPlannerPlan;
+import com.liferay.batch.planner.service.BatchPlannerPlanLocalService;
 import com.liferay.headless.batch.engine.dto.v1_0.FailedItem;
 import com.liferay.headless.batch.engine.dto.v1_0.ImportTask;
 import com.liferay.headless.batch.engine.internal.resource.v1_0.util.ParametersUtil;
 import com.liferay.headless.batch.engine.resource.v1_0.ImportTaskResource;
+import com.liferay.normalizer.Normalizer;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.io.unsync.UnsyncByteArrayInputStream;
@@ -343,11 +346,14 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 				batchEngineImportTask.getBatchEngineImportTaskId()),
 			outputStream);
 
+		String sanitizedFileName = _sanitizeFileName(
+			batchEngineImportTask.getExternalReferenceCode());
+
 		return Response.ok(
 			streamingOutput
 		).header(
 			"content-disposition",
-			"attachment; filename=" + StringUtil.randomString() + ".zip"
+			"attachment; filename=" + sanitizedFileName + ".zip"
 		).build();
 	}
 
@@ -377,11 +383,26 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			}
 		};
 
+		BatchEngineImportTask batchEngineImportTask = null;
+		String sanitizedFileName = null;
+
+		try {
+			batchEngineImportTask =
+				_batchEngineImportTaskLocalService.getBatchEngineImportTask(
+					importTaskId);
+
+			sanitizedFileName = _sanitizeFileName(
+				batchEngineImportTask.getExternalReferenceCode());
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+
 		return Response.ok(
 			streamingOutput
 		).header(
 			"Content-Disposition",
-			"attachment; filename=" + StringUtil.randomString() + ".csv"
+			"attachment; filename=" + sanitizedFileName + "_Errors.csv"
 		).build();
 	}
 
@@ -412,6 +433,19 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			String importStrategy, String taskItemDelegateName)
 		throws Exception {
 
+		String sanitizedFileName = null;
+
+		try {
+			_batchPlannerPlan =
+				_batchPlannerPlanLocalService.getBatchPlannerPlan(
+					GetterUtil.getLong(externalReferenceCode));
+
+			sanitizedFileName = _sanitizeFileName(externalReferenceCode);
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+
 		Map.Entry<byte[], String> entry = null;
 
 		if (StringUtil.endsWith(binaryFile.getFileName(), "zip")) {
@@ -420,7 +454,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		}
 		else {
 			entry = _getContentAndExtensionFromUncompressedFile(
-				binaryFile.getFileName(), binaryFile.getInputStream());
+				sanitizedFileName, binaryFile.getInputStream());
 		}
 
 		return _importFile(
@@ -467,6 +501,24 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 				batchEngineImportTask));
 
 		return _toImportTask(batchEngineImportTask);
+	}
+
+	private String _sanitizeFileName(String externalReferenceCode) {
+		String sanitizedFileName = null;
+
+		try {
+			_batchPlannerPlan =
+				_batchPlannerPlanLocalService.getBatchPlannerPlan(
+					GetterUtil.getLong(externalReferenceCode));
+
+			sanitizedFileName = _normalizer.normalizeToAscii(
+				_batchPlannerPlan.getName());
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+
+		return sanitizedFileName;
 	}
 
 	private FailedItem _toFailedItem(
@@ -558,6 +610,11 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 	private BatchEngineImportTaskLocalService
 		_batchEngineImportTaskLocalService;
 
+	private BatchPlannerPlan _batchPlannerPlan;
+
+	@Reference
+	private BatchPlannerPlanLocalService _batchPlannerPlanLocalService;
+
 	private int _batchSize;
 
 	@Reference
@@ -567,6 +624,9 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 
 	@Reference
 	private ItemClassRegistry _itemClassRegistry;
+
+	@Reference
+	private Normalizer _normalizer;
 
 	@Reference
 	private PortalExecutorManager _portalExecutorManager;
