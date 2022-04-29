@@ -47,8 +47,9 @@ export default function ({
 						.value;
 			}
 
-			fetch(getEndpoint(type, externalReferenceCode, fileName)).then((response) => {
-				response.blob().then((blob) => {
+			fetch(getEndpoint(type, externalReferenceCode, fileName)).then(
+				(response) => {
+					response.blob().then((blob) => {
 						const LinkElement = document.createElement('a');
 
 						LinkElement.href = URL.createObjectURL(blob);
