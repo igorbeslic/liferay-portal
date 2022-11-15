@@ -136,7 +136,7 @@ public class DispatchTriggerDisplayContextTest {
 				dispatchTrigger.getDispatchTaskClusterMode()));
 
 		DispatchTaskClusterMode dispatchTaskClusterMode =
-			DispatchTaskClusterMode.ALL_NODES;
+			DispatchTaskClusterMode.SINGLE_NODE_PERSISTED;
 
 		MockHttpServletRequest mockHttpServletRequest =
 			_getMockHttpServletRequest(
