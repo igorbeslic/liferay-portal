@@ -2598,8 +2598,8 @@ public class ObjectEntryLocalServiceImpl
 		if (objects.length < selectExpressions.length) {
 			throw new IllegalArgumentException(
 				StringBundler.concat(
-					"Objects array length mismatch less than select ",
-					"expressions array ", objects.length, " < ",
+					"Objects length ", objects.length,
+					" is less than select expressions length ",
 					selectExpressions.length));
 		}
 
